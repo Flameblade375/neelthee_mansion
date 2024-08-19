@@ -748,7 +748,6 @@ commands = {
 
 
 def quit():
-    global player
     exit()
 
 guards = [
@@ -795,8 +794,6 @@ def main():
                 break
             else:
                 type_text(colorTrue=False)
-
-        type_text("Please enter a codename for your achievements to save under \n>", False, colorTrue=False)
 
     else:
         type_text("You will now have to enter a name, age, height, and weight. Please enter the height in this format: _ft _. These will be used throughout the game.", colorTrue=False)
