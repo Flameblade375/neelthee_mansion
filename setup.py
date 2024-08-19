@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='neelthee_mansion',
-    version='2.1.1',
+    version='2.1.2',
     packages=find_packages(),  # Automatically finds all packages and modules
     install_requires=[
         'psutil', 'playsound', 'requests', 'keyboard', 'pandas', 'validators', 'dicttoxml', 'pytz',

@@ -89,6 +89,7 @@ evil_mage = PC(
 
 # Function to parse command
 def parse_command(command_str: str, commands: dict):
+    global player
     # Split the command string into parts
     parts = command_str.split()
     
@@ -108,6 +109,7 @@ def parse_command(command_str: str, commands: dict):
 
 
 def showInstructions():
+    global player
     # Display the game instructions
     type_text('''
 ===========================
@@ -127,6 +129,7 @@ map - Display the map of places you have been to
 
 
 def showHint():
+    global player
     if 'Hints' in ROOMS[CURRENTROOM]:
         type_text("You think:", colorTrue=color_coding)
         hint = choice(ROOMS[CURRENTROOM]['Hints'])
@@ -135,6 +138,7 @@ def showHint():
         type_text("You can't think of anything", colorTrue=color_coding)
 
 def check_direction(var: str, directions: list):
+    global player
     for direction in directions:
         if var == direction:
             return True
@@ -142,6 +146,7 @@ def check_direction(var: str, directions: list):
 
 
 def End(text: str, win: bool = True):
+    global player
     type_text(text, colorTrue=color_coding)
     if win:
         type_text('Do you want to leave the game? Y/N', colorTrue=color_coding)
@@ -164,6 +169,7 @@ NOTE_NUM = 0
 
 
 def add_note(note, parchment_index=None):
+    global player
     player.NOTES.append(note)
     NOTE_NUM += 1
     inv_note = 'note ' + str(NOTE_NUM)
@@ -175,8 +181,10 @@ def add_note(note, parchment_index=None):
 
 
 def Use_grappling_hook():
+    global player
 
     def swing_into_forest():
+        global player
         type_text("You throw your grappling-hook, it catches a branch of a nearby tree and hooks back onto itself. \nYou can swing into the forest!", colorTrue=color_coding)
         if ask_for_consent("Do you want to swing into the forest"):
             type_text("You swing into the forest", colorTrue=color_coding)
@@ -185,6 +193,7 @@ def Use_grappling_hook():
             type_text("You flick the rope and it unhooks. You continue exploring the house.", colorTrue=color_coding)
 
     def climb_into_house():
+        global player
         type_text("You throw your grappling-hook, it catches the railing of the nearby house and hooks back onto itself. \nYou can climb into the house!", colorTrue=color_coding)
         if ask_for_consent("Do you want to climb into the house"):
             type_text("You climb into the house", colorTrue=color_coding)
@@ -199,6 +208,7 @@ def Use_grappling_hook():
 
 
 def Use_quill():
+    global player
 
     if all(item in player.inventory for item in ['ink-pot', 'parchment', 'quill']):
         parchment_index = player.inventory.index('parchment')
@@ -214,6 +224,7 @@ def Use_quill():
 
 
 def Use_note(note_number):
+    global player
     """Reads a specified note from the player's inventory."""
     note_key = f'note {note_number}'
     if note_key in player.inventory:
@@ -225,6 +236,7 @@ def Use_note(note_number):
 
 
 def Use(moveone, movetwo=None):
+    global player
     """Uses an item from the player's inventory."""
     if moveone in player.inventory:
         item_obj = player.inventory[player.inventory.index(moveone)]
@@ -245,10 +257,12 @@ def Use(moveone, movetwo=None):
 
 
 def Move(move):
+    global player
     global CURRENTROOM, LAST_ROOM
 
 
     def attempt_charter():
+        global player
         if player.money >= 10:
             player.money -= 10
             if 'descovered' in ROOMS[newRoom] and not ROOMS[newRoom]['descovered']:
@@ -259,6 +273,7 @@ def Move(move):
             return CURRENTROOM
 
     def attempt_move_to_garden():
+        global player
         if 'key' in player.inventory:
             End('You unlock the gate to the garden with the key!')
             return newRoom
@@ -267,6 +282,7 @@ def Move(move):
             return newRoom
 
     def move_to_room():
+        global player
         global LAST_ROOM
         LAST_ROOM = CURRENTROOM
         if move == '0':
@@ -296,12 +312,14 @@ def Move(move):
 
 
 def start():
+    global player
     # type_text a main men, colorTrue=color_codingu
     type_text(f'\nHello %*MAGENTA*%{player.name}%*RESET*% and welcome to my Role Playing Game. \nI hope you have fun!', colorTrue=color_coding)
     showInstructions()
 
 
 def showStatus():
+    global player
 
     # Display player's current status
     text = f'\n---------------------------'
@@ -332,6 +350,7 @@ def showStatus():
 
 
 def display_directions(text):
+    global player
     directions = ['north', 'east', 'south', 'west', 'up', 'down', 'teleport']
     direction_descriptions = {
         'house': {
@@ -431,34 +450,43 @@ def monster_turn(player: PC, monster: creature):
     player.take_damage(damage)
 
 def perform_attack(attacker: PC, defender: creature):
+    global player
     """
     Perform an attack action.
 
     Args:
         attacker (PC): The attacking character.
         defender (creature): The defending monster.
+    global player
     """
     damage = calculate_damage(attacker, defender)
+    global player
     defender.take_damage(damage)
+    global player
 
 def handle_victory(player: PC, monster: creature):
     """
     Handle the logic when the player defeats the monster.
+    global player
 
     Args:
         player (PC): The player character.
         monster (creature): The defeated monster.
+    global player
     """
     type_text(f"You defeat the %*CYAN*%{monster.name}%*RESET*%!", colorTrue=color_coding)
     player.inventory_add(monster.dropped_items)
 
 def calculate_damage(attacker, defender) -> int:
+    global player
     """
     Calculate the damage inflicted by the attacker on the defender.
+    global player
 
     Args:
         attacker: The attacking character.
         defender: The defending character.
+    global player
 
     Returns:
         int: The calculated damage.
@@ -478,6 +506,7 @@ def calculate_damage(attacker, defender) -> int:
     return damage
 
 def calculate_damage_range(atpw: int) -> tuple[int, int]:
+    global player
     """
     Calculate the damage range based on attack power.
 
@@ -510,6 +539,7 @@ def use_special_ability(player: PC, monster: creature):
 
 
 def command():
+    global player
     try:
         ShouldBreak = False
 
@@ -558,6 +588,7 @@ def handle_sleep_command(player: PC):
     type_text("You feel refreshed after a good rest.", colorTrue=color_coding)
 
 def get_player_input(split = True):
+    global player
     move = ''
     while move == '':
         move = str(input('>')).strip().lower()
@@ -566,6 +597,7 @@ def get_player_input(split = True):
     return move
 
 def handle_go_command(direction):
+    global player
     Move(direction)
 
 def handle_get_command(player: PC, item_name):
@@ -577,6 +609,7 @@ def handle_get_command(player: PC, item_name):
         type_text(f"Can't get {item_name}!", colorTrue=color_coding)
 
 def handle_look_command():
+    global player
     return_ = False
     if 'item' in ROOMS[CURRENTROOM]:
         type_text(f'The item in the room: %*BLUE*%{ROOMS[CURRENTROOM]["item"].name}%*RESET*%.', colorTrue=color_coding)
@@ -589,6 +622,7 @@ def handle_look_command():
     type_text('There is nothing of interest.', colorTrue=color_coding)
 
 def handle_use_command(item = None, sub_item = None):
+    global player
     Use(item, sub_item)
 
 def handle_search_command(player, container = None, sub_container = None):
@@ -635,6 +669,7 @@ def put_in_container(player: PC, PutItem = None, container = None):
 
 
 def handle_get_quest_command(questnum):
+    global player
     if 'quests' in ROOMS[CURRENTROOM]:
         if questnum in ROOMS[CURRENTROOM]['quests']:
             quest_manager.add_quest(ROOMS[CURRENTROOM]['quests'][questnum])
@@ -643,6 +678,7 @@ def handle_get_quest_command(questnum):
 
 
 def PrintMap():
+    global player
     type_text(ShowMap())
 
 
@@ -712,6 +748,7 @@ commands = {
 
 
 def quit():
+    global player
     exit()
 
 guards = [
@@ -729,6 +766,7 @@ guards = [
 ]
 
 def main():
+    global player
     global charactersList
 
 
