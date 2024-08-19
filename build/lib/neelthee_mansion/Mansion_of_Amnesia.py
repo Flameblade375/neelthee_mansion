@@ -793,7 +793,7 @@ def main():
             f"The people you admire the most are Sam and Aragorn from Lord of the Rings, which you read as a child. You have also read the Hunger Games when you were {13 if age >= 13 else age}", 
             f"Your favorite weapon is a bow; however, the scimitar is a close second.", 
         ],
-        Background=f"""
+        Backstory=f"""
     You were born into a life of solitude as an only child. Your father was always away on grand adventures and passed away when you were just {7 if age >= 7 else age}. Your mother, a dedicated 
     baker, raised you alone. Although she did her best, you spent most of your time helping her in the bakery rather than attending school, which left you feeling quite isolated.
 
