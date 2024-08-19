@@ -1,0 +1,2 @@
+[console_scripts]
+neelthee = neelthee_mansion.main:main
