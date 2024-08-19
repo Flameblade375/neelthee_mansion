@@ -766,7 +766,7 @@ guards = [
 ]
 
 def main():
-    global player
+    global player, color_coding
     global charactersList
 
 
@@ -797,7 +797,6 @@ def main():
                 type_text(colorTrue=False)
 
         type_text("Please enter a codename for your achievements to save under \n>", False, colorTrue=False)
-        codename = input()
 
     else:
         type_text("You will now have to enter a name, age, height, and weight. Please enter the height in this format: _ft _. These will be used throughout the game.", colorTrue=False)
@@ -806,7 +805,6 @@ def main():
         age = loop_til_valid_input("What is your age (in whole years)?", "You didn't enter an integer. Please enter an integer.", int)
         height = loop_til_valid_input("What is your height?", "You didn't enter your height in the correct format. Please enter your height in the correct format.", Height)
         weight = loop_til_valid_input("What is your weight (in lbs)?", "You didn't enter an integer. Please enter an integer.", int)
-        codename = False
 
     color_coding = loop_til_valid_input("Do you want color coding (Y/N)?", "you didn't answer Y or N.", Y_N).value
 
