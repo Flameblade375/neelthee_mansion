@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: neelthee-mansion
-Version: 1.1.0
+Version: 1.2.0
 Summary: A text-based adventure game set in Neel-thee’s mansion.
 Home-page: https://github.com/Flameblade375/neelthee_mansion
 Author: Alexander.E.F
@@ -28,3 +28,10 @@ Description-Content-Type: text/markdown
 - Encounter and interact with different creatures.
 - Collect and use items throughout the game.
 - Navigate through quests that drive the narrative forward.
+
+## Installation
+
+You can install **Neel-thee's Mansion of Amnesia** using `pip` from the Python Package Index (PyPI). Run the following command:
+
+```bash
+pip install neelthee_mansion
