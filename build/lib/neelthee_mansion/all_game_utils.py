@@ -1,4 +1,4 @@
-from utils import *
+from .utils import *
 from re import *
 
 def ask_for_consent(text: str) -> bool:
