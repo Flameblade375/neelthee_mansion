@@ -740,7 +740,7 @@ def main():
 
     if Standord_Player:
         while True:
-            type_text("Who do you want to play as?", colorTrue=color_coding)
+            type_text("Who do you want to play as?", colorTrue=False)
             print(df)
             selected_character = loop_til_valid_input(
                 "Who do you want to play as? (please select the number to the left of there stats)", 
@@ -756,13 +756,13 @@ def main():
                 weight = character_info['weight(LBs)']
                 break
             else:
-                type_text(colorTrue=color_coding)
+                type_text(colorTrue=False)
 
-        type_text("Please enter a codename for your achievements to save under \n>", False, colorTrue=color_coding)
+        type_text("Please enter a codename for your achievements to save under \n>", False, colorTrue=False)
         codename = input()
 
     else:
-        type_text("You will now have to enter a name, age, height, and weight. Please enter the height in this format: _ft _. These will be used throughout the game.", colorTrue=color_coding)
+        type_text("You will now have to enter a name, age, height, and weight. Please enter the height in this format: _ft _. These will be used throughout the game.", colorTrue=False)
 
         name = loop_til_valid_input("What is your name?", "You didn't enter a string. Please enter a string.", str)
         age = loop_til_valid_input("What is your age (in whole years)?", "You didn't enter an integer. Please enter an integer.", int)
