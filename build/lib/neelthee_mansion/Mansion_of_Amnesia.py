@@ -2,12 +2,7 @@ from .Rooms import *
 from .creatures import *
 from .items import *
 from .Quests import *
-import sys
-import os
-
-# Add the path to Utils
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'all_game_utils.py')))
-from all_game_utils import *
+from .all_game_utils import *
 
 
 GameState = {
