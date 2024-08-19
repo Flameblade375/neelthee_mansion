@@ -1,7 +1,7 @@
-from Rooms import *
-from creatures import *
-from items import *
-from Quests import *
+from .Rooms import *
+from .creatures import *
+from .items import *
+from .Quests import *
 import sys
 import os
 

@@ -1,5 +1,5 @@
-from utils import *
-from creatures import PC
+from .utils import *
+from .creatures import PC
 
 class Objective:
     def __init__(self, description, is_completed=False):

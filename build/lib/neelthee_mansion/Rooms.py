@@ -1,5 +1,5 @@
-from items import *
-from creatures import *
+from .items import *
+from .creatures import *
 
 global KEY, ROOMS
 

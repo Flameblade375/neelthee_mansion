@@ -1,5 +1,5 @@
-from items import *
-from utils import *
+from .items import *
+from .utils import *
 
 global ValidActions
 
