@@ -1,0 +1,5 @@
+psutil
+playsound
+requests
+keyboard
+pandas

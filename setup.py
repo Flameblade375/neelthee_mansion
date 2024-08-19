@@ -5,7 +5,7 @@ setup(
     version='1.0.0',
     packages=find_packages(),  # Automatically finds all packages and modules
     install_requires=[
-        'psutil', 'playsound', 'requests', 'keyboard', 'pandas',
+        'psutil', 'playsound', 'requests', 'keyboard', 'pandas', 'validators', 'dicttoxml', 'pytz',
         # List other dependencies here
     ],
     entry_points={
@@ -25,11 +25,11 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
     ],
-    description='A text-based adventure game set in a mansion.',
+    description='A text-based adventure game set in Neel-thee’s mansion.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
-    url='https://github.com/yourusername/neelthee_mansion',  # Update with your repository URL
-    author='Your Name',
-    author_email='your.email@example.com',
+    url='https://github.com/Flameblade375/neelthee_mansion',  # Update with your repository URL
+    author='Alexander.E.F',
+    author_email='alexander@xandy.rocks',
     license='MIT',
 )
