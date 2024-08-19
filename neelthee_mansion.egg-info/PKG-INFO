@@ -1,10 +1,10 @@
 Metadata-Version: 2.1
 Name: neelthee-mansion
 Version: 1.0.0
-Summary: A text-based adventure game set in a mansion.
-Home-page: https://github.com/yourusername/neelthee_mansion
-Author: Your Name
-Author-email: your.email@example.com
+Summary: A text-based adventure game set in Neel-thee’s mansion.
+Home-page: https://github.com/Flameblade375/neelthee_mansion
+Author: Alexander.E.F
+Author-email: alexander@xandy.rocks
 License: MIT
 Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3.6

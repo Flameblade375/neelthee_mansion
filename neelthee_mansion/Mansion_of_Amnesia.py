@@ -78,88 +78,8 @@ charactersList = [
     {'name': 'Lily', 'age': 26, 'height': Height('5ft 6'), 'weight(LBs)': 135},
     {'name': 'Grace', 'age': 29, 'height': Height('5ft 7'), 'weight(LBs)': 140}
 ]
-
-
-df = pd.DataFrame(charactersList)
-
-
-if __name__ == "__main__":
-    # this is the initializer
-    Standord_Player = loop_til_valid_input("Do you want to use a premade character?", "you didn't answer Y or N.", Y_N).value
-
-    if Standord_Player:
-        while True:
-            type_text("Who do you want to play as?", colorTrue=color_coding)
-            print(df)
-            selected_character = loop_til_valid_input(
-                "Who do you want to play as? (please select the number to the left of there stats)", 
-                "That wasn't one of the characters. Please choose one.", 
-                int
-            )
-            lstIndex = last_index(charactersList)
-            if selected_character <= lstIndex:
-                character_info = charactersList[selected_character]
-                name = character_info['name']
-                age = character_info['age']
-                height = character_info['height']
-                weight = character_info['weight(LBs)']
-                break
-            else:
-                type_text(colorTrue=color_coding)
-        
-        type_text("Please enter a codename for your achievements to save under \n>", False, colorTrue=color_coding)
-        codename = input()
-
-    else:
-        type_text("You will now have to enter a name, age, height, and weight. Please enter the height in this format: _ft _. These will be used throughout the game.", colorTrue=color_coding)
-
-        name = loop_til_valid_input("What is your name?", "You didn't enter a string. Please enter a string.", str)
-        age = loop_til_valid_input("What is your age (in whole years)?", "You didn't enter an integer. Please enter an integer.", int)
-        height = loop_til_valid_input("What is your height?", "You didn't enter your height in the correct format. Please enter your height in the correct format.", Height)
-        weight = loop_til_valid_input("What is your weight (in lbs)?", "You didn't enter an integer. Please enter an integer.", int)
-        codename = False
     
-    color_coding = loop_til_valid_input("Do you want color coding (Y/N)?", "you didn't answer Y or N.", Y_N).value
-
-player = PC(
-    name,
-    age,
-    'Warrior',
-    1,
-    'Soldier',
-    height,
-    weight,
-    [
-        f"You joined the army at {14 if age >= 14 else age}", 
-        f"You joined the army to end the war and because you wanted glory", 
-        f"You spent your first year of service training and the rest on the front lines, surprisingly you didn't die", 
-        f"In your service, you made 3 friends, one of them died", 
-        f"You fought your enemies from the tops of the mountains to the vast oceans", 
-        f"Your father was never home; he was always off on great adventures until he died when you were {7 if age >= 7 else age}", 
-        f"You have no friends back home; you were always very lonely", 
-        f"You are an only child. You ran away from home to join the army; your mother misses you terribly", 
-        f"She was a baker, and you spent a lot of time helping her bake bread. You never went to school", 
-        f"The people you admire the most are Sam and Aragorn from Lord of the Rings, which you read as a child. You have also read the Hunger Games when you were {13 if age >= 13 else age}", 
-        f"Your favorite weapon is a bow; however, the scimitar is a close second.", 
-    ],
-    Background=f"""
-You were born into a life of solitude as an only child. Your father was always away on grand adventures and passed away when you were just {7 if age >= 7 else age}. Your mother, a dedicated 
-baker, raised you alone. Although she did her best, you spent most of your time helping her in the bakery rather than attending school, which left you feeling quite isolated.
-
-At the age of {14 if age >= 14 else age}, driven by a desire for glory and a wish to end the war, you left home to join the army. You spent your first year in rigorous training, followed by a 
-harsh life on the front lines. Against all odds, you survived, forging bonds with three close friends—though one of them tragically died in battle. Your journey took you from the heights of 
-mountains to the vast expanses of the ocean, each experience shaping who you are.
-
-You were deeply influenced by the heroes of your childhood—Sam and Aragorn from %*ITALIC*%Lord of the Rings%*RESET*%, which you read as a child, and the characters from %*ITALIC*%The Hunger 
-Games%*RESET*%, which you read when you were {13 if age >= 13 else age}. These stories inspired you and fueled your dream of heroism. Though your favorite weapon is a bow, you also have a 
-fondness for the scimitar.
-
-Now, you find yourself in the Mansion of Amnesia, a place that seems to have erased your memories. The details of your past are fragmented, but the echoes of your history drive you forward. You 
-must navigate the mansion and uncover the truth behind your captivity, all while drawing strength from the remnants of your past.
-"""
-)
-
-
+    
 evil_mage = PC(
     'Neel-thee Contozt', 
     19836, 
@@ -814,6 +734,86 @@ guards = [
 ]
 
 def main():
+    global charactersList
+
+
+    df = pd.DataFrame(charactersList)
+
+
+    # this is the initializer
+    Standord_Player = loop_til_valid_input("Do you want to use a premade character?", "you didn't answer Y or N.", Y_N).value
+
+    if Standord_Player:
+        while True:
+            type_text("Who do you want to play as?", colorTrue=color_coding)
+            print(df)
+            selected_character = loop_til_valid_input(
+                "Who do you want to play as? (please select the number to the left of there stats)", 
+                "That wasn't one of the characters. Please choose one.", 
+                int
+            )
+            lstIndex = last_index(charactersList)
+            if selected_character <= lstIndex:
+                character_info = charactersList[selected_character]
+                name = character_info['name']
+                age = character_info['age']
+                height = character_info['height']
+                weight = character_info['weight(LBs)']
+                break
+            else:
+                type_text(colorTrue=color_coding)
+
+        type_text("Please enter a codename for your achievements to save under \n>", False, colorTrue=color_coding)
+        codename = input()
+
+    else:
+        type_text("You will now have to enter a name, age, height, and weight. Please enter the height in this format: _ft _. These will be used throughout the game.", colorTrue=color_coding)
+
+        name = loop_til_valid_input("What is your name?", "You didn't enter a string. Please enter a string.", str)
+        age = loop_til_valid_input("What is your age (in whole years)?", "You didn't enter an integer. Please enter an integer.", int)
+        height = loop_til_valid_input("What is your height?", "You didn't enter your height in the correct format. Please enter your height in the correct format.", Height)
+        weight = loop_til_valid_input("What is your weight (in lbs)?", "You didn't enter an integer. Please enter an integer.", int)
+        codename = False
+
+    color_coding = loop_til_valid_input("Do you want color coding (Y/N)?", "you didn't answer Y or N.", Y_N).value
+
+    player = PC(
+        name,
+        age,
+        'Warrior',
+        1,
+        'Soldier',
+        height,
+        weight,
+        [
+            f"You joined the army at {14 if age >= 14 else age}", 
+            f"You joined the army to end the war and because you wanted glory", 
+            f"You spent your first year of service training and the rest on the front lines, surprisingly you didn't die", 
+            f"In your service, you made 3 friends, one of them died", 
+            f"You fought your enemies from the tops of the mountains to the vast oceans", 
+            f"Your father was never home; he was always off on great adventures until he died when you were {7 if age >= 7 else age}", 
+            f"You have no friends back home; you were always very lonely", 
+            f"You are an only child. You ran away from home to join the army; your mother misses you terribly", 
+            f"She was a baker, and you spent a lot of time helping her bake bread. You never went to school", 
+            f"The people you admire the most are Sam and Aragorn from Lord of the Rings, which you read as a child. You have also read the Hunger Games when you were {13 if age >= 13 else age}", 
+            f"Your favorite weapon is a bow; however, the scimitar is a close second.", 
+        ],
+        Background=f"""
+    You were born into a life of solitude as an only child. Your father was always away on grand adventures and passed away when you were just {7 if age >= 7 else age}. Your mother, a dedicated 
+    baker, raised you alone. Although she did her best, you spent most of your time helping her in the bakery rather than attending school, which left you feeling quite isolated.
+
+    At the age of {14 if age >= 14 else age}, driven by a desire for glory and a wish to end the war, you left home to join the army. You spent your first year in rigorous training, followed by a 
+    harsh life on the front lines. Against all odds, you survived, forging bonds with three close friends—though one of them tragically died in battle. Your journey took you from the heights of 
+    mountains to the vast expanses of the ocean, each experience shaping who you are.
+
+    You were deeply influenced by the heroes of your childhood—Sam and Aragorn from %*ITALIC*%Lord of the Rings%*RESET*%, which you read as a child, and the characters from %*ITALIC*%The Hunger 
+    Games%*RESET*%, which you read when you were {13 if age >= 13 else age}. These stories inspired you and fueled your dream of heroism. Though your favorite weapon is a bow, you also have a 
+    fondness for the scimitar.
+
+    Now, you find yourself in the Mansion of Amnesia, a place that seems to have erased your memories. The details of your past are fragmented, but the echoes of your history drive you forward. You 
+    must navigate the mansion and uncover the truth behind your captivity, all while drawing strength from the remnants of your past.
+    """
+    )
 
     # shows the instructions
     start()
