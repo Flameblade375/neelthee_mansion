@@ -4,6 +4,7 @@ neelthee_mansion/Mansion_of_Amnesia.py
 neelthee_mansion/Quests.py
 neelthee_mansion/Rooms.py
 neelthee_mansion/__init__.py
+neelthee_mansion/__main__.py
 neelthee_mansion/creatures.py
 neelthee_mansion/items.py
 neelthee_mansion/utils.py
