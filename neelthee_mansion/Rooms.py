@@ -172,7 +172,10 @@ ROOMS = {
 █       █
 █ææææ√ææ█
 █████████''',
-                    'Hints': ['I wonder if there is anything salvageable in the cupboards', 'I should probably look around'],
+                    'Hints': [
+                        'I wonder if there is anything salvageable in the %*RED*%cupboards%*RESET*%',
+                        'I should probably look around',
+                    ],
                     },
 
                 'Dining Room': {
@@ -200,7 +203,10 @@ ROOMS = {
 █       █
 █       █
 ████║████''',
-                    'Hints': ['I wonder if there is anything in the chandelier', 'I wonder if there is anything around the room'],
+                    'Hints': [
+                        'I wonder if there is anything in the %*RED*%chandelier',
+                        'I wonder if there is anything around the room',
+                    ],
                     },
 
                 'Garden': {
@@ -222,7 +228,9 @@ ROOMS = {
 █       ∩
 █       í
 █íííííííí''',
-                    'Hints': ['I think I need a key for the gate'],
+                    'Hints': [
+                        'I think I need a %*BLUE*%key%*RESET*% for the gate',
+                    ],
                     },
 
                 'Armoury': {
@@ -251,7 +259,10 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █Γ      █
 █       █
 ████║████''',
-                    'Hints': ['Maybe there is something salvageable on the racks', 'I wonder if that armour is salvageable'],
+                    'Hints': [
+                        'Maybe there is something salvageable on the %*RED*%racks%*RESET*%',
+                        'I wonder if that armour is salvageable',
+                    ],
                     },
 
                 'Sitting Room': {
@@ -285,7 +296,11 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █       █
 █       █
 ████║████''',
-                    'Hints': ['That pig seems dangerous', 'Those sofas look comfy', "I wonder what's down those stairs"],
+                    'Hints': [
+                        'That %*CYAN*%pig%*RESET*% seems dangerous',
+                        'Those %*RED*%sofas%*RESET*% look comfy',
+                        "I wonder what's %*GREEN*%down%*RESET*% those stairs",
+                    ],
                     },
 
                 'Landing': {
@@ -312,7 +327,9 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █╖      █
 █╖      █
 ████║████''',
-                    'Hints': ['I wonder if I can pry one of the %*RED*%floorboards%*RESET*% back'],
+                    'Hints': [
+                        'I wonder if I can pry one of the %*RED*%floorboards%*RESET*% back'
+                    ],
                     },
 
                 'Bedroom': {
@@ -339,7 +356,12 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █╬    §§█
 █╬  ☼☼§§█
 █████████''',
-                    'Hints': ["I wonder what's north", 'I wonder if there is anything under the bed', 'I wonder if there is anything in the drawers', "I wonder what's in the wardrobe"],
+                    'Hints': [
+                        "I wonder what's %*GREEN*%north%*RESET*%",
+                        'I wonder if there is anything under the %*RED*%bed%*RESET*%',
+                        'I wonder if there is anything in the %*RED*%drawers%*RESET*%',
+                        "I wonder what's in the %*RED*%wardrobe%*RESET*%",
+                    ],
                     },
 
                 'Office': {
@@ -365,7 +387,11 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █š      █
 █       █
 ████║████''',
-                    'Hints': ["I wonder what's in the storage, if anything", "I wonder what's through the southern door", 'I wonder if there is anything on the desk'],
+                    'Hints': [
+                        "I wonder what's in the %*RED*%storage%*RESET*%, if anything",
+                        "I wonder what's through the %*GREEN*%south%*RESET*%ern door",
+                        'I wonder if there is anything on the %*RED*%desk%*RESET*%',
+                    ],
                     },
 
                 'Balcony': {
@@ -386,7 +412,9 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 ∟       ∟
 ∟       ∟
 ∟∟∟∟∟∟∟∟∟''',
-                    'Hints': ['', '', '', ''],
+                    'Hints': [
+                        'If I had a %*BLUE*%grappling-hook%*RESET*% I might be able to throw it into the trees and swing down into the forest',
+                    ],
                     },
          
                 'Tower Bottom': {
@@ -410,7 +438,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █╖      █
 █╖      █
 ████║████''',
-                    'Hints': ['', '', '', ''],
+                    'Hints': ["I wonder what's %*GREEN*%south%*RESET*%", "I wonder what's %*GREEN*%east%*RESET*%", "I wonder what's %*GREEN*%up%*RESET*%", "I wonder what's %*GREEN*%down%*RESET*%"],
                     },
 
                 'Tower Middle': {
@@ -420,6 +448,9 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'directions': {
                         'down': 'Tower Bottom',
                         'up': 'Tower Top',
+                        },
+                    'containers': {
+                        'Stone': container([item('money-pouch', 'valuable', 25)], True),
                         },
                     'item': item('tome'),
                     'info': 'You are in the middle of a stone tower. The only light comes from above, through the cracks around the hatch to above.',
@@ -433,7 +464,9 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █╖      █
 █╖      █
 █████████''',
-                    'Hints': ['', '', '', ''],
+                    'Hints': [
+                        'There might be an item here',
+                    ],
                 },
 
                 'Tower Top' :{
@@ -464,7 +497,9 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █       █
 █       █
 █████████''',
-                    'Hints': ['', '', '', ''],
+                    'Hints': [
+                        'I could %*GREEN*%teleport%*RESET*%',
+                    ],
                 },
 
                 'Basement Armoury': {
@@ -492,7 +527,10 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █       █
 █       █
 ████║████''',
-                    'Hints': ['', '', '', ''],
+                    'Hints': [
+                        'The things in %*RED*%rack-1%*RESET*% and %*RED*%rack-2%*RESET*% are salvigable',
+                        "I wonder if I can get this %*BLUE*%torch%*RESET*% out of it's holder",
+                    ],
                     },
 
                 'Basement 1': {
@@ -517,7 +555,9 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █       █
 █       █
 ████║████''',
-                    'Hints': ['', '', '', ''],
+                    'Hints': [
+                        "I wonder if I can get this %*BLUE*%torch%*RESET*% out of it's holder",
+                    ],
                     },
 
                 'Basement 2': {
@@ -540,7 +580,9 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █       █
 █       █
 █████████''',
-                    'Hints': ['', '', '', ''],
+                    'Hints': [
+                        "I wonder if I can get this %*BLUE*%torch%*RESET*% out of it's holder",
+                    ],
                     },
 
                 'Basement 3': {
@@ -586,7 +628,9 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █       █
 █       █
 █████████''',
-                    'Hints': ['', '', '', ''],
+                    'Hints': [
+                        "I wonder if I can get this %*BLUE*%torch%*RESET*% out of it's holder",
+                    ],
                     },
 
                 'Forest Clearing': {
@@ -609,7 +653,6 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
  ¥   ¥¥  
   ¥  ¥   
          ''',
-                    'Hints': ['', '', '', ''],
                     },
 
                 'Forest Path1': {
@@ -630,7 +673,6 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
  ¥     ¥ 
  ¥¥   ¥ ¥
 ''',
-                    'Hints': ['', '', '', ''],
                     },
 
                 'Forest Path2': {
@@ -651,7 +693,6 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
   ¥¥¥   ¥
  ¥   ¥¥¥ 
 ''',
-                    'Hints': ['', '', '', ''],
                     },
 
                 'Teleportation Deck': {
