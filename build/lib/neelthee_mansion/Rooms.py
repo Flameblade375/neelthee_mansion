@@ -161,7 +161,7 @@ ROOMS = {
                         'A %*CYAN*%hungry%*RESET*% bear attacks you!',
                         ),
                     ],
-                    'info': 'You are in the kitchen, there are several trashed %*RED*%cupboards%*RESET*%, and a fireplace.',
+                    'info': 'You are in the kitchen, there are several trashed %*RED*%cupboards%*RESET*%, one of them has a knotted cord sticking out, and a fireplace.',
                     'map': '''
 ████║████
 █       █
@@ -175,6 +175,13 @@ ROOMS = {
                     'Hints': [
                         'I wonder if there is anything salvageable in the %*RED*%cupboards%*RESET*%',
                         'I should probably look around',
+                    ],
+                    'Event chance': 0.1,
+                    'Random events': [
+                        {
+                            'Output text': "You hear a bang and the cupboard door swings open slowly and the cord is gone",
+                            'Event code': "ROOMS['Kitchen']['containers']['cupboards'].take_contents()"
+                        },
                     ],
                     },
 

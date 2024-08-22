@@ -750,6 +750,14 @@ commands = {
 def quit():
     exit()
 
+def do_random_event():
+    if 'Random events' in ROOMS[CURRENTROOM] and 'Event chance' in ROOMS[CURRENTROOM]:
+        if random() <= ROOMS[CURRENTROOM]['Event chance']:
+            if is_executable(Event['Event code']):
+                Event = choice(ROOMS[CURRENTROOM]['Random events'])
+                type_text(Event['Output text'])
+                exec(Event['Event code'])
+
 guards = [
     Guard(
         name="Guard",
@@ -903,6 +911,7 @@ def main():
         for ___ in GameState['collected items']:
             if isinstance(___, item):
                 quest_manager.update_objective(f"Colect {___.name}")
+        do_random_event()
 
 
 

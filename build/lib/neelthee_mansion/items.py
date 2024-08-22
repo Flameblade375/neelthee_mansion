@@ -65,3 +65,10 @@ class container:
     def __init__(self, contents: list[item], secret: bool = False) -> None:
         self.contents = contents
         self.secret = secret
+    
+    def take_contents(self, geter = None):
+        try:
+            for Item in self.contents:
+                geter.inventory_add(Item)
+        finally:
+            self.contents = None
