@@ -214,10 +214,12 @@ class base_ability:
     
     def activate(self, target: creature, damage: int = 5):
         self.ready = False
+        self.current_cooldown = 0
         print(f"Ability {self.name} will be ready after {self.cooldown_time} commands.")
     
     def Tick(self):
         self.current_cooldown += 1
+        self.check_cooldown
     
     def check_cooldown(self):
         if self.current_cooldown >= self.cooldown_time:
