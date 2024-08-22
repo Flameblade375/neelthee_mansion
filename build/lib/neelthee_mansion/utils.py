@@ -235,7 +235,7 @@ def clamp(value, min = 0, max = 0):
 
 def is_executable(code_str):
     try:
-        compile(code_str, '<string>', 'exec')
+        compile(code_str, '<string>')
         return True
     except SyntaxError:
         return False

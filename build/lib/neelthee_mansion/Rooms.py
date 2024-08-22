@@ -176,13 +176,6 @@ ROOMS = {
                         'I wonder if there is anything salvageable in the %*RED*%cupboards%*RESET*%',
                         'I should probably look around',
                     ],
-                    'Event chance': 0.1,
-                    'Random events': [
-                        {
-                            'Output text': "You hear a bang and the cupboard door swings open slowly and the cord is gone",
-                            'Event code': "ROOMS['Kitchen']['containers']['cupboards'].take_contents()"
-                        },
-                    ],
                     },
 
                 'Dining Room': {
