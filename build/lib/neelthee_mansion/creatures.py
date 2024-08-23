@@ -152,7 +152,7 @@ class Guard(creature):
         patrol_route (list[str]): The list of rooms the guard patrols through.
     """
 
-    def __init__(self, name: str, hp: int, atpw: int, dropped_items: list[str] = [], description: str = None, flavor_text: str = None, type: creature_type = creature_type('humanoid'), crit_chance: float = 0.05, current_room: str = None, patrol_route: list[str] = None, patrol_type: str = 'normal'):
+    def __init__(self, name: str, hp: int, atpw: int, dropped_items: list[str] = [], description: str = None, flavor_text: str = None, type: creature_type = creature_type('humanoid'), crit_chance: float = 0.05, current_room: str = None, patrol_route: list[str] = None, patrol_type: str = 'normal', frendly_text: str = ""):
         """
         Initializes a new guard instance.
 
@@ -167,14 +167,16 @@ class Guard(creature):
             crit_chance (float, optional): The chance of the guard landing a critical hit. Defaults to 0.05.
             current_room (str, optional): The current room where the guard is located. Defaults to None.
             patrol_route (list[str], optional): The list of rooms the guard patrols through. Defaults to None.
-            patrol_type (str): The type of patrol the guard is doing. Defaults to narmol.
+            patrol_type (str): The type of patrol the guard is doing. Defaults to normal.
         """
         super().__init__(name, hp, atpw, dropped_items, description, flavor_text, type, crit_chance)
         self.current_room = current_room
         self.patrol_route = patrol_route or []
         self.patrol_type = patrol_type
+        self.frendly = False
+        self.frendly_text = frendly_text
 
-    def move(self, ROOMS):
+    def move(self, ROOMS, player):
         """
         Moves the guard depending on his patrol type.
         """
@@ -189,6 +191,11 @@ class Guard(creature):
             for direction, room in ROOMS[self.current_room]['directions'].items():
                 rooms.append(room)
             self.current_room = choice(rooms)
+        elif self.patrol_type == 'follow':
+            for direction, room in ROOMS[self.current_room]['directions'].items():
+                if room == player.CURRENTROOM:
+                    self.current_room = room
+                    return
 
     def check_detection(self, player_room):
         """
@@ -200,9 +207,12 @@ class Guard(creature):
         Returns:
             bool: True if the player is detected, False otherwise.
         """
-        if self.current_room == player_room:
+        if self.current_room == player_room and not self.frendly:
             type_text(f"You have been caught by {self.name} in the {self.current_room}!")
             return True
+        elif self.current_room == player_room and self.frendly:
+            if random() <= 0.015:
+                type_text(self.frendly_text)
         return False
 
 class base_ability:
@@ -253,12 +263,16 @@ class PC(base_character):
             money: int = 0, 
             weapons_atpws: list = [],
             backstory: str = "",
+            CURRENTROOM: str = "",
+            LASTROOM: str = None,
         ):
         if not xp:
             if Level == 1:
                 xp = 0
             else:
                 xp = Level*25
+        if not LASTROOM:
+            LASTROOM = CURRENTROOM
         self.name = Name
         self.Age = Age
         self.Class = Class
@@ -279,6 +293,8 @@ class PC(base_character):
         self.defending = False
         self.special_ability = special_ability
         self.backstory = backstory
+        self.CURRENTROOM = CURRENTROOM
+        self.LASTROOM = LASTROOM
 
     def get_change_weapon(self, weapon_atpw: int = 0, weapon_index: int = -1):
         if weapon_atpw > 0:

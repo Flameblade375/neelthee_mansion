@@ -450,7 +450,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                         'up': 'Tower Top',
                         },
                     'containers': {
-                        'Stone': container([item('money-pouch', 'valuable', 25)], True),
+                        'stone': container([item('money-pouch', 'valuable', 25)], True),
                         },
                     'item': item('tome'),
                     'info': 'You are in the middle of a stone tower. The only light comes from above, through the cracks around the hatch to above.',

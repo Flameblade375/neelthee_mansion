@@ -15,7 +15,7 @@ GameState = {
 Neel-thee's Mansion of Amnesia
 '''
 
-global player, evil_mage, commands, NOTE_NUM, LAST_ROOM, CURRENTROOM, credits, characters, color_coding, quest_manager
+global player, evil_mage, commands, NOTE_NUM, credits, characters, color_coding, quest_manager
 
 quest_manager = QuestManager()
 
@@ -24,10 +24,6 @@ color_coding = False
 credits = '''
 Made by: Alexander.E.F'''
 
-# start the player in the Hall
-CURRENTROOM = 'Hall'
-
-LAST_ROOM = CURRENTROOM
 
 name = ''
 age = 0
@@ -130,9 +126,9 @@ map - Display the map of places you have been to
 
 def showHint():
     global player
-    if 'Hints' in ROOMS[CURRENTROOM]:
+    if 'Hints' in ROOMS[player.CURRENTROOM]:
         type_text("You think:", colorTrue=color_coding)
-        hint = choice(ROOMS[CURRENTROOM]['Hints'])
+        hint = choice(ROOMS[player.CURRENTROOM]['Hints'])
         type_text(hint, colorTrue=color_coding)
     else:
         type_text("You can't think of anything", colorTrue=color_coding)
@@ -201,9 +197,9 @@ def Use_grappling_hook():
         else:
             type_text("You flick the rope and it unhooks. You continue exploring the forest", colorTrue=color_coding)
 
-    if CURRENTROOM == 'Balcony' and 'grappling-hook' in player.inventory:
+    if player.CURRENTROOM == 'Balcony' and 'grappling-hook' in player.inventory:
         swing_into_forest()
-    elif CURRENTROOM == 'Forest Clearing' and 'grappling-hook' in player.inventory:
+    elif player.CURRENTROOM == 'Forest Clearing' and 'grappling-hook' in player.inventory:
         climb_into_house()
 
 
@@ -258,7 +254,6 @@ def Use(moveone, movetwo=None):
 
 def Move(move):
     global player
-    global CURRENTROOM, LAST_ROOM
 
 
     def attempt_charter():
@@ -267,10 +262,10 @@ def Move(move):
             player.money -= 10
             if 'descovered' in ROOMS[newRoom] and not ROOMS[newRoom]['descovered']:
                 ROOMS[newRoom]['descovered'] = True
-            return ROOMS[CURRENTROOM]['directions'][move]
+            return ROOMS[player.CURRENTROOM]['directions'][move]
         else:
             type_text("You don't have enough money to charter a ship.", colorTrue=color_coding)
-            return CURRENTROOM
+            return player.CURRENTROOM
 
     def attempt_move_to_garden():
         global player
@@ -283,8 +278,7 @@ def Move(move):
 
     def move_to_room():
         global player
-        global LAST_ROOM
-        LAST_ROOM = CURRENTROOM
+        player.LASTROOM = player.CURRENTROOM
         if move == '0':
             return attempt_charter()
         elif newRoom == 'Garden':
@@ -296,17 +290,17 @@ def Move(move):
                 ROOMS[newRoom]['descovered'] = True
             return newRoom
 
-    if move in ROOMS[CURRENTROOM]['directions']:
-        newRoom = ROOMS[CURRENTROOM]['directions'][move]
-        CURRENTROOM = move_to_room()
+    if move in ROOMS[player.CURRENTROOM]['directions']:
+        newRoom = ROOMS[player.CURRENTROOM]['directions'][move]
+        player.CURRENTROOM = move_to_room()
         return
     elif move in ROOMS:
         newRoom = move
         if newRoom == 'Garden':
-            CURRENTROOM = attempt_move_to_garden()
+            player.CURRENTROOM = attempt_move_to_garden()
         else:
-            CURRENTROOM = newRoom
-        LAST_ROOM = CURRENTROOM
+            player.CURRENTROOM = newRoom
+        player.LASTROOM = player.CURRENTROOM
         return
     type_text("You can't go that way!", colorTrue=color_coding)
 
@@ -332,21 +326,21 @@ def showStatus():
     text = display_directions(text)
 
     # Display the map if available
-    if 'map' in ROOMS[CURRENTROOM]:
+    if 'map' in ROOMS[player.CURRENTROOM]:
         text += f'\n\nKey: {"; ".join(KEY)}\n'
-        text += f'\n{ROOMS[CURRENTROOM]["map"]}\n'
+        text += f'\n{ROOMS[player.CURRENTROOM]["map"]}\n'
 
     # Display the description of the current room
-    text += ('\n' + str(ROOMS[CURRENTROOM]['info']))
+    text += ('\n' + str(ROOMS[player.CURRENTROOM]['info']))
 
     text += f"\n---------------------------"
     
     type_text(text, colorTrue=color_coding)
     
     # Optionally display additional room description
-    if 'description' in ROOMS[CURRENTROOM] and ask_for_consent("Do you want to observe the area"):
+    if 'description' in ROOMS[player.CURRENTROOM] and ask_for_consent("Do you want to observe the area"):
         type_text("The area:", colorTrue=color_coding)
-        type_text(ROOMS[CURRENTROOM]['description'], colorTrue=color_coding)
+        type_text(ROOMS[player.CURRENTROOM]['description'], colorTrue=color_coding)
 
 
 def display_directions(text):
@@ -371,14 +365,14 @@ def display_directions(text):
         }
     }
 
-    room_type = ROOMS[CURRENTROOM]['room type']
+    room_type = ROOMS[player.CURRENTROOM]['room type']
     if room_type in direction_descriptions:
         for direction in directions:
-            if direction in ROOMS[CURRENTROOM]['directions']:
+            if direction in ROOMS[player.CURRENTROOM]['directions']:
                 if direction != 'teleport':
                     text += f'\n{direction_descriptions[room_type][direction]} %*GREEN*%{direction}%*RESET*%.'
 
-    if 'teleport' in ROOMS[CURRENTROOM]['directions']:
+    if 'teleport' in ROOMS[player.CURRENTROOM]['directions']:
         text += "\nThere is a %*GREEN*%teleport%*RESET*%ation circle on the ground"
 
     return text
@@ -601,9 +595,9 @@ def handle_go_command(direction):
     Move(direction)
 
 def handle_get_command(player: PC, item_name):
-    if "item" in ROOMS[CURRENTROOM] and item_name == ROOMS[CURRENTROOM]['item'].name:
-        player.inventory_add([ROOMS[CURRENTROOM]['item']])
-        del ROOMS[CURRENTROOM]['item']
+    if "item" in ROOMS[player.CURRENTROOM] and item_name == ROOMS[player.CURRENTROOM]['item'].name:
+        player.inventory_add([ROOMS[player.CURRENTROOM]['item']])
+        del ROOMS[player.CURRENTROOM]['item']
         type_text(f'%*BLUE*%{item_name}%*RESET*% got!', colorTrue=color_coding)
     else:
         type_text(f"Can't get {item_name}!", colorTrue=color_coding)
@@ -611,11 +605,11 @@ def handle_get_command(player: PC, item_name):
 def handle_look_command():
     global player
     return_ = False
-    if 'item' in ROOMS[CURRENTROOM]:
-        type_text(f'The item in the room: %*BLUE*%{ROOMS[CURRENTROOM]["item"].name}%*RESET*%.', colorTrue=color_coding)
+    if 'item' in ROOMS[player.CURRENTROOM]:
+        type_text(f'The item in the room: %*BLUE*%{ROOMS[player.CURRENTROOM]["item"].name}%*RESET*%.', colorTrue=color_coding)
         return_ = True
-    if 'containers' in ROOMS[CURRENTROOM]:
-        type_text(f"The containers here are: %*RED*%{', '.join(ROOMS[CURRENTROOM]['containers'].keys())}%*RESET*%", colorTrue=color_coding)
+    if 'containers' in ROOMS[player.CURRENTROOM]:
+        type_text(f"The containers here are: %*RED*%{', '.join(ROOMS[player.CURRENTROOM]['containers'].keys())}%*RESET*%", colorTrue=color_coding)
         return_ = True
     if return_:
         return
@@ -626,32 +620,32 @@ def handle_use_command(item = None, sub_item = None):
     Use(item, sub_item)
 
 def handle_search_command(player, container = None, sub_container = None):
-    if 'containers' in ROOMS[CURRENTROOM]:
-        if container == 'the' and sub_container in ROOMS[CURRENTROOM]['containers'] and not all_same_value(ROOMS[CURRENTROOM]['containers'][sub_container].contents, None):
+    if 'containers' in ROOMS[player.CURRENTROOM]:
+        if container == 'the' and sub_container in ROOMS[player.CURRENTROOM]['containers'] and not all_same_value(ROOMS[player.CURRENTROOM]['containers'][sub_container].contents, None):
             search_container(player, sub_container)
-        elif container in ROOMS[CURRENTROOM]['containers'] and not all_same_value(ROOMS[CURRENTROOM]['containers'][container].contents, None):
+        elif container in ROOMS[player.CURRENTROOM]['containers'] and not all_same_value(ROOMS[player.CURRENTROOM]['containers'][container].contents, None):
             search_container(player, container)
         else:
             type_text(f"You cannot search the {container}", colorTrue=color_coding)
 
 def search_container(player: PC, container):
-    player.inventory_add(ROOMS[CURRENTROOM]['containers'][container].contents)
-    type_text(f"You search the{' secret' if ROOMS[CURRENTROOM]['containers'][container].secret else ''} %*RED*%{container}%*RESET*% and find a ", newline=False, colorTrue=color_coding)
-    for searchitem in ROOMS[CURRENTROOM]['containers'][container].contents:
+    player.inventory_add(ROOMS[player.CURRENTROOM]['containers'][container].contents)
+    type_text(f"You search the{' secret' if ROOMS[player.CURRENTROOM]['containers'][container].secret else ''} %*RED*%{container}%*RESET*% and find a ", newline=False, colorTrue=color_coding)
+    for searchitem in ROOMS[player.CURRENTROOM]['containers'][container].contents:
         if searchitem:
             if isinstance(searchitem, item):
-                end_str = ' and a ' if ROOMS[CURRENTROOM]['containers'][container].contents.index(searchitem) < last_index(ROOMS[CURRENTROOM]['containers'][container].contents) else '\n'
+                end_str = ' and a ' if ROOMS[player.CURRENTROOM]['containers'][container].contents.index(searchitem) < last_index(ROOMS[player.CURRENTROOM]['containers'][container].contents) else '\n'
                 type_text(f"%*BLUE*%{searchitem.name}%*RESET*%{end_str}", newline=False, colorTrue=color_coding)
-    ROOMS[CURRENTROOM]['containers'][container].contents = []
+    ROOMS[player.CURRENTROOM]['containers'][container].contents = []
 
 
 def handle_put_command(player: PC, PutItem: item = None, container = None, sub_container = None):
     if PutItem in player.inventory:
-        if 'containers' in ROOMS[CURRENTROOM]:
-            if container == 'the' and sub_container in ROOMS[CURRENTROOM]['containers']:
+        if 'containers' in ROOMS[player.CURRENTROOM]:
+            if container == 'the' and sub_container in ROOMS[player.CURRENTROOM]['containers']:
                 put_in_container(player, player.inventory[player.inventory.index(PutItem)], sub_container)
                 return
-            elif container in ROOMS[CURRENTROOM]['containers']:
+            elif container in ROOMS[player.CURRENTROOM]['containers']:
                 put_in_container(player, player.inventory[player.inventory.index(PutItem)], container)
                 return
     type_text(f"You cannot put the {PutItem.name} in the {container}", colorTrue=color_coding)
@@ -659,22 +653,22 @@ def handle_put_command(player: PC, PutItem: item = None, container = None, sub_c
 
 def put_in_container(player: PC, PutItem = None, container = None):
     player.inventory.remove(PutItem.name)
-    if not ROOMS[CURRENTROOM]['containers'][container].contents:
-        ROOMS[CURRENTROOM][container].contents = []
-    if not isinstance(ROOMS[CURRENTROOM][container].contents, list):
-        ROOMS[CURRENTROOM]['containers'][container].contents = [ROOMS[CURRENTROOM]['containers'][container].contents]
-    ROOMS[CURRENTROOM]['containers'][container].contents += [PutItem]
+    if not ROOMS[player.CURRENTROOM]['containers'][container].contents:
+        ROOMS[player.CURRENTROOM][container].contents = []
+    if not isinstance(ROOMS[player.CURRENTROOM][container].contents, list):
+        ROOMS[player.CURRENTROOM]['containers'][container].contents = [ROOMS[player.CURRENTROOM]['containers'][container].contents]
+    ROOMS[player.CURRENTROOM]['containers'][container].contents += [PutItem]
     type_text(f"You put you're %*BLUE*%{PutItem.name}%*RESET*% into the %*RED*%{container}%*RESET*%", colorTrue=color_coding)
 
 
 
 def handle_get_quest_command(questnum):
     global player
-    if 'quests' in ROOMS[CURRENTROOM]:
-        if questnum in ROOMS[CURRENTROOM]['quests']:
-            quest_manager.add_quest(ROOMS[CURRENTROOM]['quests'][questnum])
-            quest_manager.start_quest(ROOMS[CURRENTROOM]['quests'][questnum])
-            del ROOMS[CURRENTROOM]['quests'][questnum]
+    if 'quests' in ROOMS[player.CURRENTROOM]:
+        if questnum in ROOMS[player.CURRENTROOM]['quests']:
+            quest_manager.add_quest(ROOMS[player.CURRENTROOM]['quests'][questnum])
+            quest_manager.start_quest(ROOMS[player.CURRENTROOM]['quests'][questnum])
+            del ROOMS[player.CURRENTROOM]['quests'][questnum]
 
 
 def PrintMap():
@@ -691,7 +685,7 @@ def handle_hungry_bear(player: PC, enemy: creature):
             del player.inventory[player.inventory.index('potion')]
             type_text(f'You throw the potion at the bear and it explodes into a puff of magic smoke that stuns the bear!', colorTrue=color_coding)
     if enemy_reacting:
-        return battle(player, enemy, LAST_ROOM)
+        return battle(player, enemy, player.LASTROOM)
 
 def handle_grumpy_pig(player: PC, enemy: creature):
     enemy_reacting = True
@@ -699,7 +693,7 @@ def handle_grumpy_pig(player: PC, enemy: creature):
         if ask_for_consent("Do you want to use your saddle and pig-rod on the pig"):
             enemy_reacting = False
             type_text(f'You throw a saddle onto the pig and leap on steering it about with a pig fishing rod!', colorTrue=color_coding)
-            del ROOMS[CURRENTROOM]['creatures stats']
+            del ROOMS[player.CURRENTROOM]['creatures stats']
             del player.inventory[player.inventory.index('saddle')]
             del player.inventory[player.inventory.index('pig-rod')]
             player.inventory_add(item['pig-steed'])
@@ -708,17 +702,17 @@ def handle_grumpy_pig(player: PC, enemy: creature):
         if ask_for_consent("Do you want to use your torch to scare the pig away"):
             enemy_reacting = False
             type_text(f'You wave your torch at the pig and it runs away through a tiny open window.', colorTrue=color_coding)
-            del ROOMS[CURRENTROOM]['creatures stats']
+            del ROOMS[player.CURRENTROOM]['creatures stats']
             player.xp += 5
-    if 'ration' in player.inventory:
+    if 'rations' in player.inventory:
         if ask_for_consent("Do you want to throw your ration at the pig"):
             enemy_reacting = False
             type_text(f"You quickly throw rations at the pig. It still doesn't look happy though.", colorTrue=color_coding)
-            del player.inventory[player.inventory.index('ration')]
+            del player.inventory[player.inventory.index('rations')]
             player.xp += 15
 
     if enemy_reacting:
-        return battle(player, enemy, LAST_ROOM)
+        return battle(player, enemy, player.LASTROOM)
 
 def handle_greedy_goblin(player: PC, enemy: creature):
     enemy_reacting = True
@@ -729,7 +723,7 @@ def handle_greedy_goblin(player: PC, enemy: creature):
             player.money -= 15
             enemy.dropped_items[1].value += 15
     if enemy_reacting:
-        return battle(player, enemy, LAST_ROOM)
+        return battle(player, enemy, player.LASTROOM)
 
 commands = {
     'go': handle_go_command,
@@ -755,14 +749,55 @@ guards = [
         name="Guard",
         hp=10,
         atpw=4,
-        description="A 5ft 8 human guard who looks like he doesn't belong here",
-        flavor_text="A human guard spots you and says: 'You shouldn't be here'",
-        type = creature_type('humanoid', 'human'),
+        description="A 5'8\" human guard who looks like he doesn't belong here.",
+        flavor_text="A human guard spots you and says: 'You shouldn't be here.'",
+        type=creature_type('humanoid', 'human'),
         current_room="Bedroom",
         patrol_route=["Bedroom", "Office", "Tower Bottom", "Landing", "Bedroom"],
-        patrol_type='random'
-        ),
+        patrol_type='normal'
+    ),
+    Guard(
+        name="Wolf",
+        hp=10,
+        atpw=4,
+        description="A large wolf with blood covering its face.",
+        flavor_text="A wolf spots you and growls.",
+        type=creature_type('beast', 'wolf'),
+        current_room="Balcony",
+        patrol_type='random',
+        frendly_text="The wolf nuzzles you"
+    ),
 ]
+
+def handle_wolf(player: PC, wolf: Guard):
+    enemy_reacting = True
+    if 'rations' in player.inventory:
+        if ask_for_consent("Do you want to give your ration to the wolf"):
+            enemy_reacting = False
+            type_text(
+                "You quickly give your rations to the wolf. It looks happy, walks up to you, and nuzzles you.", 
+                colorTrue=color_coding
+            )
+            player.inventory.remove('rations')
+            wolf.patrol_type = "follow"
+            wolf.frendly = True
+            return wolf
+    if enemy_reacting:
+        return battle(player, wolf, player.LASTROOM)
+
+def handle_guard_action(guard):
+    # Dynamically build the function name
+    function_name = f"handle_{guard.name.lower()}"
+    
+    # Use globals() to retrieve the function by name
+    function_to_call = globals().get(function_name)
+    
+    if function_to_call:
+        # Call the found function
+        guard = function_to_call(player, guard)
+        return [True, guard]  # Function was found and called
+    else:
+        return [False, guard]  # Function was not found
 
 def main():
     global player, color_coding
@@ -805,6 +840,8 @@ def main():
 
     color_coding = loop_til_valid_input("Do you want color coding (Y/N)?", "you didn't answer Y or N.", Y_N).value
 
+
+    # start the player in the Hall and sets up everything else
     player = PC(
         name,
         age,
@@ -827,20 +864,21 @@ def main():
             f"Your favorite weapon is a bow; however, the scimitar is a close second.", 
         ],
         backstory=f"""
-    You were born into a life of solitude as an only child. Your father was always away on grand adventures and passed away when you were just {7 if age >= 7 else age}. Your mother, a dedicated 
-    baker, raised you alone. Although she did her best, you spent most of your time helping her in the bakery rather than attending school, which left you feeling quite isolated.
+You were born into a life of solitude as an only child. Your father was always away on grand adventures and passed away when you were just {7 if age >= 7 else age}. Your mother, a dedicated 
+baker, raised you alone. Although she did her best, you spent most of your time helping her in the bakery rather than attending school, which left you feeling quite isolated.
 
-    At the age of {14 if age >= 14 else age}, driven by a desire for glory and a wish to end the war, you left home to join the army. You spent your first year in rigorous training, followed by a 
-    harsh life on the front lines. Against all odds, you survived, forging bonds with three close friends—though one of them tragically died in battle. Your journey took you from the heights of 
-    mountains to the vast expanses of the ocean, each experience shaping who you are.
+At the age of {14 if age >= 14 else age}, driven by a desire for glory and a wish to end the war, you left home to join the army. You spent your first year in rigorous training, followed by a 
+harsh life on the front lines. Against all odds, you survived, forging bonds with three close friends—though one of them tragically died in battle. Your journey took you from the heights of 
+mountains to the vast expanses of the ocean, each experience shaping who you are.
 
-    You were deeply influenced by the heroes of your childhood—Sam and Aragorn from %*ITALIC*%Lord of the Rings%*RESET*%, which you read as a child, and the characters from %*ITALIC*%The Hunger 
-    Games%*RESET*%, which you read when you were {13 if age >= 13 else age}. These stories inspired you and fueled your dream of heroism. Though your favorite weapon is a bow, you also have a 
-    fondness for the scimitar.
+You were deeply influenced by the heroes of your childhood—Sam and Aragorn from %*ITALIC*%Lord of the Rings%*RESET*%, which you read as a child, and the characters from %*ITALIC*%The Hunger 
+Games%*RESET*%, which you read when you were {13 if age >= 13 else age}. These stories inspired you and fueled your dream of heroism. Though your favorite weapon is a bow, you also have a 
+fondness for the scimitar.
 
-    Now, you find yourself in the Mansion of Amnesia, a place that seems to have erased your memories. The details of your past are fragmented, but the echoes of your history drive you forward. You 
-    must navigate the mansion and uncover the truth behind your captivity, all while drawing strength from the remnants of your past.
-    """
+Now, you find yourself in the Mansion of Amnesia, a place that seems to have erased your memories. The details of your past are fragmented, but the echoes of your history drive you forward. You 
+must navigate the mansion and uncover the truth behind your captivity, all while drawing strength from the remnants of your past.
+""",
+    CURRENTROOM='Hall'
     )
 
     # shows the instructions
@@ -853,18 +891,28 @@ def main():
         # Move guards
         for guard in guards:
             if isinstance(guard, Guard):
-                guard.move(ROOMS)
+                guard.move(ROOMS, player)
 
         # Check for detection
         for guard in guards:
-            if isinstance(guard, Guard):
-                if guard.check_detection(CURRENTROOM):
-                    guard.type_text_flavor_text()
-                    guards[guards.index(guard)] = battle(player, guard, LAST_ROOM)
+            #try:
+                if isinstance(guard, Guard):
+                    if guard.check_detection(player.CURRENTROOM):
+                        guard_handled = handle_guard_action(guard)
+                        if not isinstance(guard_handled, list):
+                            guard_handled = [guard_handled]
+                        if not guard_handled[0]:
+                            guard.type_text_flavor_text()
+                            guards[guards.index(guard)] = battle(player, guard, player.LASTROOM)
+                        else:
+                            guards[guards.index(guard)] = guard_handled[1]
+            #except:
+            #    guard.type_text_flavor_text()
+            #    guards[guards.index(guard)] = battle(player, guard, player.LASTROOM)
         
         # player loses if they enter a room with a monster, unless they can fight it.
-        if 'creatures stats' in ROOMS[CURRENTROOM]:
-            enemies = ROOMS[CURRENTROOM]['creatures stats']
+        if 'creatures stats' in ROOMS[player.CURRENTROOM]:
+            enemies = ROOMS[player.CURRENTROOM]['creatures stats']
             if not isinstance(enemies, list):
                 enemies = [enemies]  # Ensure enemies is a list even if there's only one creature
 
@@ -883,20 +931,20 @@ def main():
                         enemy_REF = handle_greedy_goblin(player, enemy)
                         enemies[enemies.index(enemy)] = enemy_REF
                     else:
-                        enemy_REF = battle(player, enemy, LAST_ROOM)
+                        enemy_REF = battle(player, enemy, player.LASTROOM)
                         enemies[enemies.index(enemy)] = enemy_REF
 
             if all_same_value(enemies, False):
-                del ROOMS[CURRENTROOM]['creatures stats']
+                del ROOMS[player.CURRENTROOM]['creatures stats']
             else:
-                ROOMS[CURRENTROOM]['creatures stats'] = enemies
+                ROOMS[player.CURRENTROOM]['creatures stats'] = enemies
         
-        if 'NPCs' in ROOMS[CURRENTROOM]:
-            for npcname, npcstats in ROOMS[CURRENTROOM]['NPCs'].items():
+        if 'NPCs' in ROOMS[player.CURRENTROOM]:
+            for npcname, npcstats in ROOMS[player.CURRENTROOM]['NPCs'].items():
                 if ask_for_consent("Do you want to interact with this NPC") or npcstats.aggressive:
                     npcstats.interact
                     if npcstats.aggressive:
-                        ROOMS[CURRENTROOM]['NPCs'][npcname] = battle(player, npcstats)
+                        ROOMS[player.CURRENTROOM]['NPCs'][npcname] = battle(player, npcstats)
         
         player.special_ability.Tick()
         quest_manager.update_objective(f"Kill {GameState['Enemys killed']} creatures")
