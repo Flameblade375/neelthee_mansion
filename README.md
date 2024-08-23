@@ -11,7 +11,7 @@
 
 ## Installation
 
-You can install **Neel-thee's Mansion of Amnesia** using `pip` from the Python Package Index (PyPI). Run the following command:
+You can install **Neel-thee's Mansion of Amnesia** using `pip` from the Python Package Index (PyPI). Run the following command (worning! make sure you are using command line and even then sometimes it doesn't work. Please use Visual Studio Code or have turned off couler coding or it will brake):
 
 ```bash
 pip install neelthee_mansion
