@@ -35,8 +35,8 @@ def SetMapsAndPosiitionsDicts(map_dict, positions):
 
     positions = {}
     for RoomName, RoomItem in ROOMS.items():
-        if 'descovered' in RoomItem and 'position' in RoomItem and 'map' in RoomItem:
-            if RoomItem['descovered']:
+        if 'discovered' in RoomItem and 'position' in RoomItem and 'map' in RoomItem:
+            if RoomItem['discovered']:
                 map_dict[RoomName] = string_to_2d_list(RoomItem['map'])
                 positions[RoomName] = RoomItem['position']
     return map_dict, positions
@@ -99,7 +99,7 @@ ROOMS = {
                 'Hall': {
                     'room type': 'house',
                     'position': (0, 8, 0),
-                    'descovered': True,
+                    'discovered': True,
                     'directions': {
                         'south': 'Kitchen',
                         'east': 'Dining Room',
@@ -143,7 +143,7 @@ ROOMS = {
                 'Kitchen': {
                     'room type': 'house',
                     'position': (0, 16, 0),
-                    'descovered': False,
+                    'discovered': False,
                     'directions': {
                         'north': 'Hall',
                         'east': 'Garden',
@@ -181,7 +181,7 @@ ROOMS = {
                 'Dining Room': {
                     'room type': 'house',
                     'position': (0, 8, 8),
-                    'descovered': False,
+                    'discovered': False,
                     'directions': {
                         'west': 'Hall',
                         'south': 'Garden',
@@ -212,7 +212,7 @@ ROOMS = {
                 'Garden': {
                     'room type': 'house',
                     'position': (0, 16, 8),
-                    'descovered': False,
+                    'discovered': False,
                     'directions': {
                         'north': 'Dining Room',
                         'west': 'Kitchen',
@@ -236,7 +236,7 @@ ROOMS = {
                 'Armoury': {
                     'room type': 'house',
                     'position': (0, 0, 0),
-                    'descovered': False,
+                    'discovered': False,
                     'directions': {
                         'south' :'Hall',
                         'east': 'Sitting Room',
@@ -268,7 +268,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                 'Sitting Room': {
                     'room type': 'house',
                     'position': (0, 0, 8),
-                    'descovered': False,
+                    'discovered': False,
                     'directions': {
                         'west': 'Armoury',
                         'south': 'Dining Room',
@@ -306,7 +306,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                 'Landing': {
                     'room type': 'house',
                     'position': (1, 8, 0),
-                    'descovered': False,
+                    'discovered': False,
                     'directions': {
                         'down': 'Hall',
                         'north': 'Tower Bottom',
@@ -335,7 +335,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                 'Bedroom': {
                     'room type': 'house',
                     'position': (1, 8, 8),
-                    'descovered': False,
+                    'discovered': False,
                     'directions': {
                         'west': 'Landing',
                         'north': 'Office',
@@ -367,7 +367,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                 'Office': {
                     'room type': 'house',
                     'position': (1, 0, 8),
-                    'descovered': False,
+                    'discovered': False,
                     'directions': {
                         'south': 'Bedroom',
                         'west': 'Tower Bottom',
@@ -397,7 +397,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                 'Balcony': {
                     'room type': 'house',
                     'position': (1, 16, 0),
-                    'descovered': False,
+                    'discovered': False,
                     'directions': {
                         'north': 'Landing',
                         },
@@ -420,7 +420,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                 'Tower Bottom': {
                     'room type': 'house',
                     'position': (1, 0, 0),
-                    'descovered': False,
+                    'discovered': False,
                     'directions': {
                         'south': 'Landing',
                         'east': 'Office',
@@ -444,7 +444,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                 'Tower Middle': {
                     'room type': 'house',
                     'position': (2, 0, 0),
-                    'descovered': False,
+                    'discovered': False,
                     'directions': {
                         'down': 'Tower Bottom',
                         'up': 'Tower Top',
@@ -472,7 +472,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                 'Tower Top' :{
                     'room type': 'house',
                     'position': (3, 0, 0),
-                    'descovered': False,
+                    'discovered': False,
                     'directions': {
                         'down': 'Tower Middle',
                         'teleport': 'Teleportation Deck',
@@ -505,7 +505,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                 'Basement Armoury': {
                     'room type': 'house',
                     'position': (-1, 0, 0),
-                    'descovered': False,
+                    'discovered': False,
                     'directions': {
                         'south': 'Basement 3',
                         'east': 'Basement 1',
@@ -536,7 +536,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                 'Basement 1': {
                     'room type': 'house',
                     'position': (-1, 0, 8),
-                    'descovered': False,
+                    'discovered': False,
                     'directions': {
                         'south': 'Basement 2',
                         'west': 'Basement Armoury',
@@ -563,7 +563,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                 'Basement 2': {
                     'room type': 'house',
                     'position': (-1, 8, 8),
-                    'descovered': False,
+                    'discovered': False,
                     'directions': {
                         'north': 'Basement 1',
                         'west': 'Basement 3',
@@ -588,7 +588,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                 'Basement 3': {
                     'room type': 'house',
                     'position': (-1, 8, 0),
-                    'descovered': False,
+                    'discovered': False,
                     'directions': {
                         'south': 'Basement 4',
                         'east': 'Basement 2',
@@ -612,7 +612,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                 'Basement 4': {
                     'room type': 'house',
                     'position': (-1, 16, 0),
-                    'descovered': False,
+                    'discovered': False,
                     'directions': {
                         'north': 'Basement 3',
                         },
