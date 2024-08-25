@@ -615,9 +615,10 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'discovered': False,
                     'directions': {
                         'north': 'Basement 3',
+                        'shoot': 'Cavern 1',
                         },
                     'item': item('torch'),
-                    'info': 'You are in an dimly lit underground (all the light in the room comes from 3 %*BLUE*%torch%*RESET*%es on the walls).',
+                    'info': 'You are in an dimly lit underground (all the light in the room comes from 3 %*BLUE*%torch%*RESET*%es on the walls). there is a choot in the floor (type: \'go shoot\' to go down the shoot).',
                     'map': '''
 ████║████
 █       █
@@ -630,6 +631,49 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █████████''',
                     'Hints': [
                         "I wonder if I can get this %*BLUE*%torch%*RESET*% out of it's holder",
+                    ],
+                    },
+
+                'Cavern 1': {
+                    'room type': 'cavern',
+                    'directions': {
+                        'up': 'Basement 4',
+                        'down': 'Cavern 2',
+                        },
+                    'info': 'you are in a dark cavern with the only light coming from the shoot you came through. A voice in the back of your head says: \'Do not go down the shoot, leave while you still can!\'',
+                    'map': '''
+█████████
+█       █
+█       █
+█       █
+█       █
+█       █
+█       █
+█       █
+█████████''',
+                    'Hints': [
+                        'I should probably go up the shoot I came from',
+                    ],
+                    },
+
+                'Cavern 2': {
+                    'room type': 'cavern',
+                    'directions': {
+                        
+                        },
+                    'info': 'you are in a dark cavern with the only light coming from the shoot you came through. A voice in the back of your head says: \'You fool! You can never escape!\'',
+                    'map': '''
+█████████
+█       █
+█       █
+█       █
+█       █
+█       █
+█       █
+█       █
+█████████''',
+                    'Hints': [
+                        'I should probably quit so I\'m not here forever',
                     ],
                     },
 

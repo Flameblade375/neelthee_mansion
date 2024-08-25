@@ -361,8 +361,16 @@ def display_directions(text):
             'south': "There is a path to the",
             'west': "There is a path to the",
             'up': "There is a ladder going",
-            'down': "There is a holl in the ground leading"
-        }
+            'down': "There is a hole in the ground leading"
+        },
+        'cavern': {
+            'north': "There is a tunel to the",
+            'east': "There is a tunel to the",
+            'south': "There is a tunel to the",
+            'west': "There is a tunel to the",
+            'up': "There is a shoot with handhold going",
+            'down': "There is a shoot in the ground going"
+        },
     }
 
     room_type = ROOMS[player.CURRENTROOM]['room type']
