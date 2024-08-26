@@ -67,10 +67,12 @@ charactersList = [
     {'name': 'Lucas', 'age': 28, 'height': Height('5ft 10'), 'weight(LBs)': 170},
     {'name': 'Ava', 'age': 22, 'height': Height('5ft 5'), 'weight(LBs)': 130},
     {'name': 'Lily', 'age': 26, 'height': Height('5ft 6'), 'weight(LBs)': 135},
-    {'name': 'Grace', 'age': 29, 'height': Height('5ft 7'), 'weight(LBs)': 140}
+    {'name': 'Grace', 'age': 29, 'height': Height('5ft 7'), 'weight(LBs)': 140},
+    {'name': 'Josh', 'age': 26, 'height': Height('5ft 6'), 'weight(LBs)': 135},
+    {'name': 'Luka', 'age': 29, 'height': Height('5ft 7'), 'weight(LBs)': 140},
 ]
-    
-    
+
+
 evil_mage = PC(
     'Neel-thee Contozt', 
     19836, 
