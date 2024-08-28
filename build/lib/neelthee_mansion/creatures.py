@@ -229,7 +229,7 @@ class base_ability:
     
     def Tick(self):
         self.current_cooldown += 1
-        self.check_cooldown
+        self.check_cooldown()
     
     def check_cooldown(self):
         if self.current_cooldown >= self.cooldown_time:

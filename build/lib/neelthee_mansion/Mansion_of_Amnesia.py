@@ -403,7 +403,7 @@ def battle(player: PC, good_guys: list, bad_guys: list, last_room):
     while player.hp > 0 and any(monster.hp > 0 for monster in bad_guys):
         if ask_for_consent("Do you want to run away"):
             Move(last_room)
-            return None, bad_guys
+            return good_guys, bad_guys
 
         # Player and good guys' turn
         for ally in [player] + good_guys:
