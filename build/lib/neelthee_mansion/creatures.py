@@ -106,7 +106,7 @@ class creature(base_character):
         crit_chance (float): The chance of the creature landing a critical hit.
     """
 
-    def __init__(self, name: str, hp: int, atpw: int, dropped_items: list[str] = [], description: str = None, flavor_text: str = None, type: creature_type = creature_type('beast'), crit_chance: float = 0.05):
+    def __init__(self, name: str, hp: int, atpw: int, dropped_items: list[str] = [], description: str = None, flavor_text: str = None, type: creature_type = creature_type('beast'), crit_chance: float = 0.05, frendly_text: str = ""):
         """
         Initializes a new creature instance.
 
@@ -130,6 +130,8 @@ class creature(base_character):
         self.flavor_text = flavor_text if flavor_text else f'You see a %*CYAN*%{self.name}%*RESET*%!'
         self.type = type
         self.crit_chance = crit_chance
+        self.frendly = False
+        self.frendly_text = frendly_text
     
     def type_text_flavor_text(self):
         """
@@ -169,12 +171,10 @@ class Guard(creature):
             patrol_route (list[str], optional): The list of rooms the guard patrols through. Defaults to None.
             patrol_type (str): The type of patrol the guard is doing. Defaults to normal.
         """
-        super().__init__(name, hp, atpw, dropped_items, description, flavor_text, type, crit_chance)
+        super().__init__(name, hp, atpw, dropped_items, description, flavor_text, type, crit_chance, frendly_text)
         self.current_room = current_room
         self.patrol_route = patrol_route or []
         self.patrol_type = patrol_type
-        self.frendly = False
-        self.frendly_text = frendly_text
 
     def move(self, ROOMS, player):
         """

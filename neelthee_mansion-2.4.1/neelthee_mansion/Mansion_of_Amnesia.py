@@ -973,8 +973,8 @@ must navigate the mansion and uncover the truth behind your captivity, all while
                         enemy_REF = enemy
 
                     if isinstance(enemy_REF, list):
-                        is_reacting = enemy_REF[1]
                         enemy_REF = enemy_REF[0]
+                        is_reacting = enemy_REF[1]
                         is_reactings.append(is_reacting)
 
                     enemies[enemies.index(enemy)] = enemy_REF

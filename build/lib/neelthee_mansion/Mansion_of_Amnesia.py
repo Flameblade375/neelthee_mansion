@@ -387,44 +387,53 @@ def display_directions(text):
 
     return text
 
-def battle(player: PC, monster: creature, last_room):
+def battle(player: PC, good_guys: list, bad_guys: list, last_room):
     """
-    Simulate a battle between the player and a monster.
+    Simulate a battle between the player (and allies) and monsters.
 
     Args:
         player (PC): The player character.
-        monster (creature): The monster to battle.
+        good_guys (list): The list of allies to help the player.
+        bad_guys (list): The list of monsters to battle the player.
         last_room: The previous room before the battle.
 
     Returns:
-        The monster if it is still alive, None otherwise.
+        None if all bad guys are defeated, else the remaining bad guys.
     """
-    while player.hp > 0 and monster.hp > 0:
+    while player.hp > 0 and any(monster.hp > 0 for monster in bad_guys):
         if ask_for_consent("Do you want to run away"):
             Move(last_room)
-            return monster
+            return None, bad_guys
 
-        player_turn(player, monster)
-        
-        if monster.hp <= 0:
-            handle_victory(player, monster)
-            return None
+        # Player and good guys' turn
+        for ally in [player] + good_guys:
+            if all(monster.hp <= 0 for monster in bad_guys):
+                handle_victory(player, bad_guys)
+                return good_guys, None
 
-        monster_turn(player, monster)
-        
+            target = select_target(bad_guys)
+            player_turn(ally, target)
+
+        # Bad guys' turn
+        for monster in bad_guys:
+            if monster.hp > 0:
+                target = select_target([player] + good_guys)
+                monster_turn(target, monster)
+
         if player.hp <= 0:
-            End(f'The %*CYAN*%{monster.name}%*RESET*% defeats you!', win=False)
-            return monster
+            End(f'The monsters defeat you!', win=False)
+            return good_guys, bad_guys
 
-    return monster
+    return good_guys, bad_guys
+
 
 def player_turn(player: PC, monster: creature):
     """
-    Handle the player's turn during the battle.
+    Handle a character's turn during the battle.
 
     Args:
-        player (PC): The player character.
-        monster (creature): The monster to battle.
+        player (PC): The player or ally.
+        monster (creature): The monster being fought.
     """
     player_action = loop_til_valid_input(
         "Choose your action: (attack/defend/special): ", 
@@ -440,57 +449,53 @@ def player_turn(player: PC, monster: creature):
     elif player_action == "special":
         use_special_ability(player, monster)
 
+
 def monster_turn(player: PC, monster: creature):
     """
-    Handle the monster's turn during the battle.
+    Handle a monster's turn during the battle.
 
     Args:
-        player (PC): The player character.
-        monster (creature): The monster to battle.
+        player (PC): The player or ally.
+        monster (creature): The monster attacking.
     """
     type_text(f"The %*CYAN*%{monster.name}%*RESET*% attacks!", colorTrue=color_coding)
     damage = calculate_damage(monster, player)
-    
     player.take_damage(damage)
 
+
 def perform_attack(attacker: PC, defender: creature):
-    global player
     """
     Perform an attack action.
 
     Args:
         attacker (PC): The attacking character.
         defender (creature): The defending monster.
-    global player
     """
     damage = calculate_damage(attacker, defender)
-    global player
     defender.take_damage(damage)
-    global player
 
-def handle_victory(player: PC, monster: creature):
+
+def handle_victory(player: PC, monsters: list):
     """
-    Handle the logic when the player defeats the monster.
-    global player
+    Handle the logic when the player and allies defeat all monsters.
 
     Args:
         player (PC): The player character.
-        monster (creature): The defeated monster.
-    global player
+        monsters (list): The list of defeated monsters.
     """
-    type_text(f"You defeat the %*CYAN*%{monster.name}%*RESET*%!", colorTrue=color_coding)
-    player.inventory_add(monster.dropped_items)
+    type_text("You have defeated all the enemies!", colorTrue=color_coding)
+    for monster in monsters:
+        if monster.hp <= 0:
+            player.inventory_add(monster.dropped_items)
+
 
 def calculate_damage(attacker, defender) -> int:
-    global player
     """
     Calculate the damage inflicted by the attacker on the defender.
-    global player
 
     Args:
         attacker: The attacking character.
         defender: The defending character.
-    global player
 
     Returns:
         int: The calculated damage.
@@ -509,8 +514,8 @@ def calculate_damage(attacker, defender) -> int:
     
     return damage
 
+
 def calculate_damage_range(atpw: int) -> tuple[int, int]:
-    global player
     """
     Calculate the damage range based on attack power.
 
@@ -518,13 +523,14 @@ def calculate_damage_range(atpw: int) -> tuple[int, int]:
         atpw (int): Attack power of the combatant.
 
     Returns:
-        Tuple[int, int]: Minimum and maximum damage range.
+        tuple[int, int]: Minimum and maximum damage range.
     """
     damage_max_range = randint(1, 3)
     damage_min_range = randint(1, 3)
     damage_min = max(1, atpw - damage_min_range)  # Ensure minimum damage is at least 1
     damage_max = atpw + damage_max_range
     return damage_min, damage_max
+
 
 def use_special_ability(player: PC, monster: creature):
     """
@@ -540,6 +546,22 @@ def use_special_ability(player: PC, monster: creature):
         player.special_ability.ready = False
     else:
         type_text("Your special ability is not ready yet.", colorTrue=color_coding)
+
+
+def select_target(targets: list):
+    """
+    Select a target from a list of characters.
+
+    Args:
+        targets (list): List of characters to select from.
+
+    Returns:
+        The selected target.
+    """
+    # Basic logic to select the first valid target. Could be expanded to allow player choice.
+    for target in targets:
+        if target.hp > 0:
+            return target
 
 
 def command():
@@ -695,7 +717,7 @@ def handle_hungry_bear(player: PC, enemy: creature):
             del player.inventory[player.inventory.index('potion')]
             type_text(f'You throw the potion at the bear and it explodes into a puff of magic smoke that stuns the bear!', colorTrue=color_coding)
     if enemy_reacting:
-        return battle(player, enemy, player.LASTROOM)
+        return [enemy, enemy_reacting]
 
 def handle_grumpy_pig(player: PC, enemy: creature):
     enemy_reacting = True
@@ -722,7 +744,7 @@ def handle_grumpy_pig(player: PC, enemy: creature):
             player.xp += 15
 
     if enemy_reacting:
-        return battle(player, enemy, player.LASTROOM)
+        return [enemy, enemy_reacting]
 
 def handle_greedy_goblin(player: PC, enemy: creature):
     enemy_reacting = True
@@ -733,7 +755,7 @@ def handle_greedy_goblin(player: PC, enemy: creature):
             player.money -= 15
             enemy.dropped_items[1].value += 15
     if enemy_reacting:
-        return battle(player, enemy, player.LASTROOM)
+        return [enemy, enemy_reacting]
 
 commands = {
     'go': handle_go_command,
@@ -793,7 +815,7 @@ def handle_wolf(player: PC, wolf: Guard):
             wolf.frendly = True
             return wolf
     if enemy_reacting:
-        return battle(player, wolf, player.LASTROOM)
+        return [wolf, enemy_reacting]
 
 def handle_guard_action(guard):
     # Dynamically build the function name
@@ -898,6 +920,8 @@ must navigate the mansion and uncover the truth behind your captivity, all while
     while True:
         command()
 
+        enemy_REFs = []
+
         # Move guards
         for guard in guards:
             if isinstance(guard, Guard):
@@ -905,62 +929,85 @@ must navigate the mansion and uncover the truth behind your captivity, all while
 
         # Check for detection
         for guard in guards:
-            #try:
-                if isinstance(guard, Guard):
-                    if guard.check_detection(player.CURRENTROOM):
-                        guard_handled = handle_guard_action(guard)
-                        if not isinstance(guard_handled, list):
-                            guard_handled = [guard_handled]
-                        if not guard_handled[0]:
-                            guard.type_text_flavor_text()
-                            guards[guards.index(guard)] = battle(player, guard, player.LASTROOM)
+            if isinstance(guard, Guard):
+                if guard.check_detection(player.CURRENTROOM):
+                    guard_handled = handle_guard_action(guard)
+                    if not isinstance(guard_handled, list):
+                        guard_handled = [guard_handled]
+
+                    # Get is_reacting from guard_handled
+                    is_reacting = guard_handled[1][1]
+
+                    # Only update guard if the guard is reacting
+                    if is_reacting:
+                        if guard.frendly:
+                            good_guys.append(guard)
                         else:
-                            guards[guards.index(guard)] = guard_handled[1]
-            #except:
-            #    guard.type_text_flavor_text()
-            #    guards[guards.index(guard)] = battle(player, guard, player.LASTROOM)
-        
-        # player loses if they enter a room with a monster, unless they can fight it.
+                            bad_guys.append(guard)
+
+                    if guard_handled[0]:
+                        guards[guards.index(guard)] = guard_handled[1][0]
+
+        # Handle creatures in the current room
         if 'creatures stats' in ROOMS[player.CURRENTROOM]:
+            is_reactings = []
             enemies = ROOMS[player.CURRENTROOM]['creatures stats']
             if not isinstance(enemies, list):
                 enemies = [enemies]  # Ensure enemies is a list even if there's only one creature
 
+            good_guys = []
+            bad_guys = []
 
             for enemy in enemies:
                 if isinstance(enemy, creature):
                     enemy.type_text_flavor_text()
 
+                    # Handle specific creatures
                     if enemy.name == 'hungry bear':
                         enemy_REF = handle_hungry_bear(player, enemy)
-                        enemies[enemies.index(enemy)] = enemy_REF
                     elif enemy.name == 'grumpy pig':
                         enemy_REF = handle_grumpy_pig(player, enemy)
-                        enemies[enemies.index(enemy)] = enemy_REF
                     elif enemy.name == 'greedy goblin':
                         enemy_REF = handle_greedy_goblin(player, enemy)
-                        enemies[enemies.index(enemy)] = enemy_REF
                     else:
-                        enemy_REF = battle(player, enemy, player.LASTROOM)
-                        enemies[enemies.index(enemy)] = enemy_REF
+                        enemy_REF = enemy
+
+                    if isinstance(enemy_REF, list):
+                        is_reacting = enemy_REF[1]
+                        enemy_REF = enemy_REF[0]
+                        is_reactings.append(is_reacting)
+
+                    enemies[enemies.index(enemy)] = enemy_REF
+
+                    # Add to good or bad lists if reacting
+                    if is_reacting:
+                        if enemy_REF.frendly:
+                            good_guys.append(enemy_REF)
+                        else:
+                            bad_guys.append(enemy_REF)
 
             if all_same_value(enemies, False):
                 del ROOMS[player.CURRENTROOM]['creatures stats']
             else:
                 ROOMS[player.CURRENTROOM]['creatures stats'] = enemies
-        
+
+        # Execute battle with separated good and bad guys
+        if bad_guys:
+            good_guys, bad_guys = battle(player, good_guys, bad_guys, player.LASTROOM)
+
+        # Handle NPC interactions
         if 'NPCs' in ROOMS[player.CURRENTROOM]:
             for npcname, npcstats in ROOMS[player.CURRENTROOM]['NPCs'].items():
                 if ask_for_consent("Do you want to interact with this NPC") or npcstats.aggressive:
-                    npcstats.interact
+                    npcstats.interact()
                     if npcstats.aggressive:
-                        ROOMS[player.CURRENTROOM]['NPCs'][npcname] = battle(player, npcstats)
-        
+                        ROOMS[player.CURRENTROOM]['NPCs'][npcname] = battle(player, [], [npcstats], player.LASTROOM)[1]
+
         player.special_ability.Tick()
-        quest_manager.update_objective(f"Kill {GameState['Enemys killed']} creatures")
-        for ___ in GameState['collected items']:
-            if isinstance(___, item):
-                quest_manager.update_objective(f"Colect {___.name}")
+        quest_manager.update_objective(f"Kill {GameState['Enemies killed']} creatures")
+        for Item in GameState['collected items']:
+            if isinstance(Item, item):
+                quest_manager.update_objective(f"Collect {Item.name}")
 
 
 

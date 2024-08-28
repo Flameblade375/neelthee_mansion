@@ -1,23 +1,3 @@
-Metadata-Version: 2.1
-Name: neelthee-mansion
-Version: 0.3.0.0
-Summary: A text-based adventure game set in Neel-thee’s mansion.
-Home-page: https://github.com/Flameblade375/neelthee_mansion
-Author: Alexander.E.F
-Author-email: alexander@xandy.rocks
-License: MIT
-Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.6
-Classifier: Programming Language :: Python :: 3.7
-Classifier: Programming Language :: Python :: 3.8
-Classifier: Programming Language :: Python :: 3.9
-Classifier: Programming Language :: Python :: 3.10
-Classifier: Programming Language :: Python :: 3.11
-Classifier: License :: OSI Approved :: MIT License
-Classifier: Operating System :: OS Independent
-Requires-Python: >=3.6
-Description-Content-Type: text/markdown
-
 # Neel-thee's Mansion of Amnesia
 
 **Neel-thee's Mansion of Amnesia** is a text-based adventure game where players explore a mysterious mansion, interact with objects and creatures, and strive to escape while uncovering their lost identity. 
