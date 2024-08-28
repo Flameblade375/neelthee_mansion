@@ -1,9 +1,0 @@
-wheel
-psutil
-playsound
-requests
-keyboard
-pandas
-validators
-dicttoxml
-pytz
