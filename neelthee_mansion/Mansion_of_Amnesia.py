@@ -411,7 +411,7 @@ def battle(player: PC, good_guys: list, bad_guys: list, last_room):
                 handle_victory(player, bad_guys)
                 return good_guys, None
 
-            target = select_target(bad_guys)
+            target = select_target(ally, bad_guys)
             player_turn(ally, target)
 
         # Bad guys' turn
@@ -548,20 +548,42 @@ def use_special_ability(player: PC, monster: creature):
         type_text("Your special ability is not ready yet.", colorTrue=color_coding)
 
 
-def select_target(targets: list):
+def select_target(chooser, targets: list):
     """
     Select a target from a list of characters.
 
     Args:
+        chooser: The entity (e.g., player or AI) selecting the target.
         targets (list): List of characters to select from.
 
     Returns:
         The selected target.
     """
-    # Basic logic to select the first valid target. Could be expanded to allow player choice.
-    for target in targets:
-        if target.hp > 0:
-            return target
+    if chooser == player:
+        valid_targets = []
+        type_text("Who do you want to attack? The options:")
+        # Enumerate through the targets to get both the index and the enemy.
+        for index, enemy in enumerate(targets):
+            if enemy.hp > 0:
+                type_text(f"{index + 1}: {enemy.name} ({enemy.hp} HP)")
+                valid_targets.append(index)
+        
+        # Prompt the player to select a target
+        while True:
+            try:
+                choice = int(input("Enter the number of the target: ")) - 1
+                if choice in valid_targets:
+                    return targets[choice]
+                else:
+                    type_text("Invalid choice. Please select a valid target.")
+            except ValueError:
+                type_text("Invalid input. Please enter a number.")
+    else:
+        # AI or other logic for non-player chooser
+        for target in targets:
+            if target.hp > 0:
+                return target
+
 
 
 def command():
