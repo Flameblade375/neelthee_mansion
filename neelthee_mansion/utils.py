@@ -18,6 +18,8 @@ try:
     import inspect
     import threading
     import json
+    import ast
+    import builtins
     import requests
     import keyboard
     import pandas as pd
@@ -234,10 +236,22 @@ def clamp(value, min = 0, max = 0):
     return value
 
 def is_executable(code_str):
+    code_str = code_str.strip()
+    if not code_str:  # Check for empty or whitespace-only string
+        return False
     try:
-        compile(code_str, '<string>')
+        # Parse the code to ensure it is syntactically correct
+        tree = ast.parse(code_str, mode='exec')
+        
+        # Walk through the AST to find undefined names
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Name) and isinstance(node.ctx, ast.Load):
+                # Check if the name is a built-in, defined locally in code, or globally available
+                if node.id not in dir(builtins) and node.id not in globals() and node.id not in locals():
+                    return False  # Name is not defined
+        
         return True
-    except SyntaxError:
+    except (SyntaxError, TypeError):
         return False
 
 def play_sound(sound_file):
