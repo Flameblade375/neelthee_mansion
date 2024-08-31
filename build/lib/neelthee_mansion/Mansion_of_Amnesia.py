@@ -851,12 +851,12 @@ def handle_guard_action(guard):
         guard = function_to_call(player, guard)
         return [True, guard]  # Function was found and called
     else:
-        return [False, guard]  # Function was not found
+        return [False, [guard, True]]  # Function was not found
 
 def main():
     global player, color_coding
     global charactersList
-
+    
 
     df = pd.DataFrame(charactersList)
 
@@ -949,6 +949,9 @@ must navigate the mansion and uncover the truth behind your captivity, all while
             if isinstance(guard, Guard):
                 guard.move(ROOMS, player)
 
+        good_guys = []
+        bad_guys = []
+
         # Check for detection
         for guard in guards:
             if isinstance(guard, Guard):
@@ -976,9 +979,6 @@ must navigate the mansion and uncover the truth behind your captivity, all while
             enemies = ROOMS[player.CURRENTROOM]['creatures stats']
             if not isinstance(enemies, list):
                 enemies = [enemies]  # Ensure enemies is a list even if there's only one creature
-
-            good_guys = []
-            bad_guys = []
 
             for enemy in enemies:
                 if isinstance(enemy, creature):
