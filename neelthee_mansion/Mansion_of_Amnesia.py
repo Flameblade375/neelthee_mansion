@@ -417,7 +417,7 @@ def battle(player: PC, good_guys: list, bad_guys: list, last_room):
         # Bad guys' turn
         for monster in bad_guys:
             if monster.hp > 0:
-                target = select_target([player] + good_guys)
+                target = select_target(monster, [player] + good_guys)
                 monster_turn(target, monster)
 
         if player.hp <= 0:
