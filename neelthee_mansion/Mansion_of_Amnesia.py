@@ -6,7 +6,7 @@ from .all_game_utils import *
 
 
 GameState = {
-    'Enemys killed': 0,
+    'Enemies killed': 0,
     'collected items': [],
 }
 
