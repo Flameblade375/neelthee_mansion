@@ -324,15 +324,18 @@ def Move(move):
                 key = PickKey(ROOMS[player.CURRENTROOM]['directions'][move].lock)
                 ROOMS[player.CURRENTROOM]['directions'][move].unlock(key, player)
             newRoom = ROOMS[player.CURRENTROOM]['directions'][move].GetRoom()
-            player.CURRENTROOM = move_to_room()
+            newRoom = move_to_room()
         return
     elif move in ROOMS:
         newRoom = move
         if newRoom == 'Garden':
-            player.CURRENTROOM = attempt_move_to_garden()
-        else:
-            player.CURRENTROOM = newRoom
+            newRoom = attempt_move_to_garden()
         player.LASTROOM = player.CURRENTROOM
+        player.CURRENTROOM = newRoom
+        if 'random_events' in ROOMS[player.CURRENTROOM]:
+            for randomEvent in ROOMS[player.CURRENTROOM]['random_events']:
+                if isinstance(randomEvent, RandomEvent):
+                    randomEvent.check_and_trigger(player)
         return
     type_text(f"There is no exit {move}", colorTrue=color_coding)
 

@@ -24,6 +24,23 @@ KEY = [
     'π = desk',
 ]
 
+class RandomEvent:
+    def __init__(self, 
+                 name='Event name', 
+                 probability=0.0,  # Probability of the event running (0.1 = 10% chance)
+                 condition=lambda player: True,  # Condition under which the event can occur
+                 effect=lambda player: None):  # Define the effect of the event
+        self.name = name
+        self.probability = probability
+        self.condition = condition
+        self.effect = effect
+
+    def check_and_trigger(self, player):
+        """Check if the event can occur based on its condition and probability, and trigger the effect."""
+        import random
+        if self.condition(player) and random.random() < self.probability:
+            self.effect(player)
+
 class Door:
     def __init__(self, RoomName, KeyCode=None) -> None:
         self.destination = RoomName
