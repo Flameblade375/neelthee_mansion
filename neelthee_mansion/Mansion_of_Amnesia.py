@@ -257,28 +257,27 @@ def Use(moveone, movetwo=None):
 
 
 def PickKey(lock):
-    if player.inventory.keys():
+    keys = player.inventory.keys()
+    
+    if keys:
         while True:
             type_text(f"Please pick which key you want to use in the lock. This is what you know about the lock: {lock}. These are your keys:")
-            keys = player.inventory.keys()
 
             # Enumerate keys and display them
             for idx, key in enumerate(keys, 1):  # Starts numbering at 1
                 type_text(f"{idx}. {key}")
-
-            # Use loop_til_valid_input to get a valid integer
+            
+            # Use loop_til_valid_input to get a valid integer within the correct range
             choice = loop_til_valid_input(
                 input_text="Enter the number of the key you'd like to use: ", 
                 bad_text="That's not a valid choice, please try again.", 
                 Class=int  # Ensuring input is an integer
             )
 
-            # Check if the chosen number corresponds to a valid key
+            # Since loop_til_valid_input ensures valid input, just return the selected key
             if 1 <= choice <= len(keys):
-                selected_key = keys[choice - 1]  # Adjust index since list is 0-based
-                return selected_key
-            else:
-                type_text("Invalid choice, please try again.")
+                return keys[choice - 1]  # Fetch the key using 0-based index
+    
     return Key(KeyCode=None)
 
 
