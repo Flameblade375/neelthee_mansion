@@ -15,7 +15,9 @@ GameState = {
 Neel-thee's Mansion of Amnesia
 '''
 
-global player, evil_mage, commands, NOTE_NUM, credits, characters, color_coding, quest_manager
+global player, evil_mage, commands, NOTE_NUM, credits, characters, color_coding, quest_manager, revealer
+
+revealer = KeyRevealer()
 
 quest_manager = QuestManager()
 
@@ -167,7 +169,7 @@ NOTE_NUM = 0
 
 
 def add_note(note, parchment_index=None):
-    global player
+    global player, NOTE_NUM
     player.NOTES.append(note)
     NOTE_NUM += 1
     inv_note = 'note ' + str(NOTE_NUM)
@@ -254,6 +256,32 @@ def Use(moveone, movetwo=None):
         type_text("You can't use that", colorTrue=color_coding)
 
 
+def PickKey(lock):
+    if player.inventory.keys():
+        while True:
+            type_text(f"Please pick which key you want to use in the lock. This is what you know about the lock: {lock}. These are your keys:")
+            keys = player.inventory.keys()
+
+            # Enumerate keys and display them
+            for idx, key in enumerate(keys, 1):  # Starts numbering at 1
+                type_text(f"{idx}. {key}")
+
+            # Use loop_til_valid_input to get a valid integer
+            choice = loop_til_valid_input(
+                input_text="Enter the number of the key you'd like to use: ", 
+                bad_text="That's not a valid choice, please try again.", 
+                Class=int  # Ensuring input is an integer
+            )
+
+            # Check if the chosen number corresponds to a valid key
+            if 1 <= choice <= len(keys):
+                selected_key = keys[choice - 1]  # Adjust index since list is 0-based
+                return selected_key
+            else:
+                type_text("Invalid choice, please try again.")
+    return Key(KeyCode=None)
+
+
 def Move(move):
     global player
 
@@ -271,30 +299,33 @@ def Move(move):
 
     def attempt_move_to_garden():
         global player
-        if 'key' in player.inventory:
-            End('You unlock the gate to the garden with the key!')
-            return newRoom
-        else:
-            type_text('The gate is locked.', colorTrue=color_coding)
-            return newRoom
+        type_text("Please pick whitch key you want to try in the lock on the gate")   
+        for key in player.inventory.keys():
+            if key.KeyCode == "629.IdnXwnt":
+                End('You unlock the gate to the garden with the key!')
+                return newRoom
+        type_text('The gate is locked.', colorTrue=color_coding)
+        return newRoom
 
     def move_to_room():
         global player
         player.LASTROOM = player.CURRENTROOM
+        if 'descovered' in ROOMS[newRoom] and not ROOMS[newRoom]['descovered']:
+            ROOMS[newRoom]['descovered'] = True
         if move == '0':
             return attempt_charter()
         elif newRoom == 'Garden':
-            if 'descovered' in ROOMS[newRoom] and not ROOMS[newRoom]['descovered']:
-                ROOMS[newRoom]['descovered'] = True
             return attempt_move_to_garden()
         else:
-            if 'descovered' in ROOMS[newRoom] and not ROOMS[newRoom]['descovered']:
-                ROOMS[newRoom]['descovered'] = True
             return newRoom
 
     if move in ROOMS[player.CURRENTROOM]['directions']:
-        newRoom = ROOMS[player.CURRENTROOM]['directions'][move]
-        player.CURRENTROOM = move_to_room()
+        if isinstance(ROOMS[player.CURRENTROOM]['directions'][move], Door):
+            if isinstance(ROOMS[player.CURRENTROOM]['directions'][move].lock, Lock):
+                key = PickKey(ROOMS[player.CURRENTROOM]['directions'][move].lock)
+                ROOMS[player.CURRENTROOM]['directions'][move].unlock(key, player)
+            newRoom = ROOMS[player.CURRENTROOM]['directions'][move].GetRoom()
+            player.CURRENTROOM = move_to_room()
         return
     elif move in ROOMS:
         newRoom = move
@@ -304,12 +335,12 @@ def Move(move):
             player.CURRENTROOM = newRoom
         player.LASTROOM = player.CURRENTROOM
         return
-    type_text("You can't go that way!", colorTrue=color_coding)
+    type_text(f"There is no exit {move}", colorTrue=color_coding)
 
 
 def start():
     global player
-    # type_text a main men, colorTrue=color_codingu
+    # shows the main menu
     type_text(f'\nHello %*MAGENTA*%{player.name}%*RESET*% and welcome to my Role Playing Game. \nI hope you have fun!', colorTrue=color_coding)
     showInstructions()
 
@@ -383,9 +414,40 @@ def display_directions(text):
                     text += f'\n{direction_descriptions[room_type][direction]} %*GREEN*%{direction}%*RESET*%.'
 
     if 'teleport' in ROOMS[player.CURRENTROOM]['directions']:
-        text += "\nThere is a %*GREEN*%teleport%*RESET*%ation circle on the ground"
+        text += "\nThere is a %*GREEN*%teleport%*RESET*%ation circle on the ground."
 
     return text
+
+def Examin(*Args):
+    Name = ' '.join(Args)
+    if player.inventory.index(Name):
+        _ = player.inventory[player.inventory.index(Name)]
+        if isinstance(_, Key):
+            type_text("You look at your key and you figure out this about it:")
+            revealer.reveal_key_code(_)
+        elif isinstance(_, item):
+            if _.type == 'weapon':
+                type_text(f"This item is a weapon that adds {_.value} damage.")
+    elif Name in ROOMS[player.CURRENTROOM]['directions']:
+        door = ROOMS[player.CURRENTROOM]['directions'][Name]
+        if isinstance(door, Door):
+            if isinstance(door.lock, Lock):
+                type_text("The door is locked," if door.lock.is_locked else "The door is not locked,", "you know this about its key code:")
+                revealer.reveal_key_code(door)
+            else:
+                type_text(f"The exit {Name} has no lock.")
+        else:
+            type_text(f"There is nothing spechial about the exit {Name}.")
+    elif Name in ROOMS[player.CURRENTROOM]['containers']:
+        containerins = ROOMS[player.CURRENTROOM]['containers'][Name]
+        if isinstance(containerins, container):
+            if isinstance(containerins.lock, Lock):
+                type_text("The container is locked," if containerins.lock.is_locked else "The container is not locked,", "you know this about its key code:")
+                revealer.reveal_key_code(containerins)
+            else:
+                type_text(f"The container {Name} has no lock.")
+        else:
+            type_text(f"There is no container {containerins} in this room")
 
 def battle(player: PC, good_guys: list, bad_guys: list, last_room):
     """
@@ -630,7 +692,7 @@ def handle_sleep_command(player: PC):
     sleep(2)  # Example: sleep for 2 seconds
 
     # Restore player's health or apply any other effects
-    player.heal(3)  # Example: heal 5 health points during sleep
+    player.heal(3)  # Example: heal 3 health points during sleep
 
     # Optional: Print a message or effect that happens during sleep
     type_text("You feel refreshed after a good rest.", colorTrue=color_coding)
@@ -658,14 +720,11 @@ def handle_get_command(player: PC, item_name):
 
 def handle_look_command():
     global player
-    return_ = False
     if 'item' in ROOMS[player.CURRENTROOM]:
         type_text(f'The item in the room: %*BLUE*%{ROOMS[player.CURRENTROOM]["item"].name}%*RESET*%.', colorTrue=color_coding)
-        return_ = True
+        return
     if 'containers' in ROOMS[player.CURRENTROOM]:
         type_text(f"The containers here are: %*RED*%{', '.join(ROOMS[player.CURRENTROOM]['containers'].keys())}%*RESET*%", colorTrue=color_coding)
-        return_ = True
-    if return_:
         return
     type_text('There is nothing of interest.', colorTrue=color_coding)
 
@@ -682,15 +741,20 @@ def handle_search_command(player, container = None, sub_container = None):
         else:
             type_text(f"You cannot search the {container}", colorTrue=color_coding)
 
-def search_container(player: PC, container):
-    player.inventory_add(ROOMS[player.CURRENTROOM]['containers'][container].contents)
-    type_text(f"You search the{' secret' if ROOMS[player.CURRENTROOM]['containers'][container].secret else ''} %*RED*%{container}%*RESET*% and find a ", newline=False, colorTrue=color_coding)
-    for searchitem in ROOMS[player.CURRENTROOM]['containers'][container].contents:
-        if searchitem:
-            if isinstance(searchitem, item):
-                end_str = ' and a ' if ROOMS[player.CURRENTROOM]['containers'][container].contents.index(searchitem) < last_index(ROOMS[player.CURRENTROOM]['containers'][container].contents) else '\n'
-                type_text(f"%*BLUE*%{searchitem.name}%*RESET*%{end_str}", newline=False, colorTrue=color_coding)
-    ROOMS[player.CURRENTROOM]['containers'][container].contents = []
+def search_container(player: PC, Container):
+    ContainerName = Container
+    Container = ROOMS[player.CURRENTROOM]['containers'][Container]
+    if isinstance(Container, container):
+        if isinstance(Container.lock, Lock):
+            key = PickKey(Container.lock)
+            Container.Unlock(key, player)
+        Container.take_contents(player)
+        type_text(f"You search the{' secret' if Container.secret else ''} %*RED*%{ContainerName}%*RESET*% and find a ", newline=False, colorTrue=color_coding)
+        for searchitem in Container.contents:
+            if searchitem:
+                if isinstance(searchitem, item):
+                    end_str = ' and a ' if Container.contents.index(searchitem) < last_index(Container.contents) else '\n'
+                    type_text(f"%*BLUE*%{searchitem.name}%*RESET*%{end_str}", newline=False, colorTrue=color_coding)
 
 
 def handle_put_command(player: PC, PutItem: item = None, container = None, sub_container = None):
@@ -792,6 +856,7 @@ commands = {
     'sleep': handle_sleep_command,
     'put': handle_put_command,
     'map': PrintMap,
+    'examin': Examin,
 }
 
 
@@ -914,7 +979,7 @@ def main():
             f"You have no friends back home; you were always very lonely", 
             f"You are an only child. You ran away from home to join the army; your mother misses you terribly", 
             f"She was a baker, and you spent a lot of time helping her bake bread. You never went to school", 
-            f"The people you admire the most are Sam and Aragorn from Lord of the Rings, which you read as a child. You have also read the Hunger Games when you were {13 if age >= 13 else age}", 
+            f"The people you admire the most are Sam and Aragorn from Lord of the Rings, which you read as a child. You also read the Hunger Games when you were {13 if age >= 13 else age}", 
             f"Your favorite weapon is a bow; however, the scimitar is a close second.", 
         ],
         backstory=f"""
@@ -929,8 +994,8 @@ You were deeply influenced by the heroes of your childhood—Sam and Aragorn fro
 Games%*RESET*%, which you read when you were {13 if age >= 13 else age}. These stories inspired you and fueled your dream of heroism. Though your favorite weapon is a bow, you also have a 
 fondness for the scimitar.
 
-Now, you find yourself in the Mansion of Amnesia, a place that seems to have erased your memories. The details of your past are fragmented, but the echoes of your history drive you forward. You 
-must navigate the mansion and uncover the truth behind your captivity, all while drawing strength from the remnants of your past.
+Now, you find yourself in the Mansion of Amnesia, a place that seems to have erased your memories. The details of your past are fragmented, but the echoes of your history drive you forward. 
+You must navigate the mansion and uncover the truth behind your captivity, all while drawing strength from the remnants of your past.
 """,
     CURRENTROOM='Hall'
     )
@@ -941,8 +1006,6 @@ must navigate the mansion and uncover the truth behind your captivity, all while
     # loop forever while the player wants to play
     while True:
         command()
-
-        enemy_REFs = []
 
         # Move guards
         for guard in guards:
@@ -982,7 +1045,6 @@ must navigate the mansion and uncover the truth behind your captivity, all while
 
             for enemy in enemies:
                 if isinstance(enemy, creature):
-                    enemy.type_text_flavor_text()
 
                     # Handle specific creatures
                     if enemy.name == 'hungry bear':

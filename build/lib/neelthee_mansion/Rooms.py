@@ -24,6 +24,34 @@ KEY = [
     'π = desk',
 ]
 
+class Door:
+    def __init__(self, RoomName, KeyCode=None) -> None:
+        self.destination = RoomName
+        self.lock = Lock(KeyCode) if KeyCode else None
+        self.reveal_count = 0
+        self.CurentRevealStr = "-" * len(self.lock.key_code) if isinstance(self.lock, Lock) else ""
+
+    def Unlock(self, key: Key, player):
+        return self.lock.unlock(key, player)
+    
+    def GetRoom(self, currentroom):
+        if not self.lock.is_locked if isinstance(self.lock, Lock) else True:
+            return self.destination
+        else:
+            type_text("The door is locked.")
+            return currentroom
+
+class SwitchDoor(Door):
+    def __init__(self, RoomOneName, RoomTwoName, KeyCode=None) -> None:
+        super.__init__(RoomOneName, Lock(KeyCode) if KeyCode else None, 0)
+        self.switch_destination = RoomTwoName
+    
+    def GetRoom(self, currentroom):
+        if not self.lock.is_locked if isinstance(self.lock, Lock) else True:
+            return self.destination
+        else:
+            return self.switch_destination
+
 global map_dict, positions
 
 def string_to_2d_list(map_str):
@@ -101,18 +129,18 @@ ROOMS = {
                     'position': (0, 8, 0),
                     'discovered': True,
                     'directions': {
-                        'south': 'Kitchen',
-                        'east': 'Dining Room',
-                        'north': 'Armoury',
-                        'up': 'Landing',
-                        'easter': 'Cavegame',
+                        'south': Door('Kitchen'),
+                        'east': Door('Dining Room'),
+                        'north': Door('Armoury'),
+                        'up': Door('Landing'),
+                        'easter': Door('Cavegame'),
                         },
                     'item': item('torch'),
                     'containers': {
-                        'drawers': container([item('key')]),
+                        'drawers': container([Key('key', "629.IdnXwnt")]),
                         },
                     'info': 'You are in the hall of the house. There is a chest of %*RED*%drawers%*RESET*% against one wall, and flaming %*BLUE*%torch%*RESET*%es on the walls. You hear a \
-%*YELLOW*%smash%*RESET*% from the %*GREEN*%south%*RESET*%',
+%*YELLOW*%smash%*RESET*% from the %*GREEN*%south%*RESET*%.',
                     'map': '''
 ████║████
 █☼☼     █
@@ -124,20 +152,20 @@ ROOMS = {
 █╖      █
 ████║████''',
                     'Hints': [
-                            'Those %*RED*%drawers%*RESET*% look intresting',
-                            'I wonder if those %*RED*%drawers%*RESET*% are locked',
-                            "I wonder if I can get this %*BLUE*%torch%*RESET*% out of it's holder",
-                            "I wonder what that %*YELLOW*%smash%*RESET*% from the %*GREEN*%south%*RESET*% was",
-                            "I should probably aviod that %*YELLOW*%smash%*RESET*%ing sound",
+                            'Those %*RED*%drawers%*RESET*% look intresting.',
+                            'I wonder if those %*RED*%drawers%*RESET*% are locked.',
+                            "I wonder if I can get this %*BLUE*%torch%*RESET*% out of it's holder.",
+                            "I wonder what that %*YELLOW*%smash%*RESET*% from the %*GREEN*%south%*RESET*% was.",
+                            "I should probably aviod that %*YELLOW*%smash%*RESET*%ing sound.",
                         ],
                     },
                 
                 'Cavegame': {
                     'room type': 'easter egg',
                     'directions': {
-                        'back': 'Hall',
+                        'back': Door('Hall'),
                         },
-                    'info': 'Cavegame, type "go back" to leave',
+                    'info': 'Cavegame, type "go back" to leave.',
                     },
 
                 'Kitchen': {
@@ -145,8 +173,8 @@ ROOMS = {
                     'position': (0, 16, 0),
                     'discovered': False,
                     'directions': {
-                        'north': 'Hall',
-                        'east': 'Garden',
+                        'north': Door('Hall'),
+                        'east': Door('Garden'),
                         },
                     'item': item('rations'),
                     'containers': {
@@ -173,8 +201,8 @@ ROOMS = {
 █ææææ√ææ█
 █████████''',
                     'Hints': [
-                        'I wonder if there is anything salvageable in the %*RED*%cupboards%*RESET*%',
-                        'I should probably look around',
+                        'I wonder if there is anything salvageable in the %*RED*%cupboards%*RESET*%.',
+                        'I should probably look around.',
                     ],
                     },
 
@@ -183,16 +211,16 @@ ROOMS = {
                     'position': (0, 8, 8),
                     'discovered': False,
                     'directions': {
-                        'west': 'Hall',
-                        'south': 'Garden',
-                        'north': 'Sitting Room',
+                        'west': Door('Hall'),
+                        'south': Door('Garden'),
+                        'north': Door('Sitting Room'),
                         },
                     'item': item('potion'),
                     'containers': {
                         'chandelier': container([item('gem', 'valuable', 50)]),
                         },
                     'info': 'You are in the dining room, there is a dining table with 8 chairs around it in the middle of the room, and a %*RED*%chandelier%*RESET*% on the ceiling. You hear \
-%*YELLOW*%ripping%*RESET*% from the %*GREEN*%north%*RESET*%',
+%*YELLOW*%ripping%*RESET*% from the %*GREEN*%north%*RESET*%.',
                     'map': '''
 ████║████
 █       █
@@ -204,8 +232,8 @@ ROOMS = {
 █       █
 ████║████''',
                     'Hints': [
-                        'I wonder if there is anything in the %*RED*%chandelier',
-                        'I wonder if there is anything around the room',
+                        'I wonder if there is anything in the %*RED*%chandelier.',
+                        'I wonder if there is anything around the room.',
                     ],
                     },
 
@@ -214,8 +242,8 @@ ROOMS = {
                     'position': (0, 16, 8),
                     'discovered': False,
                     'directions': {
-                        'north': 'Dining Room',
-                        'west': 'Kitchen',
+                        'north': Door('Dining Room'),
+                        'west': Door('Kitchen'),
                         },
                     'info': 'You are in a bright garden you are in a garden with a gate out of the house.',
                     'map': '''
@@ -229,7 +257,7 @@ ROOMS = {
 █       í
 █íííííííí''',
                     'Hints': [
-                        'I think I need a %*BLUE*%key%*RESET*% for the gate',
+                        'I think I need a %*BLUE*%key%*RESET*% for the gate.',
                     ],
                     },
 
@@ -239,8 +267,8 @@ ROOMS = {
                     'discovered': False,
                     'directions': {
                         'south' :'Hall',
-                        'east': 'Sitting Room',
-                        'up': 'Tower Bottom',
+                        'east': Door('Sitting Room'),
+                        'up': Door('Tower Bottom'),
                         },
                     'containers': {
                         'racks': container([item('sword', 'weapon', 3)]),
@@ -260,8 +288,8 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █       █
 ████║████''',
                     'Hints': [
-                        'Maybe there is something salvageable on the %*RED*%racks%*RESET*%',
-                        'I wonder if that armour is salvageable',
+                        'Maybe there is something salvageable on the %*RED*%racks%*RESET*%.',
+                        'I wonder if that armour is salvageable.',
                     ],
                     },
 
@@ -270,8 +298,8 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'position': (0, 0, 8),
                     'discovered': False,
                     'directions': {
-                        'west': 'Armoury',
-                        'south': 'Dining Room',
+                        'west': Door('Armoury'),
+                        'south': Door('Dining Room'),
                         'down': 'Basement 1',
                         },
                     'creatures stats': creature(
@@ -297,9 +325,9 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █       █
 ████║████''',
                     'Hints': [
-                        'That %*CYAN*%pig%*RESET*% seems dangerous',
-                        'Those %*RED*%sofas%*RESET*% look comfy',
-                        "I wonder what's %*GREEN*%down%*RESET*% those stairs",
+                        'That %*CYAN*%pig%*RESET*% seems dangerous.',
+                        'Those %*RED*%sofas%*RESET*% look comfy.',
+                        "I wonder what's %*GREEN*%down%*RESET*% those stairs.",
                     ],
                     },
 
@@ -309,9 +337,9 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'discovered': False,
                     'directions': {
                         'down': 'Hall',
-                        'north': 'Tower Bottom',
-                        'east': 'Bedroom',
-                        'south': 'Balcony',
+                        'north': Door('Tower Bottom'),
+                        'east': Door('Bedroom'),
+                        'south': Door('Balcony'),
                         },
                     'containers': {
                         'floorboards': container([item('money-pouch', 'valuable', 10)]),
@@ -328,7 +356,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █╖      █
 ████║████''',
                     'Hints': [
-                        'I wonder if I can pry one of the %*RED*%floorboards%*RESET*% back'
+                        'I wonder if I can pry one of the %*RED*%floorboards%*RESET*% back.'
                     ],
                     },
 
@@ -337,8 +365,8 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'position': (1, 8, 8),
                     'discovered': False,
                     'directions': {
-                        'west': 'Landing',
-                        'north': 'Office',
+                        'west': Door('Landing'),
+                        'north': Door('Office'),
                         },
                     'containers': {
                         'bed': container([item('chamber-pot')]),
@@ -357,10 +385,10 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █╬  ☼☼§§█
 █████████''',
                     'Hints': [
-                        "I wonder what's %*GREEN*%north%*RESET*%",
-                        'I wonder if there is anything under the %*RED*%bed%*RESET*%',
-                        'I wonder if there is anything in the %*RED*%drawers%*RESET*%',
-                        "I wonder what's in the %*RED*%wardrobe%*RESET*%",
+                        "I wonder what's %*GREEN*%north%*RESET*%.",
+                        'I wonder if there is anything under the %*RED*%bed%*RESET*%.',
+                        'I wonder if there is anything in the %*RED*%drawers%*RESET*%.',
+                        "I wonder what's in the %*RED*%wardrobe%*RESET*%.",
                     ],
                     },
 
@@ -369,8 +397,8 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'position': (1, 0, 8),
                     'discovered': False,
                     'directions': {
-                        'south': 'Bedroom',
-                        'west': 'Tower Bottom',
+                        'south': Door('Bedroom'),
+                        'west': Door('Tower Bottom'),
                         },
                     'containers': {
                         'storage': container([item('saddle'), item('ink-pot'), item('parchment'), item('knife', 'weapon', 2)]),
@@ -388,9 +416,9 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █       █
 ████║████''',
                     'Hints': [
-                        "I wonder what's in the %*RED*%storage%*RESET*%, if anything",
-                        "I wonder what's through the %*GREEN*%south%*RESET*%ern door",
-                        'I wonder if there is anything on the %*RED*%desk%*RESET*%',
+                        "I wonder what's in the %*RED*%storage%*RESET*%, if anything.",
+                        "I wonder what's through the %*GREEN*%south%*RESET*%ern door.",
+                        'I wonder if there is anything on the %*RED*%desk%*RESET*%.',
                     ],
                     },
 
@@ -399,7 +427,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'position': (1, 16, 0),
                     'discovered': False,
                     'directions': {
-                        'north': 'Landing',
+                        'north': Door('Landing'),
                         },
                     'info': 'You are on a balcony with an ornate railing. It is a nice day.',
                     'map': '''
@@ -413,7 +441,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 ∟       ∟
 ∟∟∟∟∟∟∟∟∟''',
                     'Hints': [
-                        'If I had a %*BLUE*%grappling-hook%*RESET*% I might be able to throw it into the trees and swing down into the forest',
+                        'If I had a %*BLUE*%grappling-hook%*RESET*% I might be able to throw it into the trees and swing down into the forest.',
                     ],
                     },
          
@@ -422,10 +450,10 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'position': (1, 0, 0),
                     'discovered': False,
                     'directions': {
-                        'south': 'Landing',
-                        'east': 'Office',
+                        'south': Door('Landing'),
+                        'east': Door('Office'),
                         'down': 'Armoury',
-                        'up': 'Tower Middle',
+                        'up': Door('Tower Middle'),
                         },
                     'info': 'You are in the base of a stone tower, there is a spiral staircase going up into the darkness.',
                     'map': '''
@@ -438,7 +466,12 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █╖      █
 █╖      █
 ████║████''',
-                    'Hints': ["I wonder what's %*GREEN*%south%*RESET*%", "I wonder what's %*GREEN*%east%*RESET*%", "I wonder what's %*GREEN*%up%*RESET*%", "I wonder what's %*GREEN*%down%*RESET*%"],
+                    'Hints': [
+                        "I wonder what's %*GREEN*%south%*RESET*%.",
+                        "I wonder what's %*GREEN*%east%*RESET*%.",
+                        "I wonder what's %*GREEN*%up%*RESET*%.",
+                        "I wonder what's %*GREEN*%down%*RESET*%.",
+                    ],
                     },
 
                 'Tower Middle': {
@@ -447,7 +480,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'discovered': False,
                     'directions': {
                         'down': 'Tower Bottom',
-                        'up': 'Tower Top',
+                        'up': Door('Tower Top'),
                         },
                     'containers': {
                         'stone': container([item('money-pouch', 'valuable', 25)], True),
@@ -465,7 +498,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █╖      █
 █████████''',
                     'Hints': [
-                        'There might be an item here',
+                        'There might be an item here.',
                     ],
                 },
 
@@ -475,7 +508,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'discovered': False,
                     'directions': {
                         'down': 'Tower Middle',
-                        'teleport': 'Teleportation Deck',
+                        'teleport': Door('Teleportation Deck'),
                         },
                     'creatures stats': creature(
                         'greedy goblin',
@@ -486,7 +519,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                         'A %*CYAN*%greedy goblin%*RESET*% spots you and your money pouch!',
                         creature_type('humanoid', 'goblin'),
                         ),
-                    'info': 'You are at the top of a stone tower. There are windows in every wall',
+                    'info': 'You are at the top of a stone tower. There are windows in every wall.',
                     'map': '''
 █████████
 █      ╖█
@@ -498,7 +531,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █       █
 █████████''',
                     'Hints': [
-                        'I could %*GREEN*%teleport%*RESET*%',
+                        'I could %*GREEN*%teleport%*RESET*%.',
                     ],
                 },
 
@@ -507,8 +540,8 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'position': (-1, 0, 0),
                     'discovered': False,
                     'directions': {
-                        'south': 'Basement 3',
-                        'east': 'Basement 1',
+                        'south': Door('Basement 3'),
+                        'east': Door('Basement 1'),
                         },
                     'item': item('torch'),
                     'containers': {
@@ -528,8 +561,8 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █       █
 ████║████''',
                     'Hints': [
-                        'The things in %*RED*%rack-1%*RESET*% and %*RED*%rack-2%*RESET*% are salvigable',
-                        "I wonder if I can get this %*BLUE*%torch%*RESET*% out of it's holder",
+                        'The things in %*RED*%rack-1%*RESET*% and %*RED*%rack-2%*RESET*% are salvigable.',
+                        "I wonder if I can get this %*BLUE*%torch%*RESET*% out of it's holder.",
                     ],
                     },
 
@@ -538,9 +571,9 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'position': (-1, 0, 8),
                     'discovered': False,
                     'directions': {
-                        'south': 'Basement 2',
-                        'west': 'Basement Armoury',
-                        'up': 'Sitting Room',
+                        'south': Door('Basement 2'),
+                        'west': Door('Basement Armoury'),
+                        'up': Door('Sitting Room'),
                         },
                     'item': item('torch'),
                     'info': 'You are in an dimly lit underground (all the light in the room comes from 3 %*BLUE*%torch%*RESET*%es on the walls). You hear a %*YELLOW*%ripping%*RESET*% from the\
@@ -556,7 +589,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █       █
 ████║████''',
                     'Hints': [
-                        "I wonder if I can get this %*BLUE*%torch%*RESET*% out of it's holder",
+                        "I wonder if I can get this %*BLUE*%torch%*RESET*% out of it's holder.",
                     ],
                     },
 
@@ -565,8 +598,8 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'position': (-1, 8, 8),
                     'discovered': False,
                     'directions': {
-                        'north': 'Basement 1',
-                        'west': 'Basement 3',
+                        'north': Door('Basement 1'),
+                        'west': Door('Basement 3'),
                         },
                     'item': item('torch'),
                     'info': 'You are in an dimly lit underground (all the light in the room comes from 3 %*BLUE*%torch%*RESET*%es on the walls).',
@@ -581,7 +614,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █       █
 █████████''',
                     'Hints': [
-                        "I wonder if I can get this %*BLUE*%torch%*RESET*% out of it's holder",
+                        "I wonder if I can get this %*BLUE*%torch%*RESET*% out of it's holder.",
                     ],
                     },
 
@@ -590,9 +623,9 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'position': (-1, 8, 0),
                     'discovered': False,
                     'directions': {
-                        'south': 'Basement 4',
-                        'east': 'Basement 2',
-                        'north': 'Basement Armoury',
+                        'south': Door('Basement 4'),
+                        'east': Door('Basement 2'),
+                        'north': Door('Basement Armoury'),
                         },
                     'item': item('torch'),
                     'info': 'You are in an dimly lit underground (all the light in the room comes from 3 %*BLUE*%torch%*RESET*%es on the walls).',
@@ -606,7 +639,6 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █       █
 █       █
 ████║████''',
-                    'Hints': ['', '', '', ''],
                     },
 
                 'Basement 4': {
@@ -614,7 +646,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'position': (-1, 16, 0),
                     'discovered': False,
                     'directions': {
-                        'north': 'Basement 3',
+                        'north': Door('Basement 3'),
                         'shoot': 'Cavern 1',
                         },
                     'item': item('torch'),
@@ -630,14 +662,14 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █       █
 █████████''',
                     'Hints': [
-                        "I wonder if I can get this %*BLUE*%torch%*RESET*% out of it's holder",
+                        "I wonder if I can get this %*BLUE*%torch%*RESET*% out of it's holder.",
                     ],
                     },
 
                 'Cavern 1': {
                     'room type': 'cavern',
                     'directions': {
-                        'up': 'Basement 4',
+                        'up': Door('Basement 4'),
                         'down': 'Cavern 2',
                         },
                     'info': 'you are in a dark cavern with the only light coming from the shoot you came through. A voice in the back of your head says: \'Do not go down the shoot, leave while you still can!\'',
@@ -652,7 +684,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █       █
 █████████''',
                     'Hints': [
-                        'I should probably go up the shoot I came from',
+                        'I should probably go up the shoot I came from.',
                     ],
                     },
 
@@ -673,17 +705,17 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █       █
 █████████''',
                     'Hints': [
-                        'I should probably quit so I\'m not here forever',
+                        'I should probably quit so I\'m not here forever.',
                     ],
                     },
 
                 'Forest Clearing': {
                     'room type': 'forest',
                     'directions': {
-                        'north': 'Forest Path1',
-                        'east': 'Forest Path2',
-                        'south': 'Forest Path1',
-                        'west': 'Forest Path2',
+                        'north': Door('Forest Path1'),
+                        'east': Door('Forest Path2'),
+                        'south': Door('Forest Path1'),
+                        'west': Door('Forest Path2'),
                         },
                     'info': 'You are in a forest clearing outside the house.',
                     'map': '''
@@ -702,8 +734,8 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                 'Forest Path1': {
                     'room type': 'forest',
                     'directions': {
-                        'north': 'Forest Clearing',
-                        'south': 'Forest Clearing',
+                        'north': Door('Forest Clearing'),
+                        'south': Door('Forest Clearing'),
                         },
                     'info': 'You are in a forest path outside the house.',
                     'map': '''
@@ -722,8 +754,8 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                 'Forest Path2': {
                     'room type': 'forest',
                     'directions': {
-                        'east': 'Forest Clearing',
-                        'west': 'Forest Clearing',
+                        'east': Door('Forest Clearing'),
+                        'west': Door('Forest Clearing'),
                         },
                     'info': 'You are in a forest path outside the house.',
                     'map': '''
@@ -742,18 +774,18 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                 'Teleportation Deck': {
                     'room type': 'asteroid-1',
                     'directions': {
-                        'teleport': 'Tower Top',
-                        '0': 'Charter ship',
-                        '1': 'The Dancing Jellyfish Inn',
-                            '2': 'The Slopy Plasmoid Tapphouse',
-                            '3': 'The Centaurbow Weapon Shop',
-                            '4': 'The Gadabout Bakery',
-                            '5': 'The Shifterspender St',
-                            '6': 'The Town Hall',
-                            '7': 'The Assassins Guild',
-                            '8': 'The Watch Castle',
-                            '9': 'The Old Manor',
-                            },
+                        'teleport': Door('Tower Top'),
+                        '0': Door('Charter ship'),
+                        '1': Door('The Dancing Jellyfish Inn'),
+                        '2': Door('The Slopy Plasmoid Tapphouse'),
+                        '3': Door('The Centaurbow Weapon Shop'),
+                        '4': Door('The Gadabout Bakery'),
+                        '5': Door('The Shifterspender St'),
+                        '6': Door('The Town Hall'),
+                        '7': Door('The Assassins Guild'),
+                        '8': Door('The Watch Castle'),
+                        '9': Door('The Old Manor'),
+                        },
                     'item': item('money-pouch', 'valuable', 10),
                     'info': '''
 You are in a strange cave with many teleportation circles, as well as some ships that are floating above the floor.
@@ -779,18 +811,18 @@ Do you want to:
                 'Charter ship' :{
                     'room type': 'asteroid-1',
                     'directions': {
-                        '1': 'Teleportation Deck',
-                        '2': 'The Dancing Jellyfish Inn',
-                        '3': 'The Slopy Plasmoid Tapphouse',
-                        '4': 'The Centaurbow Weapon Shop',
-                        '5': 'The Gadabout Bakery',
-                        '6': 'The Shifterspender St',
-                        '7': 'The Town Hall',
-                        '8': 'The Assassins Guild',
-                        '9': 'The Watch Castle',
-                        '10': 'The Old Manor',
-                        '11': '2nd Teleportation Deck',
-                        '12': '3rd Teleportation Deck',
+                        '1': Door('Teleportation Deck'),
+                        '2': Door('The Dancing Jellyfish Inn'),
+                        '3': Door('The Slopy Plasmoid Tapphouse'),
+                        '4': Door('The Centaurbow Weapon Shop'),
+                        '5': Door('The Gadabout Bakery'),
+                        '6': Door('The Shifterspender St'),
+                        '7': Door('The Town Hall'),
+                        '8': Door('The Assassins Guild'),
+                        '9': Door('The Watch Castle'),
+                        '10': Door('The Old Manor'),
+                        '11': Door('2nd Teleportation Deck'),
+                        '12': Door('3rd Teleportation Deck'),
                         },
                     'info': '''
 
@@ -814,15 +846,15 @@ Do you want to:
                 'The Dancing Jellyfish Inn' :{
                     'room type': 'asteroid-1',
                     'directions': {
-                        '1': 'Teleportation Deck',
-                        '2': 'The Slopy Plasmoid Tapphouse',
-                        '3': 'The Centaurbow Weapon Shop',
-                        '4': 'The Gadabout Bakery',
-                        '5': 'The Shifterspender St',
-                        '6': 'The Town Hall',
-                        '7': 'The Assassins Guild',
-                        '8': 'The Watch Castle',
-                        '9': 'The Old Manor',
+                        '1': Door('Teleportation Deck'),
+                        '2': Door('The Slopy Plasmoid Tapphouse'),
+                        '3': Door('The Centaurbow Weapon Shop'),
+                        '4': Door('The Gadabout Bakery'),
+                        '5': Door('The Shifterspender St'),
+                        '6': Door('The Town Hall'),
+                        '7': Door('The Assassins Guild'),
+                        '8': Door('The Watch Castle'),
+                        '9': Door('The Old Manor'),
                         },
                     'info': '''
 
@@ -841,15 +873,15 @@ do you want to:
                 'The Slopy Plasmoid Tapphouse' :{
                     'room type': 'asteroid-1',
                     'directions': {
-                        '1': 'Teleportation Deck',
-                        '2': 'The Dancing Jellyfish Inn',
-                        '3': 'The Centaurbow Weapon Shop',
-                        '4': 'The Gadabout Bakery',
-                        '5': 'The Shifterspender St',
-                        '6': 'The Town Hall',
-                        '7': 'The Assassins Guild',
-                        '8': 'The Watch Castle',
-                        '9': 'The Old Manor',
+                        '1': Door('Teleportation Deck'),
+                        '2': Door('The Dancing Jellyfish Inn'),
+                        '3': Door('The Centaurbow Weapon Shop'),
+                        '4': Door('The Gadabout Bakery'),
+                        '5': Door('The Shifterspender St'),
+                        '6': Door('The Town Hall'),
+                        '7': Door('The Assassins Guild'),
+                        '8': Door('The Watch Castle'),
+                        '9': Door('The Old Manor'),
                         },
                     'info': '''
 
@@ -868,15 +900,15 @@ do you want to:
                 'The Centaurbow Weapon Shop' :{
                     'room type': 'asteroid-1',
                     'directions': {
-                        '1': 'Teleportation Deck',
-                        '2': 'The Dancing Jellyfish Inn',
-                        '3': 'The Slopy Plasmoid Tapphouse',
-                        '4': 'The Gadabout Bakery',
-                        '5': 'The Shifterspender St',
-                        '6': 'The Town Hall',
-                        '7': 'The Assassins Guild',
-                        '8': 'The Watch Castle',
-                        '9': 'The Old Manor',
+                        '1': Door('Teleportation Deck'),
+                        '2': Door('The Dancing Jellyfish Inn'),
+                        '3': Door('The Slopy Plasmoid Tapphouse'),
+                        '4': Door('The Gadabout Bakery'),
+                        '5': Door('The Shifterspender St'),
+                        '6': Door('The Town Hall'),
+                        '7': Door('The Assassins Guild'),
+                        '8': Door('The Watch Castle'),
+                        '9': Door('The Old Manor'),
                         },
                     'info': '''
 
@@ -895,15 +927,15 @@ do you want to:
                 'The Gadabout Bakery' :{
                     'room type': 'asteroid-1',
                     'directions': {
-                        '1': 'Teleportation Deck',
-                        '2': 'The Dancing Jellyfish Inn',
-                        '3': 'The Slopy Plasmoid Tapphouse',
-                        '4': 'The Centaurbow Weapon Shop',
-                        '5': 'The Shifterspender St',
-                        '6': 'The Town Hall',
-                        '7': 'The Assassins Guild',
-                        '8': 'The Watch Castle',
-                        '9': 'The Old Manor',
+                        '1': Door('Teleportation Deck'),
+                        '2': Door('The Dancing Jellyfish Inn'),
+                        '3': Door('The Slopy Plasmoid Tapphouse'),
+                        '4': Door('The Centaurbow Weapon Shop'),
+                        '5': Door('The Shifterspender St'),
+                        '6': Door('The Town Hall'),
+                        '7': Door('The Assassins Guild'),
+                        '8': Door('The Watch Castle'),
+                        '9': Door('The Old Manor'),
                         },
                     'info': '''
 
@@ -922,15 +954,15 @@ do you want to:
                 'The Shifterspender St' :{
                     'room type': 'asteroid-1',
                     'directions': {
-                        '1': 'Teleportation Deck',
-                        '2': 'The Dancing Jellyfish Inn',
-                        '3': 'The Slopy Plasmoid Tapphouse',
-                        '4': 'The Centaurbow Weapon Shop',
-                        '5': 'The Gadabout Bakery',
-                        '6': 'The Town Hall',
-                        '7': 'The Assassins Guild',
-                        '8': 'The Watch Castle',
-                        '9': 'The Old Manor',
+                        '1': Door('Teleportation Deck'),
+                        '2': Door('The Dancing Jellyfish Inn'),
+                        '3': Door('The Slopy Plasmoid Tapphouse'),
+                        '4': Door('The Centaurbow Weapon Shop'),
+                        '5': Door('The Gadabout Bakery'),
+                        '6': Door('The Town Hall'),
+                        '7': Door('The Assassins Guild'),
+                        '8': Door('The Watch Castle'),
+                        '9': Door('The Old Manor'),
                         },
                     'info': '''
 
@@ -949,15 +981,15 @@ do you want to:
                 'The Town Hall' :{
                     'room type': 'asteroid-1',
                     'directions': {
-                        '1': 'Teleportation Deck',
-                        '2': 'The Dancing Jellyfish Inn',
-                        '3': 'The Slopy Plasmoid Tapphouse',
-                        '4': 'The Centaurbow Weapon Shop',
-                        '5': 'The Gadabout Bakery',
-                        '6': 'The Shifterspender St',
-                        '7': 'The Assassins Guild',
-                        '8': 'The Watch Castle',
-                        '9': 'The Old Manor',
+                        '1': Door('Teleportation Deck'),
+                        '2': Door('The Dancing Jellyfish Inn'),
+                        '3': Door('The Slopy Plasmoid Tapphouse'),
+                        '4': Door('The Centaurbow Weapon Shop'),
+                        '5': Door('The Gadabout Bakery'),
+                        '6': Door('The Shifterspender St'),
+                        '7': Door('The Assassins Guild'),
+                        '8': Door('The Watch Castle'),
+                        '9': Door('The Old Manor'),
                         },
                     'info': '''
 
@@ -976,15 +1008,15 @@ do you want to:
                 'The Assassins Guild' :{
                     'room type': 'asteroid-1',
                     'directions': {
-                        '1': 'Teleportation Deck',
-                        '2': 'The Dancing Jellyfish Inn',
-                        '3': 'The Slopy Plasmoid Tapphouse',
-                        '4': 'The Centaurbow Weapon Shop',
-                        '5': 'The Gadabout Bakery',
-                        '6': 'The Shifterspender St',
-                        '7': 'The Town Hall',
-                        '8': 'The Watch Castle',
-                        '9': 'The Old Manor',
+                        '1': Door('Teleportation Deck'),
+                        '2': Door('The Dancing Jellyfish Inn'),
+                        '3': Door('The Slopy Plasmoid Tapphouse'),
+                        '4': Door('The Centaurbow Weapon Shop'),
+                        '5': Door('The Gadabout Bakery'),
+                        '6': Door('The Shifterspender St'),
+                        '7': Door('The Town Hall'),
+                        '8': Door('The Watch Castle'),
+                        '9': Door('The Old Manor'),
                         },
                     'info': ''',
 
@@ -1003,15 +1035,15 @@ do you want to:
                 'The Watch Castle' :{
                     'room type': 'asteroid-1',
                     'directions': {
-                        '1': 'Teleportation Deck',
-                        '2': 'The Dancing Jellyfish Inn',
-                        '3': 'The Slopy Plasmoid Tapphouse',
-                        '4': 'The Centaurbow Weapon Shop',
-                        '5': 'The Gadabout Bakery',
-                        '6': 'The Shifterspender St',
-                        '7': 'The Town Hall',
-                        '8': 'The Assassins Guild',
-                        '9': 'The Old Manor',
+                        '1': Door('Teleportation Deck'),
+                        '2': Door('The Dancing Jellyfish Inn'),
+                        '3': Door('The Slopy Plasmoid Tapphouse'),
+                        '4': Door('The Centaurbow Weapon Shop'),
+                        '5': Door('The Gadabout Bakery'),
+                        '6': Door('The Shifterspender St'),
+                        '7': Door('The Town Hall'),
+                        '8': Door('The Assassins Guild'),
+                        '9': Door('The Old Manor'),
                         },
                     'info': '''
 
@@ -1030,15 +1062,15 @@ do you want to:
                 'The Old Manor' :{
                     'room type': 'asteroid-1',
                     'directions': {
-                        '1': 'Teleportation Deck',
-                        '2': 'The Dancing Jellyfish Inn',
-                        '3': 'The Slopy Plasmoid Tapphouse',
-                        '4': 'The Centaurbow Weapon Shop',
-                        '5': 'The Gadabout Bakery',
-                        '6': 'The Shifterspender St',
-                        '7': 'The Town Hall',
-                        '8': 'The Assassins Guild',
-                        '9': 'The Watch Castle',
+                        '1': Door('Teleportation Deck'),
+                        '2': Door('The Dancing Jellyfish Inn'),
+                        '3': Door('The Slopy Plasmoid Tapphouse'),
+                        '4': Door('The Centaurbow Weapon Shop'),
+                        '5': Door('The Gadabout Bakery'),
+                        '6': Door('The Shifterspender St'),
+                        '7': Door('The Town Hall'),
+                        '8': Door('The Assassins Guild'),
+                        '9': Door('The Watch Castle'),
                         },
                     'info': '''
 
@@ -1057,17 +1089,17 @@ do you want to:
                 '2nd Teleportation Deck': {
                     'room type': 'asteroid-2',
                     'directions': {
-                        '1': 'Charter 2nd Ship',
-                        '2': 'The 2nd Dancing Jellyfish Inn',
-                        '3': 'The 2nd Slopy Plasmoid Tapphouse',
-                        '4': 'The 2nd GiffHammer Weapon Shop',
-                        '5': 'The 2nd Gadabout Bakery',
-                        '6': 'The 2nd Githspender St',
-                        '7': 'The 2nd Town Hall',
-                        '8': 'The 2nd Thieves Guild',
-                        '9': 'The 2nd Watch Castle',
+                        '1': Door('Charter 2nd Ship'),
+                        '2': Door('The 2nd Dancing Jellyfish Inn'),
+                        '3': Door('The 2nd Slopy Plasmoid Tapphouse'),
+                        '4': Door('The 2nd GiffHammer Weapon Shop'),
+                        '5': Door('The 2nd Gadabout Bakery'),
+                        '6': Door('The 2nd Githspender St'),
+                        '7': Door('The 2nd Town Hall'),
+                        '8': Door('The 2nd Thieves Guild'),
+                        '9': Door('The 2nd Watch Castle'),
                         },
-                        '10': 'The 2nd Old Manor',
+                        '10': Door('The 2nd Old Manor'),
                     'info': '''
 You are in a strange cave with many teleportation circles, as well as some ships that are floating above the floor.
 
@@ -1091,18 +1123,18 @@ do you want to:
                 'Charter 2nd Ship' :{
                     'room type': 'asteroid-2',
                     'directions': {
-                        '1': '2nd Teleportation Deck',
-                        '2': 'The 2nd Dancing Jellyfish Inn',
-                        '3': 'The 2nd Slopy Plasmoid Tapphouse',
-                        '4': 'The 2nd GiffHammer Weapon Shop',
-                        '5': 'The 2nd Gadabout Bakery',
-                        '6': 'The 2nd Githspender St',
-                        '7': 'The 2nd Town Hall',
-                        '8': 'The 2nd Thieves Guild',
-                        '9': 'The 2nd Watch Castle',
-                        '10': 'The Old 2nd Manor',
-                        '11': 'Teleportation Deck',
-                        '12': '3rd Teleportation Deck',
+                        '1': Door('2nd Teleportation Deck'),
+                        '2': Door('The 2nd Dancing Jellyfish Inn'),
+                        '3': Door('The 2nd Slopy Plasmoid Tapphouse'),
+                        '4': Door('The 2nd GiffHammer Weapon Shop'),
+                        '5': Door('The 2nd Gadabout Bakery'),
+                        '6': Door('The 2nd Githspender St'),
+                        '7': Door('The 2nd Town Hall'),
+                        '8': Door('The 2nd Thieves Guild'),
+                        '9': Door('The 2nd Watch Castle'),
+                        '10': Door('The Old 2nd Manor'),
+                        '11': Door('Teleportation Deck'),
+                        '12': Door('3rd Teleportation Deck'),
                         },
                     'creatures stats': creature(
                         'hull leech', 
@@ -1135,15 +1167,15 @@ Do you want to:
                 'The 2nd Dancing Jellyfish Inn' :{
                     'room type': 'asteroid-2',
                     'directions': {
-                        '1': '2nd Teleportation Deck',
-                        '2': 'The 2nd Slopy Plasmoid Tapphouse',
-                        '3': 'The 2nd GiffHammer Weapon Shop',
-                        '4': 'The 2nd Gadabout Bakery',
-                        '5': 'The 2nd Githspender St',
-                        '6': 'The 2nd Town Hall',
-                        '7': 'The 2nd Thieves Guild',
-                        '8': 'The 2nd Watch Castle',
-                        '9': 'The 2nd Old Manor',
+                        '1': Door('2nd Teleportation Deck'),
+                        '2': Door('The 2nd Slopy Plasmoid Tapphouse'),
+                        '3': Door('The 2nd GiffHammer Weapon Shop'),
+                        '4': Door('The 2nd Gadabout Bakery'),
+                        '5': Door('The 2nd Githspender St'),
+                        '6': Door('The 2nd Town Hall'),
+                        '7': Door('The 2nd Thieves Guild'),
+                        '8': Door('The 2nd Watch Castle'),
+                        '9': Door('The 2nd Old Manor'),
                         },
                     'info': '''
 
@@ -1162,15 +1194,15 @@ do you want to:
                 'The 2nd Slopy Plasmoid Tapphouse' :{
                     'room type': 'asteroid-2',
                     'directions': {
-                        '1': '2nd Teleportation Deck',
-                        '2': 'The 2nd Dancing Jellyfish Inn',
-                        '3': 'The 2nd GiffHammer Weapon Shop',
-                        '4': 'The 2nd Gadabout Bakery',
-                        '5': 'The 2nd Githspender St',
-                        '6': 'The 2nd Town Hall',
-                        '7': 'The 2nd Thieves Guild',
-                        '8': 'The 2nd Watch Castle',
-                        '9': 'The 2nd Old Manor',
+                        '1': Door('2nd Teleportation Deck'),
+                        '2': Door('The 2nd Dancing Jellyfish Inn'),
+                        '3': Door('The 2nd GiffHammer Weapon Shop'),
+                        '4': Door('The 2nd Gadabout Bakery'),
+                        '5': Door('The 2nd Githspender St'),
+                        '6': Door('The 2nd Town Hall'),
+                        '7': Door('The 2nd Thieves Guild'),
+                        '8': Door('The 2nd Watch Castle'),
+                        '9': Door('The 2nd Old Manor'),
                         },
                     'info': '''
 
@@ -1189,15 +1221,15 @@ do you want to:
                 'The 2nd GiffHammer Weapon Shop' :{
                     'room type': 'asteroid-2',
                     'directions': {
-                        '1': '2nd Teleportation Deck',
-                        '2': 'The 2nd Dancing Jellyfish Inn',
-                        '3': 'The 2nd Slopy Plasmoid Tapphouse',
-                        '4': 'The 2nd Gadabout Bakery',
-                        '5': 'The 2nd Githspender St',
-                        '6': 'The 2nd Town Hall',
-                        '7': 'The 2nd Thieves Guild',
-                        '8': 'The 2nd Watch Castle',
-                        '9': 'The 2nd Old Manor',
+                        '1': Door('2nd Teleportation Deck'),
+                        '2': Door('The 2nd Dancing Jellyfish Inn'),
+                        '3': Door('The 2nd Slopy Plasmoid Tapphouse'),
+                        '4': Door('The 2nd Gadabout Bakery'),
+                        '5': Door('The 2nd Githspender St'),
+                        '6': Door('The 2nd Town Hall'),
+                        '7': Door('The 2nd Thieves Guild'),
+                        '8': Door('The 2nd Watch Castle'),
+                        '9': Door('The 2nd Old Manor'),
                         },
                     'info': '''
 
@@ -1216,15 +1248,15 @@ do you want to:
                 'The 2nd Gadabout Bakery' :{
                     'room type': 'asteroid-2',
                     'directions': {
-                        '1': '2nd Teleportation Deck',
-                        '2': 'The 2nd Dancing Jellyfish Inn',
-                        '3': 'The 2nd Slopy Plasmoid Tapphouse',
-                        '4': 'The 2nd GiffHammer Weapon Shop',
-                        '5': 'The 2nd Githspender St',
-                        '6': 'The 2nd Town Hall',
-                        '7': 'The 2nd Thieves Guild',
-                        '8': 'The 2nd Watch Castle',
-                        '9': 'The 2nd Old Manor',
+                        '1': Door('2nd Teleportation Deck'),
+                        '2': Door('The 2nd Dancing Jellyfish Inn'),
+                        '3': Door('The 2nd Slopy Plasmoid Tapphouse'),
+                        '4': Door('The 2nd GiffHammer Weapon Shop'),
+                        '5': Door('The 2nd Githspender St'),
+                        '6': Door('The 2nd Town Hall'),
+                        '7': Door('The 2nd Thieves Guild'),
+                        '8': Door('The 2nd Watch Castle'),
+                        '9': Door('The 2nd Old Manor'),
                         },
                     'info': '''
 
@@ -1243,15 +1275,15 @@ do you want to:
                 'The 2nd Githspender St' :{
                     'room type': 'asteroid-2',
                     'directions': {
-                        '1': '2nd Teleportation Deck',
-                        '2': 'The 2nd Dancing Jellyfish Inn',
-                        '3': 'The 2nd Slopy Plasmoid Tapphouse',
-                        '4': 'The 2nd GiffHammer Weapon Shop',
-                        '5': 'The 2nd Gadabout Bakery',
-                        '6': 'The 2nd Town Hall',
-                        '7': 'The 2nd Thieves Guild',
-                        '8': 'The 2nd Watch Castle',
-                        '9': 'The 2nd Old Manor',
+                        '1': Door('2nd Teleportation Deck'),
+                        '2': Door('The 2nd Dancing Jellyfish Inn'),
+                        '3': Door('The 2nd Slopy Plasmoid Tapphouse'),
+                        '4': Door('The 2nd GiffHammer Weapon Shop'),
+                        '5': Door('The 2nd Gadabout Bakery'),
+                        '6': Door('The 2nd Town Hall'),
+                        '7': Door('The 2nd Thieves Guild'),
+                        '8': Door('The 2nd Watch Castle'),
+                        '9': Door('The 2nd Old Manor'),
                         },
                     'info': '''
 
@@ -1270,15 +1302,15 @@ do you want to:
                 'The 2nd Town Hall' :{
                     'room type': 'asteroid-2',
                     'directions': {
-                        '1': '2nd Teleportation Deck',
-                        '2': 'The 2nd Dancing Jellyfish Inn',
-                        '3': 'The 2nd Slopy Plasmoid Tapphouse',
-                        '4': 'The 2nd GiffHammer Weapon Shop',
-                        '5': 'The 2nd Gadabout Bakery',
-                        '6': 'The 2nd Githspender St',
-                        '7': 'The 2nd Thieves Guild',
-                        '8': 'The 2nd Watch Castle',
-                        '9': 'The 2nd Old Manor',
+                        '1': Door('2nd Teleportation Deck'),
+                        '2': Door('The 2nd Dancing Jellyfish Inn'),
+                        '3': Door('The 2nd Slopy Plasmoid Tapphouse'),
+                        '4': Door('The 2nd GiffHammer Weapon Shop'),
+                        '5': Door('The 2nd Gadabout Bakery'),
+                        '6': Door('The 2nd Githspender St'),
+                        '7': Door('The 2nd Thieves Guild'),
+                        '8': Door('The 2nd Watch Castle'),
+                        '9': Door('The 2nd Old Manor'),
                         },
                     'info': '''
 
@@ -1297,15 +1329,15 @@ do you want to:
                 'The 2nd Thieves Guild' :{
                     'room type': 'asteroid-2',
                     'directions': {
-                        '1': '2nd Teleportation Deck',
-                        '2': 'The 2nd Dancing Jellyfish Inn',
-                        '3': 'The 2nd Slopy Plasmoid Tapphouse',
-                        '4': 'The 2nd GiffHammer Weapon Shop',
-                        '5': 'The 2nd Gadabout Bakery',
-                        '6': 'The 2nd Githspender St',
-                        '7': 'The 2nd Town Hall',
-                        '8': 'The 2nd Watch Castle',
-                        '9': 'The 2nd Old Manor',
+                        '1': Door('2nd Teleportation Deck'),
+                        '2': Door('The 2nd Dancing Jellyfish Inn'),
+                        '3': Door('The 2nd Slopy Plasmoid Tapphouse'),
+                        '4': Door('The 2nd GiffHammer Weapon Shop'),
+                        '5': Door('The 2nd Gadabout Bakery'),
+                        '6': Door('The 2nd Githspender St'),
+                        '7': Door('The 2nd Town Hall'),
+                        '8': Door('The 2nd Watch Castle'),
+                        '9': Door('The 2nd Old Manor'),
                         },
                     'creatures stats': creature(
                         'thief', 
@@ -1333,15 +1365,15 @@ do you want to:
                 'The 2nd Watch Castle' :{
                     'room type': 'asteroid-2',
                     'directions': {
-                        '1': '2nd Teleportation Deck',
-                        '2': 'The 2nd Dancing Jellyfish Inn',
-                        '3': 'The 2nd Slopy Plasmoid Tapphouse',
-                        '4': 'The 2nd GiffHammer Weapon Shop',
-                        '5': 'The 2nd Gadabout Bakery',
-                        '6': 'The 2nd Githspender St',
-                        '7': 'The 2nd Town Hall',
-                        '8': 'The 2nd Thieves Guild',
-                        '9': 'The 2nd Old Manor',
+                        '1': Door('2nd Teleportation Deck'),
+                        '2': Door('The 2nd Dancing Jellyfish Inn'),
+                        '3': Door('The 2nd Slopy Plasmoid Tapphouse'),
+                        '4': Door('The 2nd GiffHammer Weapon Shop'),
+                        '5': Door('The 2nd Gadabout Bakery'),
+                        '6': Door('The 2nd Githspender St'),
+                        '7': Door('The 2nd Town Hall'),
+                        '8': Door('The 2nd Thieves Guild'),
+                        '9': Door('The 2nd Old Manor'),
                         },
                     'info': '''
 
@@ -1360,15 +1392,15 @@ do you want to:
                 'The 2nd Old Manor' :{
                     'room type': 'asteroid-2',
                     'directions': {
-                        '1': '2nd Teleportation Deck',
-                        '2': 'The 2nd Dancing Jellyfish Inn',
-                        '3': 'The 2nd Slopy Plasmoid Tapphouse',
-                        '4': 'The 2nd GiffHammer Weapon Shop',
-                        '5': 'The 2nd Gadabout Bakery',
-                        '6': 'The 2nd Githspender St',
-                        '7': 'The 2nd Town Hall',
-                        '8': 'The 2nd Thieves Guild',
-                        '9': 'The 2nd Watch Castle',
+                        '1': Door('2nd Teleportation Deck'),
+                        '2': Door('The 2nd Dancing Jellyfish Inn'),
+                        '3': Door('The 2nd Slopy Plasmoid Tapphouse'),
+                        '4': Door('The 2nd GiffHammer Weapon Shop'),
+                        '5': Door('The 2nd Gadabout Bakery'),
+                        '6': Door('The 2nd Githspender St'),
+                        '7': Door('The 2nd Town Hall'),
+                        '8': Door('The 2nd Thieves Guild'),
+                        '9': Door('The 2nd Watch Castle'),
                         },
                     'info': '''
 
@@ -1387,17 +1419,17 @@ do you want to:
                 '3rd Teleportation Deck': {
                     'room type': 'asteroid-2',
                     'directions': {
-                        '1': 'Charter 3rd Ship',
-                        '2': 'The Main Guildhall',
-                        '3': 'The Order of the Arcane Scribes',
-                        '4': 'The Wayfarers\' Brotherhood',
-                        '5': 'The Artisans\' Collective',
-                        '6': 'The Silent Shadows Syndicate',
-                        '7': 'The Guardians of the Wilds',
-                        '8': 'The Mercantile Consortium',
-                        '9': 'The Sentinels of the Shield',
+                        '1': Door('Charter 3rd Ship'),
+                        '2': Door('The Main Guildhall'),
+                        '3': Door('The Order of the Arcane Scribes'),
+                        '4': Door('The Wayfarers\' Brotherhood'),
+                        '5': Door('The Artisans\' Collective'),
+                        '6': Door('The Silent Shadows Syndicate'),
+                        '7': Door('The Guardians of the Wilds'),
+                        '8': Door('The Mercantile Consortium'),
+                        '9': Door('The Sentinels of the Shield'),
                         },
-                        '10': 'The 3rd Old Manor',
+                        '10': Door('The 3rd Old Manor'),
                     'info': '''
 You are in a strange cave with many teleportation circles, as well as some ships that are floating above the floor.
 
@@ -1421,18 +1453,18 @@ do you want to:
                 'Charter 3rd Ship' :{
                     'room type': 'asteroid-3',
                     'directions': {
-                        '1': 'Teleportation Deck',
-                        '2': 'The Main Guildhall',
-                        '3': 'The Order of the Arcane Scribes',
-                        '4': 'The Wayfarers\' Brotherhood',
-                        '5': 'The Artisans\' Collective',
-                        '6': 'The Silent Shadows Syndicate',
-                        '7': 'The Guardians of the Wilds',
-                        '8': 'The Mercantile Consortium',
-                        '9': 'The Sentinels of the Shield',
-                        '10': 'The 3rd Old Manor',
-                        '11': 'Teleportation Deck',
-                        '12': '2nd Teleportation Deck',
+                        '1': Door('Teleportation Deck'),
+                        '2': Door('The Main Guildhall'),
+                        '3': Door('The Order of the Arcane Scribes'),
+                        '4': Door('The Wayfarers\' Brotherhood'),
+                        '5': Door('The Artisans\' Collective'),
+                        '6': Door('The Silent Shadows Syndicate'),
+                        '7': Door('The Guardians of the Wilds'),
+                        '8': Door('The Mercantile Consortium'),
+                        '9': Door('The Sentinels of the Shield'),
+                        '10': Door('The 3rd Old Manor'),
+                        '11': Door('Teleportation Deck'),
+                        '12': Door('2nd Teleportation Deck'),
                         },
                     'info': '''
 
@@ -1465,16 +1497,16 @@ tapestries, statues, and artifacts commemorating the triumphs of the past. Wheth
 from across the realm flock to the Forge, drawn by the promise of glory and the chance to make their mark on history.''',
                     'room type': 'asteroid-3',
                     'directions': {
-                        '1': '2nd Teleportation Deck',
-                        '2': 'The Order of the Arcane Scribes',
-                        '3': 'The Wayfarers\' Brotherhood',
-                        '4': 'The Artisans\' Collective',
-                        '5': 'The Silent Shadows Syndicate',
-                        '6': 'The Guardians of the Wilds',
-                        '7': 'The Mercantile Consortium',
-                        '8': 'The Sentinels of the Shield',
-                        '9': 'The 3rd Old Manor',
-                        '10': 'The Grand Coliseum',
+                        '1': Door('2nd Teleportation Deck'),
+                        '2': Door('The Order of the Arcane Scribes'),
+                        '3': Door('The Wayfarers\' Brotherhood'),
+                        '4': Door('The Artisans\' Collective'),
+                        '5': Door('The Silent Shadows Syndicate'),
+                        '6': Door('The Guardians of the Wilds'),
+                        '7': Door('The Mercantile Consortium'),
+                        '8': Door('The Sentinels of the Shield'),
+                        '9': Door('The 3rd Old Manor'),
+                        '10': Door('The Grand Coliseum'),
                         },
                     'info': '''
 
@@ -1505,7 +1537,7 @@ elaborate tournaments of skill and strategy, the fighters of the Grand Coliseum 
 Coliseum stands as a testament to the enduring appeal of gladiatorial combat and the timeless allure of the warrior's path.''',
                     'room type': 'asteroid-3',
                     'directions': {
-                        '1': 'The Main Guildhall',
+                        '1': Door('The Main Guildhall'),
                         },
                     'creatures stats': creature(
                         'gladiator',
@@ -1535,15 +1567,15 @@ Whether delving into the depths of forgotten lore or harnessing the power of the
 magic.''',
                     'room type': 'asteroid-3',
                     'directions': {
-                        '1': '3rd Teleportation Deck',
-                        '2': 'The Main Guildhall',
-                        '3': 'The Wayfarers\' Brotherhood',
-                        '4': 'The Artisans\' Collective',
-                        '5': 'The Silent Shadows Syndicate',
-                        '6': 'The Guardians of the Wilds',
-                        '7': 'The Mercantile Consortium',
-                        '8': 'The Sentinels of the Shield',
-                        '9': 'The 3rd Old Manor',
+                        '1': Door('3rd Teleportation Deck'),
+                        '2': Door('The Main Guildhall'),
+                        '3': Door('The Wayfarers\' Brotherhood'),
+                        '4': Door('The Artisans\' Collective'),
+                        '5': Door('The Silent Shadows Syndicate'),
+                        '6': Door('The Guardians of the Wilds'),
+                        '7': Door('The Mercantile Consortium'),
+                        '8': Door('The Sentinels of the Shield'),
+                        '9': Door('The 3rd Old Manor'),
                         },
                     'info': '''
 
@@ -1571,15 +1603,15 @@ ambitious expeditions, and seek companions for their journeys. Guided by a spiri
 eager to uncover the mysteries that lie beyond the horizon.''',
                     'room type': 'asteroid-3',
                     'directions': {
-                        '1': '3rd Teleportation Deck',
-                        '2': 'The Main Guildhall',
-                        '3': 'The Order of the Arcane Scribes',
-                        '4': 'The Artisans\' Collective',
-                        '5': 'The Silent Shadows Syndicate',
-                        '6': 'The Guardians of the Wilds',
-                        '7': 'The Mercantile Consortium',
-                        '8': 'The Sentinels of the Shield',
-                        '9': 'The 3rd Old Manor',
+                        '1': Door('3rd Teleportation Deck'),
+                        '2': Door('The Main Guildhall'),
+                        '3': Door('The Order of the Arcane Scribes'),
+                        '4': Door('The Artisans\' Collective'),
+                        '5': Door('The Silent Shadows Syndicate'),
+                        '6': Door('The Guardians of the Wilds'),
+                        '7': Door('The Mercantile Consortium'),
+                        '8': Door('The Sentinels of the Shield'),
+                        '9': Door('The 3rd Old Manor'),
                         },
                     'info': '''
 
@@ -1608,15 +1640,15 @@ quality, crafting intricate works of jewelry, or painting breathtaking landscape
 potential of skilled craftsmanship.''',
                     'room type': 'asteroid-3',
                     'directions': {
-                        '1': '3rd Teleportation Deck',
-                        '2': 'The Main Guildhall',
-                        '3': 'The Order of the Arcane Scribes',
-                        '4': 'The Wayfarers\' Brotherhood',
-                        '5': 'The Silent Shadows Syndicate',
-                        '6': 'The Guardians of the Wilds',
-                        '7': 'The Mercantile Consortium',
-                        '8': 'The Sentinels of the Shield',
-                        '9': 'The 3rd Old Manor',
+                        '1': Door('3rd Teleportation Deck'),
+                        '2': Door('The Main Guildhall'),
+                        '3': Door('The Order of the Arcane Scribes'),
+                        '4': Door('The Wayfarers\' Brotherhood'),
+                        '5': Door('The Silent Shadows Syndicate'),
+                        '6': Door('The Guardians of the Wilds'),
+                        '7': Door('The Mercantile Consortium'),
+                        '8': Door('The Sentinels of the Shield'),
+                        '9': Door('The 3rd Old Manor'),
                         },
                     'info': '''
 
@@ -1645,15 +1677,15 @@ before melting back into the shadows from whence they came. Though their methods
 willing to operate outside the boundaries of conventional morality.''',
                     'room type': 'asteroid-3',
                     'directions': {
-                        '1': '3rd Teleportation Deck',
-                        '2': 'The Main Guildhall',
-                        '3': 'The Order of the Arcane Scribes',
-                        '4': 'The Wayfarers\' Brotherhood',
-                        '5': 'The Artisans\' Collective',
-                        '6': 'The Guardians of the Wilds',
-                        '7': 'The Mercantile Consortium',
-                        '8': 'The Sentinels of the Shield',
-                        '9': 'The 3rd Old Manor',
+                        '1': Door('3rd Teleportation Deck'),
+                        '2': Door('The Main Guildhall'),
+                        '3': Door('The Order of the Arcane Scribes'),
+                        '4': Door('The Wayfarers\' Brotherhood'),
+                        '5': Door('The Artisans\' Collective'),
+                        '6': Door('The Guardians of the Wilds'),
+                        '7': Door('The Mercantile Consortium'),
+                        '8': Door('The Sentinels of the Shield'),
+                        '9': Door('The 3rd Old Manor'),
                         },
                     'info': '''
 
@@ -1682,15 +1714,15 @@ would exploit nature for profit or power. Whether embarking on quests to thwart 
 wildlife, the Guardians of the Wilds stand as vigilant protectors of the natural world, sworn to defend it against all who would seek to do it harm.''',
                     'room type': 'asteroid-3',
                     'directions': {
-                        '1': '3rd Teleportation Deck',
-                        '2': 'The Main Guildhall',
-                        '3': 'The Order of the Arcane Scribes',
-                        '4': 'The Wayfarers\' Brotherhood',
-                        '5': 'The Artisans\' Collective',
-                        '6': 'The Silent Shadows Syndicate',
-                        '7': 'The Mercantile Consortium',
-                        '8': 'The Sentinels of the Shield',
-                        '9': 'The 3rd Old Manor',
+                        '1': Door('3rd Teleportation Deck'),
+                        '2': Door('The Main Guildhall'),
+                        '3': Door('The Order of the Arcane Scribes'),
+                        '4': Door('The Wayfarers\' Brotherhood'),
+                        '5': Door('The Artisans\' Collective'),
+                        '6': Door('The Silent Shadows Syndicate'),
+                        '7': Door('The Mercantile Consortium'),
+                        '8': Door('The Sentinels of the Shield'),
+                        '9': Door('The 3rd Old Manor'),
                         },
                     'info': '''
 
@@ -1719,15 +1751,15 @@ Though their methods may be ruthless and their ambitions vast, their guild stand
 of wealth.''',
                     'room type': 'asteroid-3',
                     'directions': {
-                        '1': '3rd Teleportation Deck',
-                        '2': 'The Main Guildhall',
-                        '3': 'The Order of the Arcane Scribes',
-                        '4': 'The Wayfarers\' Brotherhood',
-                        '5': 'The Artisans\' Collective',
-                        '6': 'The Silent Shadows Syndicate',
-                        '7': 'The Guardians of the Wilds',
-                        '8': 'The Sentinels of the Shield',
-                        '9': 'The 3rd Old Manor',
+                        '1': Door('3rd Teleportation Deck'),
+                        '2': Door('The Main Guildhall'),
+                        '3': Door('The Order of the Arcane Scribes'),
+                        '4': Door('The Wayfarers\' Brotherhood'),
+                        '5': Door('The Artisans\' Collective'),
+                        '6': Door('The Silent Shadows Syndicate'),
+                        '7': Door('The Guardians of the Wilds'),
+                        '8': Door('The Sentinels of the Shield'),
+                        '9': Door('The 3rd Old Manor'),
                         },
                     'info': '''
 
@@ -1764,15 +1796,15 @@ guild. Training programs cover various aspects of combat, law enforcement techni
 new recruits, fostering a sense of camaraderie and unity among the ranks.''',
                     'room type': 'asteroid-3',
                     'directions': {
-                        '1': '3rd Teleportation Deck',
-                        '2': 'The Main Guildhall',
-                        '3': 'The Order of the Arcane Scribes',
-                        '4': 'The Wayfarers\' Brotherhood',
-                        '5': 'The Artisans\' Collective',
-                        '6': 'The Silent Shadows Syndicate',
-                        '7': 'The Guardians of the Wilds',
-                        '8': 'The Mercantile Consortium',
-                        '9': 'The 3rd Old Manor',
+                        '1': Door('3rd Teleportation Deck'),
+                        '2': Door('The Main Guildhall'),
+                        '3': Door('The Order of the Arcane Scribes'),
+                        '4': Door('The Wayfarers\' Brotherhood'),
+                        '5': Door('The Artisans\' Collective'),
+                        '6': Door('The Silent Shadows Syndicate'),
+                        '7': Door('The Guardians of the Wilds'),
+                        '8': Door('The Mercantile Consortium'),
+                        '9': Door('The 3rd Old Manor'),
                         },
                     'info': '''
 
@@ -1791,15 +1823,15 @@ do you want to:
                 'The 3rd Old Manor' :{
                     'room type': 'asteroid-3',
                     'directions': {
-                        '1': '3rd Teleportation Deck',
-                        '2': 'The Main Guildhall',
-                        '3': 'The Order of the Arcane Scribes',
-                        '4': 'The Wayfarers\' Brotherhood',
-                        '5': 'The Artisans\' Collective',
-                        '6': 'The Silent Shadows Syndicate',
-                        '7': 'The Guardians of the Wilds',
-                        '8': 'The Mercantile Consortium',
-                        '9': 'The Sentinels of the Shield',
+                        '1': Door('3rd Teleportation Deck'),
+                        '2': Door('The Main Guildhall'),
+                        '3': Door('The Order of the Arcane Scribes'),
+                        '4': Door('The Wayfarers\' Brotherhood'),
+                        '5': Door('The Artisans\' Collective'),
+                        '6': Door('The Silent Shadows Syndicate'),
+                        '7': Door('The Guardians of the Wilds'),
+                        '8': Door('The Mercantile Consortium'),
+                        '9': Door('The Sentinels of the Shield'),
                         },
                     'info': '''
 
