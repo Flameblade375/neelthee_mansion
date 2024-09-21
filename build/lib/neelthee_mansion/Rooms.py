@@ -57,6 +57,9 @@ class Door:
         else:
             type_text("The door is locked.")
             return currentroom
+    
+    def __str__(self) -> str:
+        return self.CurentRevealStr
 
 class SwitchDoor(Door):
     def __init__(self, RoomOneName, RoomTwoName, KeyCode=None) -> None:
@@ -317,7 +320,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'directions': {
                         'west': Door('Armoury'),
                         'south': Door('Dining Room'),
-                        'down': 'Basement 1',
+                        'down': Door('Basement 1'),
                         },
                     'creatures stats': creature(
                         'grumpy pig',
@@ -353,7 +356,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'position': (1, 8, 0),
                     'discovered': False,
                     'directions': {
-                        'down': 'Hall',
+                        'down': Door('Hall'),
                         'north': Door('Tower Bottom'),
                         'east': Door('Bedroom'),
                         'south': Door('Balcony'),
@@ -469,7 +472,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'directions': {
                         'south': Door('Landing'),
                         'east': Door('Office'),
-                        'down': 'Armoury',
+                        'down': Door('Armoury'),
                         'up': Door('Tower Middle'),
                         },
                     'info': 'You are in the base of a stone tower, there is a spiral staircase going up into the darkness.',
@@ -496,7 +499,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'position': (2, 0, 0),
                     'discovered': False,
                     'directions': {
-                        'down': 'Tower Bottom',
+                        'down': Door('Tower Bottom'),
                         'up': Door('Tower Top'),
                         },
                     'containers': {
@@ -524,7 +527,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'position': (3, 0, 0),
                     'discovered': False,
                     'directions': {
-                        'down': 'Tower Middle',
+                        'down': Door('Tower Middle'),
                         'teleport': Door('Teleportation Deck'),
                         },
                     'creatures stats': creature(
@@ -685,9 +688,11 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 
                 'Cavern 1': {
                     'room type': 'cavern',
+                    'position': (-2, 0, 0),
+                    'discovered': False,
                     'directions': {
                         'up': Door('Basement 4'),
-                        'down': 'Cavern 2',
+                        'down': Door('Cavern 2'),
                         },
                     'info': 'you are in a dark cavern with the only light coming from the shoot you came through. A voice in the back of your head says: \'Do not go down the shoot, leave while you still can!\'',
                     'map': '''
@@ -707,10 +712,12 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 
                 'Cavern 2': {
                     'room type': 'cavern',
+                    'position': (-3, 0, 0),
+                    'discovered': False,
                     'directions': {
-                        
+                            'up': SwitchDoor('Cavern 1', 'Cavern 3', '7k69fImz4y')
                         },
-                    'info': 'you are in a dark cavern with the only light coming from the shoot you came through. A voice in the back of your head says: \'You fool! You can never escape!\'',
+                    'info': 'you are in a dark cavern with the only light coming from the shoot you came through. A voice in the back of your head says: \'You fool! You can never get back now!\'',
                     'map': '''
 █████████
 █       █
@@ -722,7 +729,8 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █       █
 █████████''',
                     'Hints': [
-                        'I should probably quit so I\'m not here forever.',
+                        'I should probably go back up so I\'m not here forever.',
+                        'I wander what the voice was talking about.',
                     ],
                     },
 

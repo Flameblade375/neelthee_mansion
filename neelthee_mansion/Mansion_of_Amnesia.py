@@ -256,12 +256,12 @@ def Use(moveone, movetwo=None):
         type_text("You can't use that", colorTrue=color_coding)
 
 
-def PickKey(lock):
+def PickKey(locked_obj):
     keys = player.inventory.keys()
     
     if keys:
         while True:
-            type_text(f"Please pick which key you want to use in the lock. This is what you know about the lock: {lock}. These are your keys:")
+            type_text(f"Please pick which key you want to use in the lock. This is what you know about the lock: {locked_obj}. These are your keys:")
 
             # Enumerate keys and display them
             for idx, key in enumerate(keys, 1):  # Starts numbering at 1
@@ -299,10 +299,10 @@ def Move(move):
     def attempt_move_to_garden():
         global player
         type_text("Please pick whitch key you want to try in the lock on the gate")   
-        for key in player.inventory.keys():
-            if key.KeyCode == "629.IdnXwnt":
-                End('You unlock the gate to the garden with the key!')
-                return newRoom
+        key = PickKey(Lock("629.IdnXwnt"))
+        if key.KeyCode == "629.IdnXwnt":
+            End('You unlock the gate to the garden with the key!')
+            return newRoom
         type_text('The gate is locked.', colorTrue=color_coding)
         return newRoom
 
@@ -319,12 +319,15 @@ def Move(move):
             return newRoom
 
     if move in ROOMS[player.CURRENTROOM]['directions']:
+        newRoom = "Hall"
         if isinstance(ROOMS[player.CURRENTROOM]['directions'][move], Door):
             if isinstance(ROOMS[player.CURRENTROOM]['directions'][move].lock, Lock):
                 key = PickKey(ROOMS[player.CURRENTROOM]['directions'][move].lock)
                 ROOMS[player.CURRENTROOM]['directions'][move].unlock(key, player)
             newRoom = ROOMS[player.CURRENTROOM]['directions'][move].GetRoom()
-            newRoom = move_to_room()
+        elif isinstance(ROOMS[player.CURRENTROOM]['directions'][move], str):
+            newRoom = ROOMS[player.CURRENTROOM]['directions'][move]
+        newRoom = move_to_room()
         return
     elif move in ROOMS:
         newRoom = move

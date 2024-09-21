@@ -156,3 +156,6 @@ class container:
     
     def Unlock(self, key: Key, player):
         return self.lock.unlock(key, player)
+    
+    def __str__(self) -> str:
+        return self.CurentRevealStr
