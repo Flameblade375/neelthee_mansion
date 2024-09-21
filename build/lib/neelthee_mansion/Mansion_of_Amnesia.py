@@ -1012,6 +1012,11 @@ You must navigate the mansion and uncover the truth behind your captivity, all w
     while True:
         command()
 
+        if 'random_events' in ROOMS[player.CURRENTROOM]:
+            for event in ROOMS[player.CURRENTROOM]['random_events']:
+                if isinstance(event, RandomEvent):
+                    event.check_and_trigger(player)
+
         # Move guards
         for guard in guards:
             if isinstance(guard, Guard):

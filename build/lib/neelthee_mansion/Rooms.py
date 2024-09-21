@@ -224,6 +224,14 @@ ROOMS = {
                         'I wonder if there is anything salvageable in the %*RED*%cupboards%*RESET*%.',
                         'I should probably look around.',
                     ],
+                    'random_events': [
+                        RandomEvent(
+                            name='Event name',
+                            probability=0.15,  # Adjust this for the probability of the event running (e.g., 0.1 is 10% chance)
+                            condition=lambda player: True,  # Condition under which the event can occur
+                            effect=lambda player: ROOMS['Kitchen']['containers']['cupboards'].take_contents(),  # Define the effect of the event
+                        )
+                    ],
                     },
 
                 'Dining Room': {
