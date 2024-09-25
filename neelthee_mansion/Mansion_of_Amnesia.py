@@ -15,7 +15,13 @@ GameState = {
 Neel-thee's Mansion of Amnesia
 '''
 
-global player, evil_mage, commands, NOTE_NUM, credits, characters, color_coding, quest_manager, revealer
+global player, evil_mage, commands, NOTE_NUM, credits, color_coding, quest_manager, revealer, CHARACTERSLIST, BACKGROUNDS
+
+BACKGROUNDS = [
+    'Adventurer',
+    'Artist',
+    'Scholar',
+]
 
 revealer = KeyRevealer()
 
@@ -33,7 +39,7 @@ height = Height()
 weight = 0
 
 
-charactersList = [
+CHARACTERSLIST = [
     {'name': 'Jack', 'age': 19, 'height': Height('6ft 3'), 'weight(LBs)': 213}, 
     {'name': 'Darcie-Mae', 'age': 19, 'height': Height('5ft 5'), 'weight(LBs)': 150}, 
     {'name': 'John', 'age': 25, 'height': Height('5ft 10'), 'weight(LBs)': 180}, 
@@ -923,15 +929,9 @@ def handle_guard_action(guard):
     else:
         return [False, [guard, True]]  # Function was not found
 
-def main():
-    global player, color_coding
-    global charactersList
-    
-
-    df = pd.DataFrame(charactersList)
-
-
-    # this is the initializer
+def initializer():
+    global color_coding, player, CHARACTERSLIST
+    df = pd.DataFrame(CHARACTERSLIST)
     Standord_Player = loop_til_valid_input("Do you want to use a premade character?", "you didn't answer Y or N.", Y_N).value
 
     if Standord_Player:
@@ -943,9 +943,9 @@ def main():
                 "That wasn't one of the characters. Please choose one.", 
                 int
             )
-            lstIndex = last_index(charactersList)
+            lstIndex = last_index(CHARACTERSLIST)
             if selected_character <= lstIndex:
-                character_info = charactersList[selected_character]
+                character_info = CHARACTERSLIST[selected_character]
                 name = character_info['name']
                 age = character_info['age']
                 height = character_info['height']
@@ -965,45 +965,37 @@ def main():
     color_coding = loop_til_valid_input("Do you want color coding (Y/N)?", "you didn't answer Y or N.", Y_N).value
 
 
+    while True:
+        for idx, background in enumerate(BACKGROUNDS):
+            type_text(f"{idx}. {background}")
+
+        background = loop_til_valid_input("What background do you want? (please select the number to the left of them)", "You didn't pick one", int)
+        lstIndex = last_index(CHARACTERSLIST)
+        if background <= lstIndex:
+            background = BACKGROUNDS[background]
+            break
+        else:
+            type_text("You didn't pick one")
+
+
     # start the player in the Hall and sets up everything else
     player = PC(
         name,
         age,
-        'Warrior',
+        background,
         1,
         'Soldier',
         height,
         weight,
-        [
-            f"You joined the army at {14 if age >= 14 else age}", 
-            f"You joined the army to end the war and because you wanted glory", 
-            f"You spent your first year of service training and the rest on the front lines, surprisingly you didn't die", 
-            f"In your service, you made 3 friends, one of them died", 
-            f"You fought your enemies from the tops of the mountains to the vast oceans", 
-            f"Your father was never home; he was always off on great adventures until he died when you were {7 if age >= 7 else age}", 
-            f"You have no friends back home; you were always very lonely", 
-            f"You are an only child. You ran away from home to join the army; your mother misses you terribly", 
-            f"She was a baker, and you spent a lot of time helping her bake bread. You never went to school", 
-            f"The people you admire the most are Sam and Aragorn from Lord of the Rings, which you read as a child. You also read the Hunger Games when you were {13 if age >= 13 else age}", 
-            f"Your favorite weapon is a bow; however, the scimitar is a close second.", 
-        ],
-        backstory=f"""
-You were born into a life of solitude as an only child. Your father was always away on grand adventures and passed away when you were just {7 if age >= 7 else age}. Your mother, a dedicated 
-baker, raised you alone. Although she did her best, you spent most of your time helping her in the bakery rather than attending school, which left you feeling quite isolated.
-
-At the age of {14 if age >= 14 else age}, driven by a desire for glory and a wish to end the war, you left home to join the army. You spent your first year in rigorous training, followed by a 
-harsh life on the front lines. Against all odds, you survived, forging bonds with three close friends—though one of them tragically died in battle. Your journey took you from the heights of 
-mountains to the vast expanses of the ocean, each experience shaping who you are.
-
-You were deeply influenced by the heroes of your childhood—Sam and Aragorn from %*ITALIC*%Lord of the Rings%*RESET*%, which you read as a child, and the characters from %*ITALIC*%The Hunger 
-Games%*RESET*%, which you read when you were {13 if age >= 13 else age}. These stories inspired you and fueled your dream of heroism. Though your favorite weapon is a bow, you also have a 
-fondness for the scimitar.
-
-Now, you find yourself in the Mansion of Amnesia, a place that seems to have erased your memories. The details of your past are fragmented, but the echoes of your history drive you forward. 
-You must navigate the mansion and uncover the truth behind your captivity, all while drawing strength from the remnants of your past.
-""",
-    CURRENTROOM='Hall'
+        CURRENTROOM='Hall'
     )
+
+def main():
+    global player, color_coding
+
+
+    # this is the initializer
+    initializer()
 
     # shows the instructions
     start()
