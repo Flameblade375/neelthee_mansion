@@ -254,6 +254,56 @@ def is_executable(code_str):
     except (SyntaxError, TypeError):
         return False
 
+def get_holiday():
+    today = date.today()
+    year = today.year
+
+    # Define date ranges for holidays
+    halloween_start = date(year, 10, 20)
+    halloween_end = date(year, 10, 31)
+
+    christmas_start = date(year, 12, 24)
+    christmas_end = date(year, 12, 26)
+
+    easter_sunday = calculate_easter_date(year)
+    easter_start = easter_sunday - timedelta(days=3)
+    easter_end = easter_sunday + timedelta(days=3)
+
+    # Check if today is near Halloween
+    if halloween_start <= today <= halloween_end:
+        return 'halloween'
+    
+    # Check if today is near Christmas
+    elif christmas_start <= today <= christmas_end:
+        return 'christmas'
+    
+    # Check if today is near Easter
+    elif easter_start <= today <= easter_end:
+        return 'easter'
+    
+    # No holiday near today
+    else:
+        return None
+
+# Easter calculation (based on the "Computus" algorithm)
+def calculate_easter_date(year):
+    a = year % 19
+    b = year // 100
+    c = year % 100
+    d = b // 4
+    e = b % 4
+    f = (b + 8) // 25
+    g = (b - f + 1) // 3
+    h = (19 * a + b - d - g + 15) % 30
+    i = c // 4
+    k = c % 4
+    l = (32 + 2 * e + 2 * i - h - k) % 7
+    m = (a + 11 * h + 22 * l) // 451
+    month = (h + l - 7 * m + 114) // 31
+    day = ((h + l - 7 * m + 114) % 31) + 1
+
+    return date(year, month, day)
+
 def play_sound(sound_file):
     playsound(sound_file)
 

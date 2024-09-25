@@ -126,7 +126,7 @@ class creature(base_character):
         self.difficulty = self.hp / 10 + self.atpw
         self.dropped_items = dropped_items
         self.xp = rounding(self.difficulty * 2 + len(self.dropped_items))
-        self.description = description if description else f'A %*CYAN*%{self.name}%*RESET'
+        self.description = description if description else f'A %*CYAN*%{self.name}%*RESET.'
         self.flavor_text = flavor_text if flavor_text else f'You see a %*CYAN*%{self.name}%*RESET*%!'
         self.type = type
         self.crit_chance = crit_chance
@@ -144,6 +144,15 @@ class creature(base_character):
         Prints the description of the creature.
         """
         type_text(self.description)
+        curent_holiday = get_holiday()
+        if curent_holiday == 'christmas':
+            type_text(f"The {self.name} also has a santa hat.")
+        elif curent_holiday == 'easter':
+            type_text(f"The {self.name} also has bunny ears.")
+        elif curent_holiday == 'halloween':
+            if random < 0.2:
+                type_text(f"The {self.name} also has a pumkin on it's head.")
+
 
 class Guard(creature):
     """
@@ -190,11 +199,11 @@ class Guard(creature):
             rooms = []
             for direction, room in ROOMS[self.current_room]['directions'].items():
                 rooms.append(room)
-            self.current_room = choice(rooms)
+            self.current_room = choice(rooms).GetRoom()
         elif self.patrol_type == 'follow':
             for direction, room in ROOMS[self.current_room]['directions'].items():
-                if room == player.CURRENTROOM:
-                    self.current_room = room
+                if room.GetRoom() == player.CURRENTROOM:
+                    self.current_room = room.GetRoom()
                     return
 
     def check_detection(self, player_room):
