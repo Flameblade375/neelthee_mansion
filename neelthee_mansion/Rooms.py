@@ -63,7 +63,7 @@ class Door:
 
 class SwitchDoor(Door):
     def __init__(self, RoomOneName, RoomTwoName, KeyCode=None) -> None:
-        super().__init__(RoomOneName, KeyCode, 0)
+        super().__init__(RoomOneName, KeyCode)
         self.switch_destination = RoomTwoName
     
     def GetRoom(self, currentroom):
