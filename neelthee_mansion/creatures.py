@@ -199,11 +199,11 @@ class Guard(creature):
             rooms = []
             for direction, room in ROOMS[self.current_room]['directions'].items():
                 rooms.append(room)
-            self.current_room = choice(rooms).GetRoom()
+            self.current_room = choice(rooms).GetRoom(self.current_room)
         elif self.patrol_type == 'follow':
             for direction, room in ROOMS[self.current_room]['directions'].items():
-                if room.GetRoom() == player.CURRENTROOM:
-                    self.current_room = room.GetRoom()
+                if room.GetRoom(self.current_room) == player.CURRENTROOM:
+                    self.current_room = room.GetRoom(self.current_room)
                     return
 
     def check_detection(self, player_room):
