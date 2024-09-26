@@ -264,6 +264,8 @@ def Use(moveone, movetwo=None):
 
 def PickKey(locked_obj):
     keys = player.inventory.keys()
+    if not isinstance(keys, list):
+        keys = [keys]
     
     if keys:
         while True:
@@ -271,7 +273,7 @@ def PickKey(locked_obj):
 
             # Enumerate keys and display them
             for idx, key in enumerate(keys, 1):  # Starts numbering at 1
-                type_text(f"{idx}. {key}")
+                type_text(f"{idx}. {key.name} - {key.CurentRevealStr}")
             
             # Use loop_til_valid_input to get a valid integer within the correct range
             choice = loop_til_valid_input(
@@ -304,9 +306,8 @@ def Move(move):
 
     def attempt_move_to_garden():
         global player
-        type_text("Please pick whitch key you want to try in the lock on the gate")   
         key = PickKey(Lock("629.IdnXwnt"))
-        if key.KeyCode == "629.IdnXwnt":
+        if key.GetKeyCode() == "629.IdnXwnt":
             End('You unlock the gate to the garden with the key!')
             return newRoom
         type_text('The gate is locked.', colorTrue=color_coding)
@@ -330,10 +331,11 @@ def Move(move):
             if isinstance(ROOMS[player.CURRENTROOM]['directions'][move].lock, Lock):
                 key = PickKey(ROOMS[player.CURRENTROOM]['directions'][move].lock)
                 ROOMS[player.CURRENTROOM]['directions'][move].unlock(key, player)
-            newRoom = ROOMS[player.CURRENTROOM]['directions'][move].GetRoom()
-        elif isinstance(ROOMS[player.CURRENTROOM]['directions'][move], str):
+            newRoom = ROOMS[player.CURRENTROOM]['directions'][move].GetRoom(player.CURRENTROOM)
+        else:
             newRoom = ROOMS[player.CURRENTROOM]['directions'][move]
         newRoom = move_to_room()
+        player.CURRENTROOM = newRoom
         return
     elif move in ROOMS:
         newRoom = move
@@ -759,13 +761,13 @@ def search_container(player: PC, Container):
         if isinstance(Container.lock, Lock):
             key = PickKey(Container.lock)
             Container.Unlock(key, player)
-        Container.take_contents(player)
         type_text(f"You search the{' secret' if Container.secret else ''} %*RED*%{ContainerName}%*RESET*% and find a ", newline=False, colorTrue=color_coding)
         for searchitem in Container.contents:
             if searchitem:
                 if isinstance(searchitem, item):
                     end_str = ' and a ' if Container.contents.index(searchitem) < last_index(Container.contents) else '\n'
                     type_text(f"%*BLUE*%{searchitem.name}%*RESET*%{end_str}", newline=False, colorTrue=color_coding)
+        Container.take_contents(player)
 
 
 def handle_put_command(player: PC, PutItem: item = None, container = None, sub_container = None):

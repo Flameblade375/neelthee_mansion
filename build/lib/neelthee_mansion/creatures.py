@@ -322,6 +322,8 @@ class PC(base_character):
 
     def inventory_add(self, added: list[item]):
         try:
+            if not isinstance(added, list):
+                added = [added]
             for item_to_add in added:
                 if isinstance(item_to_add, item):
                     # Add the item to the player's inventory
@@ -335,7 +337,7 @@ class PC(base_character):
                     type_text(f"Error: {item_to_add} is not an instance of Item class")
         except Exception as e:
             # Print the full traceback if an exception occurs
-            type_text(("Error:", e))
+            type_text(f"Error: {e}")
     
     def heal(self, value):
         self.hp = clamp(value, 0, self.maxhp)

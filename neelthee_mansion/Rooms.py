@@ -46,7 +46,7 @@ class Door:
         self.destination = RoomName
         self.lock = Lock(KeyCode) if KeyCode else None
         self.reveal_count = 0
-        self.CurentRevealStr = "-" * len(self.lock.key_code) if isinstance(self.lock, Lock) else ""
+        self.CurentRevealStr = "=" * len(self.lock.key_code) if isinstance(self.lock, Lock) else ""
 
     def Unlock(self, key: Key, player):
         return self.lock.unlock(key, player)

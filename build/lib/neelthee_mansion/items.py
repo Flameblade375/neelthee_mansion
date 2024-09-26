@@ -53,7 +53,7 @@ class Key(item):
         super().__init__(name, 'key', KeyCode if KeyCode else get_random_string(10))
         self.KeyDels = KeyDels
         self.RevealCount = 0
-        self.CurentRevealStr = "-" * len(self.value)
+        self.CurentRevealStr = "=" * len(self.value)
 
     def GetKeyCode(self):
         return self.value
@@ -62,7 +62,7 @@ class KeyRevealer:
     def __init__(self, max_reveals=2):
         self.max_reveals = max_reveals
     
-    def reveal_key_code(self, obj: Key, mask_char="-"):
+    def reveal_key_code(self, obj: Key, mask_char="="):
         if obj.reveal_count >= self.max_reveals:
             type_text(f"You can only reveal a Key Code twice.")
             type_text(f"Here is what you already know about this lock: {obj.CurentRevealStr}")
@@ -132,7 +132,7 @@ class inv(list):
         keys = []
         for key in self:
             if isinstance(key, Key):
-                keys += key
+                keys = keys + [key]
         return keys
 
 class container:
@@ -141,7 +141,7 @@ class container:
         self.secret = secret
         self.lock = Lock(KeyCode) if KeyCode else None
         self.RevealCount = 0
-        self.CurentRevealStr = "-" * len(self.lock.key_code) if isinstance(self.lock, Lock) else ""
+        self.CurentRevealStr = "=" * len(self.lock.key_code) if isinstance(self.lock, Lock) else ""
     
     def take_contents(self, geter=None):
         if isinstance(self.lock, Lock) and self.lock.is_locked:
