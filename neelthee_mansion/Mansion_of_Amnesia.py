@@ -966,13 +966,18 @@ def initializer():
 
 
     while True:
+        type_text("")
+        type_text(f"0. Random")
         for idx, background in enumerate(BACKGROUNDS):
-            type_text(f"{idx}. {background}")
+            type_text(f"{idx + 1}. {background}")
 
         background = loop_til_valid_input("What background do you want? (please select the number to the left of them)", "You didn't pick one", int)
-        lstIndex = last_index(CHARACTERSLIST)
-        if background <= lstIndex:
-            background = BACKGROUNDS[background]
+        length = len(CHARACTERSLIST)
+        if 1 <= background <= length:
+            background = BACKGROUNDS[background-1]
+            break
+        elif background == 0:
+            background = choice(BACKGROUNDS)
             break
         else:
             type_text("You didn't pick one")
