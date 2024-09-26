@@ -141,7 +141,7 @@ class container:
         self.secret = secret
         self.lock = Lock(KeyCode) if KeyCode else None
         self.RevealCount = 0
-        self.CurentRevealStr = "-" * len(self.value)
+        self.CurentRevealStr = "-" * len(self.lock.key_code) if isinstance(self.lock, Lock) else ""
     
     def take_contents(self, geter=None):
         if isinstance(self.lock, Lock) and self.lock.is_locked:
