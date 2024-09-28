@@ -836,7 +836,7 @@ def handle_grumpy_pig(player: PC, enemy: creature):
         if ask_for_consent("Do you want to use your torch to scare the pig away"):
             enemy_reacting = False
             type_text(f'You wave your torch at the pig and it runs away through a tiny open window.', colorTrue=color_coding)
-            del ROOMS[player.CURRENTROOM]['creatures stats']
+            del ROOMS[player.CURRENTROOM]['creatures stats'][ROOMS[player.CURRENTROOM]['creatures stats'].index(enemy)]
             player.xp += 5
     if 'rations' in player.inventory:
         if ask_for_consent("Do you want to throw your ration at the pig"):
