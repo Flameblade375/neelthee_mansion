@@ -125,7 +125,7 @@ get [%*BLUE*%item%*RESET*%] - Pick up an item from your current location
 search [the/] [%*RED*%container%*RESET*%] - Search a container in your current location
 use [%*BLUE*%item%*RESET*%] - Use an item from your inventory
 put [%*BLUE*%item%*RESET*%] [the/] [%*RED*%container%*RESET*%] - Put an item from your inventory into a container in your current location
-examin [%*GREEN*%direction%*RESET*%/%*RED*%container%*RESET*%/%*BLUE*%item%*RESET*%] - Find out some info about the object
+examine [%*GREEN*%direction%*RESET*%/%*RED*%container%*RESET*%/%*BLUE*%item%*RESET*%] - Find out some info about the object
 sleep - Rest for a bit and regain some health
 look - Look around your current location
 quit - Quit the game
@@ -463,7 +463,7 @@ def Examin(*Args):
         else:
             type_text(f"There is no container named {Name} in this room.")
     else:
-        type_text(f"There is no {Name} to examine.")
+        type_text(f"There is nothing special about the {Name}.")
 
 def battle(player: PC, good_guys: list, bad_guys: list, last_room):
     """
@@ -872,7 +872,7 @@ commands = {
     'sleep': handle_sleep_command,
     'put': handle_put_command,
     'map': PrintMap,
-    'examin': Examin,
+    'examine': Examin,
 }
 
 
