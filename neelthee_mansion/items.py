@@ -154,6 +154,8 @@ class container:
         try:
             for Item in self.contents:
                 geter.inventory_add(Item)
+        except:
+            pass
         finally:
             self.contents = []
     
