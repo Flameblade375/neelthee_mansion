@@ -1057,6 +1057,9 @@ def main():
 
             for enemy in enemies:
                 if isinstance(enemy, creature):
+                    enemy.type_text_flavor_text()
+                    if ask_for_consent(f"Do you want to examine the {enemy.name}"):
+                        enemy.type_text_description()
 
                     # Handle specific creatures
                     if enemy.name == 'hungry bear':
