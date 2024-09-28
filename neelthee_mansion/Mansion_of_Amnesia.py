@@ -433,15 +433,15 @@ def display_directions(text):
 
 def Examin(*Args):
     Name = ' '.join(Args)
-    if player.inventory.index(Name):
-        _ = player.inventory[player.inventory.index(Name)]
-        if isinstance(_, Key):
-            type_text("You look at your key and you figure out this about it:")
-            revealer.reveal_key_code(_)
-        elif isinstance(_, item):
+    item_index = player.inventory.index(Name)  # Store the result of index in a variable
+
+    if item_index is not None:  # Check explicitly if item_index is valid
+        _ = player.inventory[item_index]
+        type_text("You look at your item and you figure out this about it:")
+        if not revealer.reveal_key_code(_):
             if _.type == 'weapon':
                 type_text(f"This item is a weapon that adds {_.value} damage.")
-    elif Name in ROOMS[player.CURRENTROOM]['directions']:
+    elif Name in ROOMS[player.CURRENTROOM]['directions']:  # Check exits in the room
         door = ROOMS[player.CURRENTROOM]['directions'][Name]
         if isinstance(door, Door):
             if isinstance(door.lock, Lock):
@@ -450,8 +450,8 @@ def Examin(*Args):
             else:
                 type_text(f"The exit {Name} has no lock.")
         else:
-            type_text(f"There is nothing spechial about the exit {Name}.")
-    elif Name in ROOMS[player.CURRENTROOM]['containers']:
+            type_text(f"There is nothing special about the exit {Name}.")
+    elif Name in ROOMS[player.CURRENTROOM]['containers']:  # Check containers in the room
         containerins = ROOMS[player.CURRENTROOM]['containers'][Name]
         if isinstance(containerins, container):
             if isinstance(containerins.lock, Lock):
@@ -460,7 +460,9 @@ def Examin(*Args):
             else:
                 type_text(f"The container {Name} has no lock.")
         else:
-            type_text(f"There is no container {containerins} in this room")
+            type_text(f"There is no container named {Name} in this room.")
+    else:
+        type_text(f"There is no {Name} to examine.")
 
 def battle(player: PC, good_guys: list, bad_guys: list, last_room):
     """
@@ -662,8 +664,8 @@ def select_target(chooser, targets: list):
 
 
 def command():
-    global player
-    try:
+        global player
+    #try:
         ShouldBreak = False
 
         while True:
@@ -691,12 +693,12 @@ def command():
                         ShouldBreak = True
             if ShouldBreak:
                 return
-    except KeyError as e:
-        type_text(f"KeyError: {e} - This might be due to an undefined command or incorrect arguments.", colorTrue=color_coding)
-    except ValueError as e:
-        type_text(f"ValueError: {e} - This might be due to incorrect arguments provided.", colorTrue=color_coding)
-    except Exception as e:
-        type_text(f"Unexpected Error: {e}", colorTrue=color_coding)
+    #except KeyError as e:
+    #    type_text(f"KeyError: {e} - This might be due to an undefined command or incorrect arguments.", colorTrue=color_coding)
+    #except ValueError as e:
+    #    type_text(f"ValueError: {e} - This might be due to incorrect arguments provided.", colorTrue=color_coding)
+    #except Exception as e:
+    #    type_text(f"Unexpected Error: {e}", colorTrue=color_coding)
 
 def handle_sleep_command(player: PC):
     type_text("You decide to rest for a while.", colorTrue=color_coding)

@@ -52,7 +52,7 @@ class Key(item):
     def __init__(self, name: str = '', KeyCode: str = None, KeyDels: bool = False):
         super().__init__(name, 'key', KeyCode if KeyCode else get_random_string(10))
         self.KeyDels = KeyDels
-        self.RevealCount = 0
+        self.reveal_count = 0
         self.CurentRevealStr = "=" * len(self.value)
 
     def GetKeyCode(self):
@@ -63,26 +63,29 @@ class KeyRevealer:
         self.max_reveals = max_reveals
     
     def reveal_key_code(self, obj: Key, mask_char="="):
-        if obj.reveal_count >= self.max_reveals:
-            type_text(f"You can only reveal a Key Code twice.")
-            type_text(f"Here is what you already know about this lock: {obj.CurentRevealStr}")
-            return
-        
-        if not hasattr(obj, 'lock'):
-            key_code = obj.value
-        else:
-            key_code = obj.lock.key_code
-        one_third_length = len(key_code) // 3
-        selected_indices = random.sample(range(len(key_code)), one_third_length)
-        
-        result = [
-            key_code[i] if i in selected_indices else mask_char
-            for i in range(len(key_code))
-        ]
-        
-        obj.reveal_count += 1
-        obj.CurentRevealStr = ''.join(result)
-        return ''.join(result)
+        if isinstance(obj, Key):
+            if obj.reveal_count >= self.max_reveals:
+                type_text(f"You can only reveal a Key Code twice.")
+                type_text(f"Here is what you already know about this lock: {obj.CurentRevealStr}")
+                return
+
+            if not hasattr(obj, 'lock'):
+                key_code = obj.value
+            else:
+                key_code = obj.lock.key_code
+            one_third_length = len(key_code) // 3
+            selected_indices = sample(range(len(key_code)), one_third_length)
+
+            result = [
+                key_code[i] if i in selected_indices else mask_char
+                for i in range(len(key_code))
+            ]
+
+            obj.reveal_count += 1
+            obj.CurentRevealStr = ''.join(result)
+            type_text("".join(result))
+            return True
+        return
 
 class ShopItem:
     def __init__(self, item: item, price: int):
