@@ -199,7 +199,10 @@ class Guard(creature):
             rooms = []
             for direction, room in ROOMS[self.current_room]['directions'].items():
                 rooms.append(room)
-            self.current_room = choice(rooms).GetRoom(self.current_room)
+            if hasattr(room, 'GetRoom'):
+                self.current_room = choice(rooms).GetRoom(self.current_room)
+                return
+            self.current_room = choice(rooms)
         elif self.patrol_type == 'follow':
             for direction, room in ROOMS[self.current_room]['directions'].items():
                 if room.GetRoom(self.current_room) == player.CURRENTROOM:
