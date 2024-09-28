@@ -479,6 +479,10 @@ def battle(player: PC, good_guys: list, bad_guys: list, last_room):
         None if all bad guys are defeated, else the remaining bad guys.
     """
     while player.hp > 0:
+        if all(monster.hp <= 0 for monster in bad_guys):
+            handle_victory(player, bad_guys)
+            return good_guys, None
+
         if ask_for_consent("Do you want to run away"):
             Move(last_room)
             return good_guys, bad_guys
