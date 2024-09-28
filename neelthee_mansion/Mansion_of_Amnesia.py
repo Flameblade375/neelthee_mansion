@@ -125,6 +125,7 @@ get [%*BLUE*%item%*RESET*%] - Pick up an item from your current location
 search [the/] [%*RED*%container%*RESET*%] - Search a container in your current location
 use [%*BLUE*%item%*RESET*%] - Use an item from your inventory
 put [%*BLUE*%item%*RESET*%] [the/] [%*RED*%container%*RESET*%] - Put an item from your inventory into a container in your current location
+examin [%*GREEN*%direction%*RESET*%/%*RED*%container%*RESET*%/%*BLUE*%item%*RESET*%] - Find out some info about the object
 sleep - Rest for a bit and regain some health
 look - Look around your current location
 quit - Quit the game
@@ -664,8 +665,8 @@ def select_target(chooser, targets: list):
 
 
 def command():
-        global player
-    #try:
+    global player
+    try:
         ShouldBreak = False
 
         while True:
@@ -693,12 +694,12 @@ def command():
                         ShouldBreak = True
             if ShouldBreak:
                 return
-    #except KeyError as e:
-    #    type_text(f"KeyError: {e} - This might be due to an undefined command or incorrect arguments.", colorTrue=color_coding)
-    #except ValueError as e:
-    #    type_text(f"ValueError: {e} - This might be due to incorrect arguments provided.", colorTrue=color_coding)
-    #except Exception as e:
-    #    type_text(f"Unexpected Error: {e}", colorTrue=color_coding)
+    except KeyError as e:
+        type_text(f"KeyError: {e} - This might be due to an undefined command or incorrect arguments.", colorTrue=color_coding)
+    except ValueError as e:
+        type_text(f"ValueError: {e} - This might be due to incorrect arguments provided.", colorTrue=color_coding)
+    except Exception as e:
+        type_text(f"Unexpected Error: {e}", colorTrue=color_coding)
 
 def handle_sleep_command(player: PC):
     type_text("You decide to rest for a while.", colorTrue=color_coding)
