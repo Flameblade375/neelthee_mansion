@@ -330,7 +330,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                         'south': Door('Dining Room'),
                         'down': Door('Basement 1'),
                         },
-                    'creatures stats': creature(
+                    'creatures stats': [creature(
                         'grumpy pig',
                         3,
                         4,
@@ -338,6 +338,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                         'A oxford sandy & black pig with a savaged cushion on it\'s head',
                         'A %*CYAN*%grumpy pig%*RESET*% spots you and comes towards you!',
                         ),
+                    ],
                     'containers': {
                         'sofas': container([item('cushion')]),
                         },
@@ -538,7 +539,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                         'down': Door('Tower Middle'),
                         'teleport': Door('Teleportation Deck'),
                         },
-                    'creatures stats': creature(
+                    'creatures stats': [creature(
                         'greedy goblin',
                         5,
                         7,
@@ -547,6 +548,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                         'A %*CYAN*%greedy goblin%*RESET*% spots you and your money pouch!',
                         creature_type('humanoid', 'goblin'),
                         ),
+                    ],
                     'info': 'You are at the top of a stone tower. There are windows in every wall.',
                     'map': '''
 █████████
@@ -1221,7 +1223,7 @@ do you want to:
                         '11': Door('Teleportation Deck'),
                         '12': Door('3rd Teleportation Deck'),
                         },
-                    'creatures stats': creature(
+                    'creatures stats': [creature(
                         'hull leech', 
                         15, 
                         2, 
@@ -1230,6 +1232,7 @@ do you want to:
                         'You see a spike on a tentacle stabed through the hull of the ship',
                         creature_type('plant'),
                         ),
+                    ],
                     'info': '''
 
 You charter a ship, and the Captain says: "You can go anywhere you like before you land back on this here asteriod!"
@@ -1424,7 +1427,7 @@ do you want to:
                         '8': Door('The 2nd Watch Castle'),
                         '9': Door('The 2nd Old Manor'),
                         },
-                    'creatures stats': creature(
+                    'creatures stats': [creature(
                         'thief', 
                         10, 
                         4, 
@@ -1433,6 +1436,7 @@ do you want to:
                         'You see a %*CYAN*%thief%*RESET*% at the door',
                         creature_type('humanoid', 'cowfolk'),
                         ),
+                    ],
                     'info': '''
 
 do you want to:
@@ -1624,7 +1628,7 @@ Coliseum stands as a testament to the enduring appeal of gladiatorial combat and
                     'directions': {
                         '1': Door('The Main Guildhall'),
                         },
-                    'creatures stats': creature(
+                    'creatures stats': [creature(
                         'gladiator',
                         15,
                         6,
@@ -1632,7 +1636,8 @@ Coliseum stands as a testament to the enduring appeal of gladiatorial combat and
                         'A large 6ft 7 humaniod gladiator',
                         'As you enter the Arena a hulking %*CYAN*%gladiator%*RESET*% walks up to you and says: "You sould run while you still can or face me!"',
                         creature_type('humaniod', 'goliath'),
-                    ),
+                        ),
+                    ],
                     'info': '''
 
 do you want to:
