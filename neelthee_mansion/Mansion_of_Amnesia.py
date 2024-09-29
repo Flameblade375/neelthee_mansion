@@ -18,9 +18,9 @@ Neel-thee's Mansion of Amnesia
 global player, evil_mage, commands, NOTE_NUM, credits, color_coding, quest_manager, revealer, CHARACTERSLIST, BACKGROUNDS
 
 BACKGROUNDS = {
-    'Adventurer': ['Survival', 'Climbing'],
-    'Artist': ['Painting', 'Sculpting'],
-    'Scholar': ['Reading', 'Research'],
+    'Adventurer': ['survival', 'climbing'],
+    'Artist': ['painting', 'sculpting'],
+    'Scholar': ['reading', 'research'],
 }
 
 revealer = KeyRevealer()
