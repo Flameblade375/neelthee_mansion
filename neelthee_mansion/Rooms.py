@@ -697,14 +697,14 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 
                 'Library': {
                     'room type': 'house',
-                    'position': (0, 0, 0),
+                    'position': (-1, 16, 8),
                     'discovered': False,
                     'directions': {
                         'west': Door('Room name'),
                         'bookcase': Door('Cavern 3'),
                     },
                     'containers': {
-                        'bookcases': container([item('\'Book of mistory', 'readable', "Neel-thee is waching you through the mansion itself")]),
+                        'bookcases': container([Book('\'Book of mistory', "Neel-thee is waching you through the mansion itself")]),
                     },
                     'info': 'Towering bookcases filled with odd, mismatched books line the walls. Some have faded titles, others are blank, arranged almost deliberately. One bookcase stands slightly forward, leaving a faint scrape on the floor. The air is still, as if waiting for you to notice.',
                     'map': '''
@@ -772,7 +772,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 
                 'Cavern 3': {
                     'room type': 'cavern',
-                    'position': (-3, 0, 0),
+                    'position': (-2, 8, 0),
                     'discovered': False,
                     'directions': {
                             'down': Door('Cavern 2'),

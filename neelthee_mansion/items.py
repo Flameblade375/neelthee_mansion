@@ -2,7 +2,7 @@ from .utils import *
 
 class item:
 
-    def __init__(self, name: str = '', type: str = 'miscellaneous', value: int = 0):
+    def __init__(self, name: str = "", type: str = "miscellaneous", value: int = 0):
         self.name = name
         self.type = type
         self.value = value
@@ -13,6 +13,13 @@ class item:
             return True
         else:
             return False
+
+class Book(item):
+    def __init__(self, Name: str = "", Contense: int = ""):
+        super().__init__(Name, "readable", Contense)
+    
+    def GetContense(self):
+        return self.value
 
 class Lock:
     def __init__(self, key_code: str = None):

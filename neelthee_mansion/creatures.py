@@ -277,6 +277,7 @@ class PC(base_character):
             backstory: str = "",
             CURRENTROOM: str = "",
             LASTROOM: str = None,
+            Skills: list[str] = None
         ):
         if not xp:
             if Level == 1:
@@ -307,6 +308,7 @@ class PC(base_character):
         self.backstory = backstory
         self.CURRENTROOM = CURRENTROOM
         self.LASTROOM = LASTROOM
+        self.Skills = Skills
 
     def get_change_weapon(self, weapon_atpw: int = 0, weapon_index: int = -1):
         if weapon_atpw > 0:

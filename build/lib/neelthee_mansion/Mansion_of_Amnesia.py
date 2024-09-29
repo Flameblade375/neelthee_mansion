@@ -17,11 +17,11 @@ Neel-thee's Mansion of Amnesia
 
 global player, evil_mage, commands, NOTE_NUM, credits, color_coding, quest_manager, revealer, CHARACTERSLIST, BACKGROUNDS
 
-BACKGROUNDS = [
-    'Adventurer',
-    'Artist',
-    'Scholar',
-]
+BACKGROUNDS = {
+    'Adventurer': ['Survival', 'Climbing'],
+    'Artist': ['Painting', 'Sculpting'],
+    'Scholar': ['Reading', 'Research'],
+}
 
 revealer = KeyRevealer()
 
@@ -432,16 +432,24 @@ def display_directions(text):
 
     return text
 
-def Examin(*Args):
+def Examine(*Args):
     Name = ' '.join(Args)
     item_index = player.inventory.index(Name)  # Store the result of index in a variable
 
     if item_index is not None:  # Check explicitly if item_index is valid
         _ = player.inventory[item_index]
-        type_text("You look at your item and you figure out this about it:")
-        if not revealer.reveal_key_code(_):
-            if _.type == 'weapon':
-                type_text(f"This item is a weapon that adds {_.value} damage.")
+        if isinstance(_, item):
+            type_text("You look at your item and you figure out this about it:")
+            if not revealer.reveal_key_code(_):
+                if _.type == 'weapon':
+                    type_text(f"This item is a weapon that adds {_.value} damage.")
+                elif _.type == 'readable':
+                    if 'reading' in player.Skills:
+                        type_text(f"You read {_.name} and it contains:")
+                        if isinstance(_, Book):
+                            type_text(_.GetContense())
+                        else:
+                            type_text(_.value)
     elif Name in ROOMS[player.CURRENTROOM]['directions']:  # Check exits in the room
         door = ROOMS[player.CURRENTROOM]['directions'][Name]
         if isinstance(door, Door):
@@ -876,7 +884,7 @@ commands = {
     'sleep': handle_sleep_command,
     'put': handle_put_command,
     'map': PrintMap,
-    'examine': Examin,
+    'examine': Examine,
 }
 
 
@@ -974,19 +982,28 @@ def initializer():
     color_coding = loop_til_valid_input("Do you want color coding (Y/N)?", "you didn't answer Y or N.", Y_N).value
 
 
-    while True:
-        type_text("")
-        type_text(f"0. Random")
-        for idx, background in enumerate(BACKGROUNDS):
-            type_text(f"{idx + 1}. {background}")
+    while True: 
+        type_text("")  # Prints an empty line
+        type_text("0. Random")
 
+        # Display each background with its skills formatted correctly.
+        for idx, (background_name, background_skills) in enumerate(BACKGROUNDS.items()):
+            formatted_skills = ", ".join(background_skills)
+            type_text(f"{idx + 1}. {background_name} - {formatted_skills}")
+
+        # Prompt the user to pick a background by number.
         background = loop_til_valid_input("What background do you want? (please select the number to the left of them)", "You didn't pick one", int)
-        length = len(CHARACTERSLIST)
+        
+        length = len(BACKGROUNDS)
         if 1 <= background <= length:
-            background = BACKGROUNDS[background-1]
+            # Get the background name and skills based on user choice.
+            background_name = list(BACKGROUNDS.keys())[background - 1]
+            background_skills = BACKGROUNDS[background_name]
             break
         elif background == 0:
-            background = choice(BACKGROUNDS)
+            # Randomly select a background and get its associated skills.
+            background_name = choice(list(BACKGROUNDS.keys()))
+            background_skills = BACKGROUNDS[background_name]
             break
         else:
             type_text("You didn't pick one")
