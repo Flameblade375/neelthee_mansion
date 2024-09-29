@@ -244,7 +244,7 @@ class base_ability:
         self.check_cooldown()
     
     def check_cooldown(self):
-        if self.current_cooldown >= self.cooldown_time:
+        if self.current_cooldown >= self.cooldown_time and not self.ready:
             type_text(f"\nAbility {self.name} is ready to use again. ")
             self.ready = True
 
