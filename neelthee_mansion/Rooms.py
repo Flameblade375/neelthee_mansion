@@ -204,7 +204,7 @@ ROOMS = {
                         'hungry bear', 
                         7, 
                         5, 
-                        [item('claw')],
+                        [item('claw', 'valuable', 1)],
                         'A large 7ft 8 brown bear that looks hungry',
                         'A %*CYAN*%hungry%*RESET*% bear attacks you!',
                         ),
@@ -294,7 +294,7 @@ ROOMS = {
                     'position': (0, 0, 0),
                     'discovered': False,
                     'directions': {
-                        'south' :'Hall',
+                        'south' : Door('Hall'),
                         'east': Door('Sitting Room'),
                         'up': Door('Tower Bottom'),
                         },

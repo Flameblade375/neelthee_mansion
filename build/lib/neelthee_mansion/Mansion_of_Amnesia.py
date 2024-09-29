@@ -1034,23 +1034,24 @@ def main():
         # Check for detection
         for guard in guards:
             if isinstance(guard, Guard):
-                if guard.check_detection(player.CURRENTROOM):
-                    guard_handled = handle_guard_action(guard)
-                    if not isinstance(guard_handled, list):
-                        guard_handled = [guard_handled]
+                if guard.HP > 0:
+                    if guard.check_detection(player.CURRENTROOM):
+                        guard_handled = handle_guard_action(guard)
+                        if not isinstance(guard_handled, list):
+                            guard_handled = [guard_handled]
 
-                    # Get is_reacting from guard_handled
-                    is_reacting = guard_handled[1][1]
+                        # Get is_reacting from guard_handled
+                        is_reacting = guard_handled[1][1]
 
-                    # Only update guard if the guard is reacting
-                    if is_reacting:
-                        if guard.frendly:
-                            good_guys.append(guard)
-                        else:
-                            bad_guys.append(guard)
+                        # Only update guard if the guard is reacting
+                        if is_reacting:
+                            if guard.frendly:
+                                good_guys.append(guard)
+                            else:
+                                bad_guys.append(guard)
 
-                    if guard_handled[0]:
-                        guards[guards.index(guard)] = guard_handled[1][0]
+                        if guard_handled[0]:
+                            guards[guards.index(guard)] = guard_handled[1][0]
 
         # Handle creatures in the current room
         if 'creatures stats' in ROOMS[player.CURRENTROOM]:
@@ -1061,33 +1062,34 @@ def main():
 
             for enemy in enemies:
                 if isinstance(enemy, creature):
-                    enemy.type_text_flavor_text()
-                    if ask_for_consent(f"Do you want to examine the {enemy.name}"):
-                        enemy.type_text_description()
+                    if enemy.HP > 0:
+                        enemy.type_text_flavor_text()
+                        if ask_for_consent(f"Do you want to examine the {enemy.name}"):
+                            enemy.type_text_description()
 
-                    # Handle specific creatures
-                    if enemy.name == 'hungry bear':
-                        enemy_REF = handle_hungry_bear(player, enemy)
-                    elif enemy.name == 'grumpy pig':
-                        enemy_REF = handle_grumpy_pig(player, enemy)
-                    elif enemy.name == 'greedy goblin':
-                        enemy_REF = handle_greedy_goblin(player, enemy)
-                    else:
-                        enemy_REF = enemy
-
-                    if isinstance(enemy_REF, list):
-                        is_reacting = enemy_REF[1]
-                        enemy_REF = enemy_REF[0]
-                        is_reactings.append(is_reacting)
-
-                    enemies[enemies.index(enemy)] = enemy_REF
-
-                    # Add to good or bad lists if reacting
-                    if is_reacting:
-                        if enemy_REF.frendly:
-                            good_guys.append(enemy_REF)
+                        # Handle specific creatures
+                        if enemy.name == 'hungry bear':
+                            enemy_REF = handle_hungry_bear(player, enemy)
+                        elif enemy.name == 'grumpy pig':
+                            enemy_REF = handle_grumpy_pig(player, enemy)
+                        elif enemy.name == 'greedy goblin':
+                            enemy_REF = handle_greedy_goblin(player, enemy)
                         else:
-                            bad_guys.append(enemy_REF)
+                            enemy_REF = enemy
+
+                        if isinstance(enemy_REF, list):
+                            is_reacting = enemy_REF[1]
+                            enemy_REF = enemy_REF[0]
+                            is_reactings.append(is_reacting)
+
+                        enemies[enemies.index(enemy)] = enemy_REF
+
+                        # Add to good or bad lists if reacting
+                        if is_reacting:
+                            if enemy_REF.frendly:
+                                good_guys.append(enemy_REF)
+                            else:
+                                bad_guys.append(enemy_REF)
 
             if all_same_value(enemies, False):
                 del ROOMS[player.CURRENTROOM]['creatures stats']
