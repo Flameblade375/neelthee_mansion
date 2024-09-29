@@ -748,11 +748,14 @@ def handle_get_command(player: PC, item_name):
 
 def handle_look_command():
     global player
+    should_return = False
     if 'item' in ROOMS[player.CURRENTROOM]:
         type_text(f'The item in the room: %*BLUE*%{ROOMS[player.CURRENTROOM]["item"].name}%*RESET*%.', colorTrue=color_coding)
-        return
+        should_return = True
     if 'containers' in ROOMS[player.CURRENTROOM]:
         type_text(f"The containers here are: %*RED*%{', '.join(ROOMS[player.CURRENTROOM]['containers'].keys())}%*RESET*%", colorTrue=color_coding)
+        should_return = True
+    if should_return:
         return
     type_text('There is nothing of interest.', colorTrue=color_coding)
 
