@@ -1051,7 +1051,7 @@ def main():
         # Check for detection
         for guard in guards:
             if isinstance(guard, Guard):
-                if guard.HP > 0:
+                if guard.hp > 0:
                     if guard.check_detection(player.CURRENTROOM):
                         guard_handled = handle_guard_action(guard)
                         if not isinstance(guard_handled, list):
@@ -1079,7 +1079,7 @@ def main():
 
             for enemy in enemies:
                 if isinstance(enemy, creature):
-                    if enemy.HP > 0:
+                    if enemy.hp > 0:
                         enemy.type_text_flavor_text()
                         if ask_for_consent(f"Do you want to examine the {enemy.name}"):
                             enemy.type_text_description()
