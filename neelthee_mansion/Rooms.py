@@ -675,7 +675,8 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'discovered': False,
                     'directions': {
                         'north': Door('Basement 3'),
-                        'shoot': 'Cavern 1',
+                        'east': Door('Library'),
+                        'shoot': Door('Cavern 1'),
                         },
                     'item': item('torch'),
                     'info': 'You are in an dimly lit underground (all the light in the room comes from 3 %*BLUE*%torch%*RESET*%es on the walls). there is a choot in the floor (type: \'go shoot\' to go down the shoot).',
@@ -684,13 +685,40 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █       █
 █       █
 █       █
-█       █
+█       ║
 █       █
 █       █
 █       █
 █████████''',
                     'Hints': [
                         "I wonder if I can get this %*BLUE*%torch%*RESET*% out of it's holder.",
+                    ],
+                    },
+
+                'Library': {
+                    'room type': 'house',
+                    'position': (0, 0, 0),
+                    'discovered': False,
+                    'directions': {
+                        'west': Door('Room name'),
+                        'bookcase': Door('Cavern 3'),
+                    },
+                    'containers': {
+                        'bookcases': container([item('\'Book of mistory', 'readable', "Neel-thee is waching you through the mansion itself")]),
+                    },
+                    'info': 'Towering bookcases filled with odd, mismatched books line the walls. Some have faded titles, others are blank, arranged almost deliberately. One bookcase stands slightly forward, leaving a faint scrape on the floor. The air is still, as if waiting for you to notice.',
+                    'map': '''
+█████████
+█       █
+█       █
+█       █
+║       █
+█       █
+█       █
+█       █
+█████████''',
+                    'Hints': [
+                        'Is it just me or are the first letters of all of those book names spelling the words "I\'m watching you"',
                     ],
                     },
 
@@ -739,6 +767,30 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'Hints': [
                         'I should probably go back up so I\'m not here forever.',
                         'I wander what the voice was talking about.',
+                    ],
+                    },
+
+                'Cavern 3': {
+                    'room type': 'cavern',
+                    'position': (-3, 0, 0),
+                    'discovered': False,
+                    'directions': {
+                            'down': Door('Cavern 2'),
+                            'bookcase': Door('Library'),
+                        },
+                    'info': 'you are in a dark cavern with the only light coming from the crack behind a %*GREEN*%bookcase%*RESET*%. A voice in the back of your head says: \'I give up.\'',
+                    'map': '''
+█████████
+█       █
+█       █
+█       █
+█       █
+█       █
+█       █
+█       █
+█████████''',
+                    'Hints': [
+                        'I wander what\'s behind that %*GREEN*%bookcase%*RESET*%.',
                     ],
                     },
 
