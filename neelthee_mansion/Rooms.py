@@ -157,7 +157,7 @@ ROOMS = {
                         },
                     'item': item('torch'),
                     'containers': {
-                        'drawers': container([Key('key', "629.IdnXwnt")]),
+                        'drawers': container([]),
                         },
                     'info': 'You are in the hall of the house. There is a chest of %*RED*%drawers%*RESET*% against one wall, and flaming %*BLUE*%torch%*RESET*%es on the walls. You hear a \
 %*YELLOW*%smash%*RESET*% from the %*GREEN*%south%*RESET*%.',
@@ -512,7 +512,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                         'up': Door('Tower Top'),
                         },
                     'containers': {
-                        'stone': container([item('money-pouch', 'valuable', 25)], True),
+                        'stone': container([item('money-pouch', 'valuable', 25), Key('key', "629.IdnXwnt")], True),
                         },
                     'item': item('tome'),
                     'info': 'You are in the middle of a stone tower. The only light comes from above, through the cracks around the hatch to above.',
