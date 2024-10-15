@@ -1071,7 +1071,7 @@ def main():
                                 bad_guys.append(guard)
 
                         if guard_handled[0]:
-                            guards[guards.index(guard)] = guard_handled[1][0]
+                            guards[guards.index(guard)] = guard_handled[1][0] if isinstance(guard_handled[1], list) else guard_handled[1]
 
         # Handle creatures in the current room
         if 'creatures stats' in ROOMS[player.CURRENTROOM]:
