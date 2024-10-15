@@ -1061,7 +1061,7 @@ def main():
                             guard_handled = [guard_handled]
 
                         # Get is_reacting from guard_handled
-                        is_reacting = guard_handled[1][1]
+                        is_reacting = guard_handled[1][1] if isinstance(guard_handled[1], list) else True
 
                         # Only update guard if the guard is reacting
                         if is_reacting:
