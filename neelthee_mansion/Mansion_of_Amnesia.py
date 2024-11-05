@@ -30,7 +30,8 @@ quest_manager = QuestManager()
 color_coding = False
 
 credits = '''
-Made by: Alexander.E.F'''
+Made by: Alexander.E.F
+AI assisted the creation'''
 
 
 name = ''
@@ -124,7 +125,7 @@ go [%*GREEN*%direction%*RESET*%/%*GREEN*%teleport%*RESET*%/%*GREEN*%number%*RESE
 get [%*BLUE*%item%*RESET*%] - Pick up an item from your current location
 search [the/] [%*RED*%container%*RESET*%] - Search a container in your current location
 use [%*BLUE*%item%*RESET*%] - Use an item from your inventory
-put [%*BLUE*%item%*RESET*%] [the/] [%*RED*%container%*RESET*%] - Put an item from your inventory into a container in your current location
+put [%*BLUE*%item%*RESET*%] [in] [%*RED*%container%*RESET*%] - Put an item from your inventory into a container in your current location
 examine [%*GREEN*%direction%*RESET*%/%*RED*%container%*RESET*%/%*BLUE*%item%*RESET*%] - Find out some info about the object
 sleep - Rest for a bit and regain some health
 look - Look around your current location
@@ -331,7 +332,7 @@ def Move(move):
         if isinstance(ROOMS[player.CURRENTROOM]['directions'][move], Door):
             if isinstance(ROOMS[player.CURRENTROOM]['directions'][move].lock, Lock):
                 key = PickKey(ROOMS[player.CURRENTROOM]['directions'][move].lock)
-                ROOMS[player.CURRENTROOM]['directions'][move].unlock(key, player)
+                ROOMS[player.CURRENTROOM]['directions'][move].Unlock(key, player)
             newRoom = ROOMS[player.CURRENTROOM]['directions'][move].GetRoom(player.CURRENTROOM)
         else:
             newRoom = ROOMS[player.CURRENTROOM]['directions'][move]
@@ -677,8 +678,8 @@ def select_target(chooser, targets: list):
 
 
 def command():
-    global player
-    try:
+        global player
+    #try:
         ShouldBreak = False
 
         while True:
@@ -706,12 +707,12 @@ def command():
                         ShouldBreak = True
             if ShouldBreak:
                 return
-    except KeyError as e:
-        type_text(f"KeyError: {e} - This might be due to an undefined command or incorrect arguments.", colorTrue=color_coding)
-    except ValueError as e:
-        type_text(f"ValueError: {e} - This might be due to incorrect arguments provided.", colorTrue=color_coding)
-    except Exception as e:
-        type_text(f"Unexpected Error: {e}", colorTrue=color_coding)
+    #except KeyError as e:
+    #    type_text(f"KeyError: {e} - This might be due to an undefined command or incorrect arguments.", colorTrue=color_coding)
+    #except ValueError as e:
+    #    type_text(f"ValueError: {e} - This might be due to incorrect arguments provided.", colorTrue=color_coding)
+    #except Exception as e:
+    #    type_text(f"Unexpected Error: {e}", colorTrue=color_coding)
 
 def handle_sleep_command(player: PC):
     type_text("You decide to rest for a while.", colorTrue=color_coding)
@@ -788,23 +789,38 @@ def search_container(player: PC, Container):
         Container.take_contents(player)
 
 
-def handle_put_command(player: PC, PutItem: item = None, container = None, sub_container = None):
-    if PutItem in player.inventory:
-        if 'containers' in ROOMS[player.CURRENTROOM]:
-            if container == 'the' and sub_container in ROOMS[player.CURRENTROOM]['containers']:
-                put_in_container(player, player.inventory[player.inventory.index(PutItem)], sub_container)
-                return
-            elif container in ROOMS[player.CURRENTROOM]['containers']:
-                put_in_container(player, player.inventory[player.inventory.index(PutItem)], container)
-                return
-    type_text(f"You cannot put the {PutItem.name} in the {container}", colorTrue=color_coding)
+def handle_put_command(player: PC, *Args):
+    arguments = " ".join(Args)
+    Arguments = arguments.split(" in ")
+    
+    # Ensure we have exactly two parts
+    if len(Arguments) < 2:
+        type_text("You need to specify an item and where to put it (e.g., 'put book in drawer').", colorTrue=color_coding)
+        return
+    
+    # Strip whitespace
+    Arguments = [arg.strip() for arg in Arguments]
+    item_name = Arguments[0]
+    container_name = Arguments[1]
+
+    # Check if item is in inventory
+    if item_name not in [item.name for item in player.inventory]:
+        type_text(f"You don't have {item_name} in your inventory.", colorTrue=color_coding)
+        return
+
+    # Retrieve item and container
+    PutItem = player.inventory[[item.name for item in player.inventory].index(item_name)]
+    if 'containers' in ROOMS[player.CURRENTROOM]:
+        put_in_container(player, PutItem, container_name)
+    else:
+        type_text(f"You cannot put the {PutItem.name} in the {container_name}", colorTrue=color_coding)
 
 
 def put_in_container(player: PC, PutItem = None, container = None):
     player.inventory.remove(PutItem.name)
     if not ROOMS[player.CURRENTROOM]['containers'][container].contents:
-        ROOMS[player.CURRENTROOM][container].contents = []
-    if not isinstance(ROOMS[player.CURRENTROOM][container].contents, list):
+        ROOMS[player.CURRENTROOM]['containers'][container].contents = []
+    if not isinstance(ROOMS[player.CURRENTROOM]['containers'][container].contents, list):
         ROOMS[player.CURRENTROOM]['containers'][container].contents = [ROOMS[player.CURRENTROOM]['containers'][container].contents]
     ROOMS[player.CURRENTROOM]['containers'][container].contents += [PutItem]
     type_text(f"You put you're %*BLUE*%{PutItem.name}%*RESET*% into the %*RED*%{container}%*RESET*%", colorTrue=color_coding)
@@ -985,6 +1001,9 @@ def initializer():
     color_coding = loop_til_valid_input("Do you want color coding (Y/N)?", "you didn't answer Y or N.", Y_N).value
 
 
+    background_name = []
+    background_skills = []
+
     while True: 
         type_text("")  # Prints an empty line
         type_text("0. Random")
@@ -1021,7 +1040,8 @@ def initializer():
         'Soldier',
         height,
         weight,
-        CURRENTROOM='Hall'
+        CURRENTROOM='Hall',
+        Skills=background_skills,
     )
 
 def main():

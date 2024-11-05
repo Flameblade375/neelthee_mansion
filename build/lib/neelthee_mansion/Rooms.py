@@ -1,5 +1,6 @@
 from .items import *
 from .creatures import *
+from .Books import *
 
 global KEY, ROOMS
 
@@ -706,9 +707,9 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                         'bookcase': Door('Cavern 3'),
                     },
                     'containers': {
-                        'bookcases': container([Book('\'Book of mistory', "Neel-thee is waching you through the mansion itself")]),
+                        'bookcases': container(sample(books, 3)),
                     },
-                    'info': 'Towering bookcases filled with odd, mismatched books line the walls. Some have faded titles, others are blank, arranged almost deliberately. One bookcase stands slightly forward, leaving a faint scrape on the floor. The air is still, as if waiting for you to notice.',
+                    'info': 'Towering %*RED*%bookcases%*RESET*% filled with odd, mismatched books line the walls. Some have faded titles, others are blank, arranged almost deliberately. One bookcase stands slightly forward, leaving a faint scrape on the floor. The air is still, as if waiting for you to notice.',
                     'map': '''
 █████████
 █       █
@@ -720,7 +721,7 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
 █       █
 █████████''',
                     'Hints': [
-                        'Is it just me or are the first letters of all of those book names spelling the words "I\'m watching you"',
+                        'Is it just me or are the first letters of all of those book names spelling the words "He\'s watching you"',
                     ],
                     },
 

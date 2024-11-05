@@ -1,5 +1,6 @@
 README.md
 setup.py
+neelthee_mansion/Books.py
 neelthee_mansion/Mansion_of_Amnesia.py
 neelthee_mansion/Quests.py
 neelthee_mansion/Rooms.py

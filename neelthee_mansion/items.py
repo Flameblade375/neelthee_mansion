@@ -14,13 +14,6 @@ class item:
         else:
             return False
 
-class Book(item):
-    def __init__(self, Name: str = "", Contense: int = ""):
-        super().__init__(Name, "readable", Contense)
-    
-    def GetContense(self):
-        return self.value
-
 class Lock:
     def __init__(self, key_code: str = None):
         self.key_code = key_code if key_code else get_random_string(10)
@@ -67,37 +60,38 @@ class KeyRevealer:
         self.max_reveals = max_reveals
     
     def reveal_key_code(self, obj: Key, mask_char="="):
-        if obj.reveal_count >= self.max_reveals:
-            type_text(f"You can only reveal a Key Code {self.max_reveals} times.")
-            type_text(f"Here is what you already know about this lock: {obj.CurentRevealStr}")
-            return
+        if hasattr(obj, "reveal_count"):
+            if obj.reveal_count >= self.max_reveals:
+                type_text(f"You can only reveal a Key Code {self.max_reveals} times.")
+                type_text(f"Here is what you already know about this lock: {obj.CurentRevealStr}")
+                return
 
-        if not hasattr(obj, 'lock'):
-            key_code = obj.value
-        else:
-            key_code = obj.lock.key_code
-        
-        one_third_length = len(key_code) // 3
-        
-        # Keep track of already revealed indices
-        revealed_indices = {i for i, char in enumerate(obj.CurentRevealStr) if char != mask_char}
-        
-        # Get new indices to reveal
-        new_indices = set(sample(range(len(key_code)), one_third_length))
+            if not hasattr(obj, 'lock'):
+                key_code = obj.value
+            else:
+                key_code = obj.lock.key_code
 
-        # Combine revealed and new indices
-        all_revealed_indices = revealed_indices.union(new_indices)
-        
-        # Create the result with revealed characters
-        result = [
-            key_code[i] if i in all_revealed_indices else mask_char
-            for i in range(len(key_code))
-        ]
+            one_third_length = len(key_code) // 3
 
-        obj.reveal_count += 1
-        obj.CurentRevealStr = ''.join(result)
-        type_text("".join(result))
-        return True
+            # Keep track of already revealed indices
+            revealed_indices = {i for i, char in enumerate(obj.CurentRevealStr) if char != mask_char}
+
+            # Get new indices to reveal
+            new_indices = set(sample(range(len(key_code)), one_third_length))
+
+            # Combine revealed and new indices
+            all_revealed_indices = revealed_indices.union(new_indices)
+
+            # Create the result with revealed characters
+            result = [
+                key_code[i] if i in all_revealed_indices else mask_char
+                for i in range(len(key_code))
+            ]
+
+            obj.reveal_count += 1
+            obj.CurentRevealStr = ''.join(result)
+            type_text("".join(result))
+            return True
 
 class ShopItem:
     def __init__(self, item: item, price: int):
@@ -122,6 +116,8 @@ class inv(list):
     def __contains__(self, item_name) -> bool:
         for item_ in self:
             if item_.name == item_name:
+                return True
+            elif item_ == item_name:
                 return True
         return False
     
