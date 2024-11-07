@@ -739,7 +739,7 @@ def handle_go_command(direction):
     global player
     Move(direction)
 
-def handle_get_command(player: PC, Args):
+def handle_get_command(player: PC, *Args):
     item_name = " ".join(Args)
     if "item" in ROOMS[player.CURRENTROOM] and item_name == ROOMS[player.CURRENTROOM]['item'].name:
         player.inventory_add([ROOMS[player.CURRENTROOM]['item']])
