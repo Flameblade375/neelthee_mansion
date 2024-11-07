@@ -156,7 +156,9 @@ ROOMS = {
                         'up': Door('Landing'),
                         'easter': Door('Cavegame'),
                         },
-                    'item': item('torch'),
+                    'items': {
+                        'torch': item('torch'),
+                        },
                     'containers': {
                         'drawers': container([]),
                         },

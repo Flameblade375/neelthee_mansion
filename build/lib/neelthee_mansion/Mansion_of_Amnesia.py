@@ -741,18 +741,19 @@ def handle_go_command(direction):
 
 def handle_get_command(player: PC, *Args):
     item_name = " ".join(Args)
-    if "item" in ROOMS[player.CURRENTROOM] and item_name == ROOMS[player.CURRENTROOM]['item'].name:
-        player.inventory_add([ROOMS[player.CURRENTROOM]['item']])
-        del ROOMS[player.CURRENTROOM]['item']
-        type_text(f'%*BLUE*%{item_name}%*RESET*% got!', colorTrue=color_coding)
-    else:
-        type_text(f"Can't get {item_name}!", colorTrue=color_coding)
+    for ItemName in ROOMS[player.CURRENTROOM]['items'].Keys():
+        if "item" in ROOMS[player.CURRENTROOM] and item_name == ItemName:
+            player.inventory_add([ROOMS[player.CURRENTROOM]['items'][ItemName]])
+            del ROOMS[player.CURRENTROOM]['items'][ItemName]
+            type_text(f'%*BLUE*%{item_name}%*RESET*% got!', colorTrue=color_coding)
+            return
+    type_text(f"Can't get {item_name}!", colorTrue=color_coding)
 
 def handle_look_command():
     global player
     should_return = False
     if 'item' in ROOMS[player.CURRENTROOM]:
-        type_text(f'The item in the room: %*BLUE*%{ROOMS[player.CURRENTROOM]["item"].name}%*RESET*%.', colorTrue=color_coding)
+        type_text(f'The items in the room: %*BLUE*%{", ".join(ROOMS[player.CURRENTROOM]["items"].keys())}%*RESET*%.', colorTrue=color_coding)
         should_return = True
     if 'containers' in ROOMS[player.CURRENTROOM]:
         type_text(f"The containers here are: %*RED*%{', '.join(ROOMS[player.CURRENTROOM]['containers'].keys())}%*RESET*%", colorTrue=color_coding)
