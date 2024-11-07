@@ -123,7 +123,7 @@ def showInstructions():
 Commands:
 go [%*GREEN*%direction%*RESET*%/%*GREEN*%teleport%*RESET*%/%*GREEN*%number%*RESET*%] - Move to another location
 get [%*BLUE*%item%*RESET*%] - Pick up an item from your current location
-search [the/] [%*RED*%container%*RESET*%] - Search a container in your current location
+search [%*RED*%container%*RESET*%] - Search a container in your current location
 use [%*BLUE*%item%*RESET*%] - Use an item from your inventory
 put [%*BLUE*%item%*RESET*%] [in] [%*RED*%container%*RESET*%] - Put an item from your inventory into a container in your current location
 examine [%*GREEN*%direction%*RESET*%/%*RED*%container%*RESET*%/%*BLUE*%item%*RESET*%] - Find out some info about the object
@@ -764,14 +764,13 @@ def handle_use_command(item = None, sub_item = None):
     global player
     Use(item, sub_item)
 
-def handle_search_command(player, container = None, sub_container = None):
+def handle_search_command(player, *Args):
+    Container = " ".join(Args)
     if 'containers' in ROOMS[player.CURRENTROOM]:
-        if container == 'the' and sub_container in ROOMS[player.CURRENTROOM]['containers'] and not all_same_value(ROOMS[player.CURRENTROOM]['containers'][sub_container].contents, None):
-            search_container(player, sub_container)
-        elif container in ROOMS[player.CURRENTROOM]['containers'] and not all_same_value(ROOMS[player.CURRENTROOM]['containers'][container].contents, None):
-            search_container(player, container)
+        if Container in ROOMS[player.CURRENTROOM]['containers'] and not all_same_value(ROOMS[player.CURRENTROOM]['containers'][Container].contents, None):
+            search_container(player, Container)
         else:
-            type_text(f"You cannot search the {container}", colorTrue=color_coding)
+            type_text(f"You cannot search the {Container}", colorTrue=color_coding)
 
 def search_container(player: PC, Container):
     ContainerName = Container
