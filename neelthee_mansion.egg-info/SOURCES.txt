@@ -1,3 +1,4 @@
+LICENSE.md
 README.md
 setup.py
 neelthee_mansion/Books.py
