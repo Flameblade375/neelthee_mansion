@@ -243,22 +243,23 @@ def Use_note(note_number):
         type_text('You do not have that note', colorTrue=color_coding)
 
 
-def Use(moveone, movetwo=None):
+def Use(*Args):
     global player
+    Item = " ".join(Args)
     """Uses an item from the player's inventory."""
-    if moveone in player.inventory:
-        item_obj = player.inventory[player.inventory.index(moveone)]
+    if Item in player.inventory:
+        item_obj = player.inventory[player.inventory.index(Item)]
         if isinstance(item_obj, item):
             if item_obj.sell(player):
-                type_text(f"You sell the %*BLUE*%{moveone}%*RESET*%", colorTrue=color_coding)
+                type_text(f"You sell the %*BLUE*%{Item}%*RESET*%", colorTrue=color_coding)
                 player.inventory.remove(item_obj.name)
-            elif moveone == 'quill':
+            elif Item == 'quill':
                 Use_quill()
-            elif moveone == 'grappling-hook':
+            elif Item == 'grappling-hook':
                 Use_grappling_hook()
-    elif moveone == 'note' and movetwo:
-        Use_note(movetwo)
-    elif moveone == '0':
+    elif Item[0] == 'note' and Item[1]:
+        Use_note(Item[1])
+    elif Item == '0':
         type_text("You can't use nothing", colorTrue=color_coding)
     else:
         type_text("You can't use that", colorTrue=color_coding)
