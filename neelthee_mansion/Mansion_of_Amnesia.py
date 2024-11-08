@@ -742,7 +742,7 @@ def handle_go_command(direction):
 def handle_get_command(player: PC, *Args):
     item_name = " ".join(Args)
     for ItemName in ROOMS[player.CURRENTROOM]['items'].keys():
-        if "item" in ROOMS[player.CURRENTROOM] and item_name == ItemName:
+        if item_name == ItemName:
             player.inventory_add([ROOMS[player.CURRENTROOM]['items'][ItemName]])
             del ROOMS[player.CURRENTROOM]['items'][ItemName]
             type_text(f'%*BLUE*%{item_name}%*RESET*% got!', colorTrue=color_coding)
