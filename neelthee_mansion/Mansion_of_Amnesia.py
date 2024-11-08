@@ -257,7 +257,7 @@ def Use(*Args):
                 Use_quill()
             elif Item == 'grappling-hook':
                 Use_grappling_hook()
-    elif Item[0] == 'note' and Item[1]:
+    elif len(Item) >= 2 and Item[0] == 'note' and Item[1]:
         Use_note(Item[1])
     elif Item == '0':
         type_text("You can't use nothing", colorTrue=color_coding)
@@ -763,9 +763,9 @@ def handle_look_command():
         return
     type_text('There is nothing of interest.', colorTrue=color_coding)
 
-def handle_use_command(item = None, sub_item = None):
+def handle_use_command(*Args):
     global player
-    Use(item, sub_item)
+    Use(Args)
 
 def handle_search_command(player, *Args):
     Container = " ".join(Args)
