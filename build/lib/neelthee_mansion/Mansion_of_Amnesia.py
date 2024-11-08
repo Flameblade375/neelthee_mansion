@@ -1,4 +1,4 @@
-from .Rooms import *
+from .Rooms import * 
 from .creatures import *
 from .items import *
 from .Quests import *
@@ -752,7 +752,7 @@ def handle_get_command(player: PC, *Args):
 def handle_look_command():
     global player
     should_return = False
-    if 'item' in ROOMS[player.CURRENTROOM]:
+    if 'items' in ROOMS[player.CURRENTROOM]:
         type_text(f'The items in the room: %*BLUE*%{", ".join(ROOMS[player.CURRENTROOM]["items"].keys())}%*RESET*%.', colorTrue=color_coding)
         should_return = True
     if 'containers' in ROOMS[player.CURRENTROOM]:
