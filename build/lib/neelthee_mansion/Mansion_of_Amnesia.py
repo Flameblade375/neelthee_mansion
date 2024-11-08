@@ -245,6 +245,8 @@ def Use_note(note_number):
 
 def Use(*Args):
     global player
+    if isinstance(Args[0], list) or isinstance(Args[0], tuple):
+        Args = Args[0]
     Item = " ".join(Args)
     """Uses an item from the player's inventory."""
     if Item in player.inventory:
@@ -679,8 +681,8 @@ def select_target(chooser, targets: list):
 
 
 def command():
-    global player
-    try:
+        global player
+    #try:
         ShouldBreak = False
 
         while True:
@@ -708,12 +710,12 @@ def command():
                         ShouldBreak = True
             if ShouldBreak:
                 return
-    except KeyError as e:
-        type_text(f"KeyError: {e} - This might be due to an undefined command or incorrect arguments.", colorTrue=color_coding)
-    except ValueError as e:
-        type_text(f"ValueError: {e} - This might be due to incorrect arguments provided.", colorTrue=color_coding)
-    except Exception as e:
-        type_text(f"Unexpected Error: {e}", colorTrue=color_coding)
+    #except KeyError as e:
+    #    type_text(f"KeyError: {e} - This might be due to an undefined command or incorrect arguments.", colorTrue=color_coding)
+    #except ValueError as e:
+    #    type_text(f"ValueError: {e} - This might be due to incorrect arguments provided.", colorTrue=color_coding)
+    #except Exception as e:
+    #    type_text(f"Unexpected Error: {e}", colorTrue=color_coding)
 
 def handle_sleep_command(player: PC):
     type_text("You decide to rest for a while.", colorTrue=color_coding)
