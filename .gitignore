@@ -1,0 +1,27 @@
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+env/
+venv/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Node.js
+node_modules/
+
+# Logs
+*.log
+
+# Environment files
+.env
+
+# PyPI
+build/
+dist/
+neelthee_mansion.egg-info

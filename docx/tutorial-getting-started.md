@@ -66,6 +66,6 @@ You are in the hall of the house. There is a chest of drawers against one wall, 
 ---------------------------
 ```
 
-the first thing to remember is that you can string commands together like this: `go south, go north` you can put as many commands in a row as you want. Here is a tip: You can just, in one command, go into and bak out of a room and then open your map and it will be drawn on there.
+the first thing to remember is that you can string commands together like this: `go south, go north` you can put as many commands in a row as you want. Here is a tip: You can just, in one command, go into and back out of a room and then open your map and it will be drawn on there.
 
 From here you just move from room to room searching containers, picking up items, and fighting monsters. That should be all you need to get starting!
