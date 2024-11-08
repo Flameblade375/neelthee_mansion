@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: neelthee-mansion
-Version: 3.19.3
+Version: 3.19.4
 Summary: A text-based adventure game set in Neel-thee’s mansion.
 Home-page: https://github.com/Flameblade375/neelthee_mansion
 Author: Alexander.E.F
@@ -22,6 +22,11 @@ License-File: LICENSE.md
 # Neel-thee's Mansion of Amnesia
 
 **Neel-thee's Mansion of Amnesia** is a text-based adventure game where players explore a mysterious mansion, interact with objects and creatures, and strive to escape while uncovering their lost identity. 
+
+## Documentation
+
+- [Installation Guide](INSTALL.md)
+- [Changelog](CHANGELOG.md)
 
 ## Features
 
