@@ -6,6 +6,7 @@
 
 - [Installation Guide](INSTALL.md)
 - [Changelog](CHANGELOG.md)
+- [Contributing errors](CONTRIBUTING.md)
 
 ## Features
 
