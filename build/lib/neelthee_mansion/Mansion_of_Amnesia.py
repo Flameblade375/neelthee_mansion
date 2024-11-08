@@ -744,12 +744,13 @@ def handle_go_command(direction):
 
 def handle_get_command(player: PC, *Args):
     item_name = " ".join(Args)
-    for ItemName in ROOMS[player.CURRENTROOM]['items'].keys():
-        if item_name == ItemName:
-            player.inventory_add([ROOMS[player.CURRENTROOM]['items'][ItemName]])
-            del ROOMS[player.CURRENTROOM]['items'][ItemName]
-            type_text(f'%*BLUE*%{item_name}%*RESET*% got!', colorTrue=color_coding)
-            return
+    if 'items' in ROOMS[player.CURRENTROOM]:
+        for ItemName in ROOMS[player.CURRENTROOM]['items'].keys():
+            if item_name == ItemName:
+                player.inventory_add([ROOMS[player.CURRENTROOM]['items'][ItemName]])
+                del ROOMS[player.CURRENTROOM]['items'][ItemName]
+                type_text(f'%*BLUE*%{item_name}%*RESET*% got!', colorTrue=color_coding)
+                return
     type_text(f"Can't get {item_name}!", colorTrue=color_coding)
 
 def handle_look_command():

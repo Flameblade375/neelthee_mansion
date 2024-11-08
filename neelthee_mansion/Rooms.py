@@ -199,7 +199,9 @@ ROOMS = {
                         'north': Door('Hall'),
                         'east': Door('Garden'),
                         },
-                    'item': item('rations'),
+                    'items': {
+                        'rations': item('rations'),
+                        },
                     'containers': {
                         'cupboards': container([item('money-pouch', 'valuable', 10)]),
                         },
@@ -246,7 +248,9 @@ ROOMS = {
                         'south': Door('Garden'),
                         'north': Door('Sitting Room'),
                         },
-                    'item': item('potion'),
+                    'items': {
+                        '': item('potion'),
+                        },
                     'containers': {
                         'chandelier': container([item('gem', 'valuable', 50)]),
                         },
@@ -517,7 +521,9 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                     'containers': {
                         'stone': container([item('money-pouch', 'valuable', 25), Key('key', "629.IdnXwnt")], True),
                         },
-                    'item': item('tome'),
+                    'items': {
+                        '': item('tome'),
+                        },
                     'info': 'You are in the middle of a stone tower. The only light comes from above, through the cracks around the hatch to above.',
                     'map': '''
 █████████
@@ -576,7 +582,9 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                         'south': Door('Basement 3'),
                         'east': Door('Basement 1'),
                         },
-                    'item': item('torch'),
+                    'items': {
+                        'torch': item('torch'),
+                        },
                     'containers': {
                         'rack-1': container([item('bow', 'weapon', 4)]),
                         'rack-2': container([item('spear', 'weapon', 3)]),
@@ -608,7 +616,9 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                         'west': Door('Basement Armoury'),
                         'up': Door('Sitting Room'),
                         },
-                    'item': item('torch'),
+                    'items': {
+                        'torch': item('torch'),
+                        },
                     'info': 'You are in an dimly lit underground (all the light in the room comes from 3 %*BLUE*%torch%*RESET*%es on the walls). You hear a %*YELLOW*%ripping%*RESET*% from the\
  stairs going %*GREEN*%up%*RESET*%.',
                     'map': '''
@@ -634,7 +644,9 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                         'north': Door('Basement 1'),
                         'west': Door('Basement 3'),
                         },
-                    'item': item('torch'),
+                    'items': {
+                        'torch': item('torch'),
+                        },
                     'info': 'You are in an dimly lit underground (all the light in the room comes from 3 %*BLUE*%torch%*RESET*%es on the walls).',
                     'map': '''
 ████║████
@@ -660,7 +672,9 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                         'east': Door('Basement 2'),
                         'north': Door('Basement Armoury'),
                         },
-                    'item': item('torch'),
+                    'items': {
+                        'torch': item('torch'),
+                        },
                     'info': 'You are in an dimly lit underground (all the light in the room comes from 3 %*BLUE*%torch%*RESET*%es on the walls).',
                     'map': '''
 ████║████
@@ -683,7 +697,9 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                         'east': Door('Library'),
                         'shoot': Door('Cavern 1'),
                         },
-                    'item': item('torch'),
+                    'items': {
+                        'torch': item('torch'),
+                        },
                     'info': 'You are in an dimly lit underground (all the light in the room comes from 3 %*BLUE*%torch%*RESET*%es on the walls). there is a choot in the floor (type: \'go shoot\' to go down the shoot).',
                     'map': '''
 ████║████
@@ -876,7 +892,9 @@ You notice a ''%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW
                         '8': Door('The Watch Castle'),
                         '9': Door('The Old Manor'),
                         },
-                    'item': item('money-pouch', 'valuable', 10),
+                    'items': {
+                        'money-pouch': item('money-pouch', 'valuable', 10),
+                        },
                     'info': '''
 You are in a strange cave with many teleportation circles, as well as some ships that are floating above the floor.
 
