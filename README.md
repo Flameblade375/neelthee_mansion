@@ -4,9 +4,11 @@
 
 ## Documentation
 
-- [Installation Guide](INSTALL.md)
-- [Changelog](CHANGELOG.md)
-- [Contributing errors](CONTRIBUTING.md)
+- [Installation Guide](docx/INSTALL.md)
+- [Changelog](docx/CHANGELOG.md)
+- [Contributing errors](docx/CONTRIBUTING.md)
+- [how to start](docx/tutorial-getting-started.md)
+- [FAQ](docx/faq.md)
 
 ## Features
 
