@@ -24,4 +24,4 @@ node_modules/
 # PyPI
 build/
 dist/
-neelthee_mansion.egg-info/
+*.egg-info
