@@ -3,3 +3,7 @@
 ## 08:20
 
 Change .gitignore line 27 to `*.egg-info`
+
+## 11:18
+
+Updated all .py files to comply with PEP 8 standards
