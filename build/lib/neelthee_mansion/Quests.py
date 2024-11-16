@@ -1,6 +1,7 @@
 from .utils import *
 from .creatures import PC
 
+
 class Objective:
     def __init__(self, description, is_completed=False):
         self.description = description
@@ -16,7 +17,9 @@ class Quest:
         self.description = description
         self.objectives = objectives  # List of objectives
         self.rewards = rewards  # Rewards for completing the quest
-        self.status = "Not Started"  # Can be "Not Started", "In Progress", or "Completed"
+        self.status = (
+            "Not Started"  # Can be "Not Started", "In Progress", or "Completed"
+        )
 
     def start(self):
         self.status = "In Progress"
@@ -28,7 +31,9 @@ class Quest:
                 completer.money += reward
 
     def is_completed(self):
-        return self.status == "Completed" and all(obj.is_completed for obj in self.objectives)
+        return self.status == "Completed" and all(
+            obj.is_completed for obj in self.objectives
+        )
 
 
 class QuestManager:
@@ -42,7 +47,9 @@ class QuestManager:
         for quest in self.quests:
             if quest.title == quest_title:
                 quest.start()
-                type_text(f"%*ORANGE*%Quest '{quest.title}' started: {quest.description}%*RESET*%")
+                type_text(
+                    f"%*ORANGE*%Quest '{quest.title}' started: {quest.description}%*RESET*%"
+                )
                 return
         type_text(f"Quest '{quest_title}' not found.")
 
@@ -50,7 +57,9 @@ class QuestManager:
         for quest in self.quests:
             if quest.title == quest_title and quest.is_completed():
                 quest.complete()
-                type_text(f"%*ORANGE*%Quest '{quest.title}' completed! Rewards: {quest.rewards} money%*RESET*%")
+                type_text(
+                    f"%*ORANGE*%Quest '{quest.title}' completed! Rewards: {quest.rewards} money%*RESET*%"
+                )
                 return
 
     def show_quests(self):
@@ -66,5 +75,7 @@ class QuestManager:
             for obj in quest.objectives:
                 if obj.description == objective_description:
                     obj.complete()
-                    type_text(f"%*ORANGE*%Objective '{obj.description}' completed!%*RESET*%")
+                    type_text(
+                        f"%*ORANGE*%Objective '{obj.description}' completed!%*RESET*%"
+                    )
                     return

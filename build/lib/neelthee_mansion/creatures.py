@@ -9,9 +9,10 @@ ValidActions = [
     "special",
 ]
 
+
 class Height:
     def __init__(self, height_str="0ft 0"):
-        feet, inches = map(float, height_str.split('ft '))
+        feet, inches = map(float, height_str.split("ft "))
         if inches >= 12:
             raise ValueError("Inches must be less than 12.")
         try:
@@ -50,7 +51,9 @@ class base_character:
         self.hp = self.hp - damage_taken
         if self.hp < 0:
             self.hp = 0
-        type_text(f"{string_beginning}{self.name}%*RESET*% takes {damage_taken} damage and has {self.hp} HP left!")
+        type_text(
+            f"{string_beginning}{self.name}%*RESET*% takes {damage_taken} damage and has {self.hp} HP left!"
+        )
 
 
 class creature_type:
@@ -68,7 +71,7 @@ class creature_type:
         """
         self.type = type
         self.subtype = subtype
-    
+
     def check_type(self):
         """
         Returns the type and subtype of the creature.
@@ -79,7 +82,7 @@ class creature_type:
         if self.subtype:
             return self.type, self.subtype
         return self.type
-    
+
     def __str__(self) -> str:
         """
         Returns a string representation of the creature type.
@@ -90,6 +93,7 @@ class creature_type:
         if self.subtype:
             return f"{self.type}, {self.subtype}"
         return f"{self.type}"
+
 
 class creature(base_character):
     """
@@ -106,7 +110,18 @@ class creature(base_character):
         crit_chance (float): The chance of the creature landing a critical hit.
     """
 
-    def __init__(self, name: str, hp: int, atpw: int, dropped_items: list[str] = [], description: str = None, flavor_text: str = None, type: creature_type = creature_type('beast'), crit_chance: float = 0.05, frendly_text: str = ""):
+    def __init__(
+        self,
+        name: str,
+        hp: int,
+        atpw: int,
+        dropped_items: list[str] = [],
+        description: str = None,
+        flavor_text: str = None,
+        type: creature_type = creature_type("beast"),
+        crit_chance: float = 0.05,
+        frendly_text: str = "",
+    ):
         """
         Initializes a new creature instance.
 
@@ -126,30 +141,34 @@ class creature(base_character):
         self.difficulty = self.hp / 10 + self.atpw
         self.dropped_items = dropped_items
         self.xp = rounding(self.difficulty * 2 + len(self.dropped_items))
-        self.description = description if description else f'A %*CYAN*%{self.name}%*RESET.'
-        self.flavor_text = flavor_text if flavor_text else f'You see a %*CYAN*%{self.name}%*RESET*%!'
+        self.description = (
+            description if description else f"A %*CYAN*%{self.name}%*RESET."
+        )
+        self.flavor_text = (
+            flavor_text if flavor_text else f"You see a %*CYAN*%{self.name}%*RESET*%!"
+        )
         self.type = type
         self.crit_chance = crit_chance
         self.frendly = False
         self.frendly_text = frendly_text
-    
+
     def type_text_flavor_text(self):
         """
         Prints the flavor text associated with encountering the creature.
         """
         type_text(self.flavor_text)
-    
+
     def type_text_description(self):
         """
         Prints the description of the creature.
         """
         type_text(self.description)
         curent_holiday = get_holiday()
-        if curent_holiday == 'christmas':
+        if curent_holiday == "christmas":
             type_text(f"The {self.name} also has a santa hat.")
-        elif curent_holiday == 'easter':
+        elif curent_holiday == "easter":
             type_text(f"The {self.name} also has bunny ears.")
-        elif curent_holiday == 'halloween':
+        elif curent_holiday == "halloween":
             if random < 0.2:
                 type_text(f"The {self.name} also has a pumkin on it's head.")
 
@@ -163,7 +182,21 @@ class Guard(creature):
         patrol_route (list[str]): The list of rooms the guard patrols through.
     """
 
-    def __init__(self, name: str, hp: int, atpw: int, dropped_items: list[str] = [], description: str = None, flavor_text: str = None, type: creature_type = creature_type('humanoid'), crit_chance: float = 0.05, current_room: str = None, patrol_route: list[str] = None, patrol_type: str = 'normal', frendly_text: str = ""):
+    def __init__(
+        self,
+        name: str,
+        hp: int,
+        atpw: int,
+        dropped_items: list[str] = [],
+        description: str = None,
+        flavor_text: str = None,
+        type: creature_type = creature_type("humanoid"),
+        crit_chance: float = 0.05,
+        current_room: str = None,
+        patrol_route: list[str] = None,
+        patrol_type: str = "normal",
+        frendly_text: str = "",
+    ):
         """
         Initializes a new guard instance.
 
@@ -180,7 +213,17 @@ class Guard(creature):
             patrol_route (list[str], optional): The list of rooms the guard patrols through. Defaults to None.
             patrol_type (str): The type of patrol the guard is doing. Defaults to normal.
         """
-        super().__init__(name, hp, atpw, dropped_items, description, flavor_text, type, crit_chance, frendly_text)
+        super().__init__(
+            name,
+            hp,
+            atpw,
+            dropped_items,
+            description,
+            flavor_text,
+            type,
+            crit_chance,
+            frendly_text,
+        )
         self.current_room = current_room
         self.patrol_route = patrol_route or []
         self.patrol_type = patrol_type
@@ -190,21 +233,21 @@ class Guard(creature):
         Moves the guard depending on his patrol type.
         """
 
-        if self.patrol_type == 'normal':
+        if self.patrol_type == "normal":
             if self.patrol_route:
                 current_index = self.patrol_route.index(self.current_room)
                 next_index = (current_index + 1) % len(self.patrol_route)
                 self.current_room = self.patrol_route[next_index]
-        elif self.patrol_type == 'random':
+        elif self.patrol_type == "random":
             rooms = []
-            for direction, room in ROOMS[self.current_room]['directions'].items():
+            for direction, room in ROOMS[self.current_room]["directions"].items():
                 rooms.append(room)
-            if hasattr(room, 'GetRoom'):
+            if hasattr(room, "GetRoom"):
                 self.current_room = choice(rooms).GetRoom(self.current_room)
                 return
             self.current_room = choice(rooms)
-        elif self.patrol_type == 'follow':
-            for direction, room in ROOMS[self.current_room]['directions'].items():
+        elif self.patrol_type == "follow":
+            for direction, room in ROOMS[self.current_room]["directions"].items():
                 if room.GetRoom(self.current_room) == player.CURRENTROOM:
                     self.current_room = room.GetRoom(self.current_room)
                     return
@@ -220,12 +263,15 @@ class Guard(creature):
             bool: True if the player is detected, False otherwise.
         """
         if self.current_room == player_room and not self.frendly:
-            type_text(f"You have been caught by {self.name} in the {self.current_room}!")
+            type_text(
+                f"You have been caught by {self.name} in the {self.current_room}!"
+            )
             return True
         elif self.current_room == player_room and self.frendly:
             if random() <= 0.015:
                 type_text(self.frendly_text)
         return False
+
 
 class base_ability:
     def __init__(self, name, cooldown_time) -> None:
@@ -233,57 +279,59 @@ class base_ability:
         self.name = name
         self.cooldown_time = cooldown_time
         self.current_cooldown = 0
-    
+
     def activate(self, target: creature, damage: int = 5):
         self.ready = False
         self.current_cooldown = 0
         print(f"Ability {self.name} will be ready after {self.cooldown_time} commands.")
-    
+
     def Tick(self):
         self.current_cooldown += 1
         self.check_cooldown()
-    
+
     def check_cooldown(self):
         if self.current_cooldown >= self.cooldown_time and not self.ready:
             type_text(f"\nAbility {self.name} is ready to use again. ")
             self.ready = True
 
+
 class supercrit_ability(base_ability):
     def __init__(self) -> None:
         super().__init__("Super Crit", 5)
-    
+
     def activate(self, target: base_character, damage: int = 5):
-        target.take_damage(damage*5)
+        target.take_damage(damage * 5)
         super().activate(target, damage)
+
 
 class PC(base_character):
 
     def __init__(
-            self, 
-            Name: str, 
-            Age: int, 
-            Class: str, 
-            Level: int, 
-            Background: str, 
-            Height: Height, 
-            Weight: int, 
-            Notes: list = [], 
-            special_ability: base_ability = supercrit_ability(),
-            NOTES: list = [], 
-            xp: int = None, 
-            inventory: inv = None, 
-            money: int = 0, 
-            weapons_atpws: list = [],
-            backstory: str = "",
-            CURRENTROOM: str = "",
-            LASTROOM: str = None,
-            Skills: list[str] = None
-        ):
+        self,
+        Name: str,
+        Age: int,
+        Class: str,
+        Level: int,
+        Background: str,
+        Height: Height,
+        Weight: int,
+        Notes: list = [],
+        special_ability: base_ability = supercrit_ability(),
+        NOTES: list = [],
+        xp: int = None,
+        inventory: inv = None,
+        money: int = 0,
+        weapons_atpws: list = [],
+        backstory: str = "",
+        CURRENTROOM: str = "",
+        LASTROOM: str = None,
+        Skills: list[str] = None,
+    ):
         if not xp:
             if Level == 1:
                 xp = 0
             else:
-                xp = Level*25
+                xp = Level * 25
         if not LASTROOM:
             LASTROOM = CURRENTROOM
         self.name = Name
@@ -299,7 +347,9 @@ class PC(base_character):
         self.hp = self.maxhp
         self.atpw = rounding(self.Level * 1.5 + 3, 1)
         self.xp = xp
-        self.inventory = inventory if inventory is not None else inv()  # Initialize an inv if inventory is None
+        self.inventory = (
+            inventory if inventory is not None else inv()
+        )  # Initialize an inv if inventory is None
         self.money = money
         self.weapons_atpws = weapons_atpws
         self.crit_chance = 0.075
@@ -319,7 +369,7 @@ class PC(base_character):
             self.atpw = self.Level * 2 + 3 + self.weapons_atpws[weapon_index]
 
     def check_xp(self):
-        self.level = rounding(self.xp/25, 1)
+        self.level = rounding(self.xp / 25, 1)
 
     def add_xp(self, xp_added: int = 5):
         self.xp += xp_added
@@ -335,7 +385,7 @@ class PC(base_character):
                     self.inventory.append(item_to_add)
 
                     # Check if the added item is a weapon and update player's weapon if needed
-                    if item_to_add.type == 'weapon':
+                    if item_to_add.type == "weapon":
                         self.get_change_weapon(item_to_add.value)
                 else:
                     # Print an error message if the item is not an instance of Item class
@@ -343,64 +393,66 @@ class PC(base_character):
         except Exception as e:
             # Print the full traceback if an exception occurs
             type_text(f"Error: {e}")
-    
+
     def heal(self, value):
         self.hp = clamp(value, 0, self.maxhp)
 
+
 class NPC(PC):
     def __init__(
-            self, 
-            Name: str, 
-            Age: int, 
-            Class: str, 
-            Level: int, 
-            Background: str, 
-            Height: Height, 
-            Weight: int, 
-            Notes: list = [], 
-            special_ability: base_ability = supercrit_ability(),
-            NOTES: list = [], 
-            xp: int = None, 
-            inventory: inv = None, 
-            money: int = 0, 
-            weapons_atpws: list = [],
-            npc_role: str = "generic",  # New attribute for NPC role (e.g., merchant, enemy, etc.)
-            aggressive: bool = False    # New attribute to determine if NPC is aggressive
-        ):
+        self,
+        Name: str,
+        Age: int,
+        Class: str,
+        Level: int,
+        Background: str,
+        Height: Height,
+        Weight: int,
+        Notes: list = [],
+        special_ability: base_ability = supercrit_ability(),
+        NOTES: list = [],
+        xp: int = None,
+        inventory: inv = None,
+        money: int = 0,
+        weapons_atpws: list = [],
+        npc_role: str = "generic",  # New attribute for NPC role (e.g., merchant, enemy, etc.)
+        aggressive: bool = False,  # New attribute to determine if NPC is aggressive
+    ):
         super().__init__(
-            Name=Name, 
-            Age=Age, 
-            Class=Class, 
-            Level=Level, 
-            Background=Background, 
-            Height=Height, 
-            Weight=Weight, 
-            Notes=Notes, 
+            Name=Name,
+            Age=Age,
+            Class=Class,
+            Level=Level,
+            Background=Background,
+            Height=Height,
+            Weight=Weight,
+            Notes=Notes,
             special_ability=special_ability,
-            NOTES=NOTES, 
-            xp=xp, 
-            inventory=inventory, 
-            money=money, 
-            weapons_atpws=weapons_atpws
+            NOTES=NOTES,
+            xp=xp,
+            inventory=inventory,
+            money=money,
+            weapons_atpws=weapons_atpws,
         )
         self.npc_role = npc_role
         self.aggressive = aggressive
-    
+
     def interact(self):
         if self.aggressive:
             return f"{self.name} looks hostile and prepares for a fight!"
         else:
             return f"{self.name} has nothing to say to you."
-    
+
     def npc_info(self):
         return f"Name: {self.name}, Age: {self.Age}, Class: {self.Class}, Level: {self.Level}, Role: {self.npc_role}, Aggressive: {self.aggressive}"
+
 
 class PC_action:
     def __init__(self, value) -> None:
         if not value in ValidActions:
             raise ValueError
         self.value = value
-    
+
     def __eq__(self, value: object) -> bool:
         if isinstance(value, PC_action):
             return self.value == value.value

@@ -12,7 +12,6 @@ try:
     from psutil import *
     from playsound import *
 
-
     # Importing the whole module
     import pickle as pk
     import inspect
@@ -45,6 +44,7 @@ identifiers, and formatting dates.
 These utilities aim to simplify development processes, promote code reuse, and improve the efficiency of Python applications.
 """
 
+
 def perform_action_on_matches(input_list, target, action):
     """
     Perform an action on all items in the list that are the same as the target.
@@ -60,6 +60,7 @@ def perform_action_on_matches(input_list, target, action):
             input_list[i] = action(input_list[i])
     return input_list
 
+
 def get_all_matches(input_list, target):
     """
     Return a list of all items in the list that are the same as the target.
@@ -70,16 +71,18 @@ def get_all_matches(input_list, target):
     """
     return [item for item in input_list if item == target]
 
+
 def last_index(lst):
     if isinstance(lst, list):
         if lst:
             return len(lst) - 1
     return None
 
+
 def has_named_arg(func, arg_name):
     """
     Check if the function 'func' has an argument named 'arg_name'.
-    
+
     :param func: Function to inspect
     :param arg_name: Name of the argument to check
     :return: True if the argument exists, False otherwise
@@ -87,8 +90,10 @@ def has_named_arg(func, arg_name):
     signature = inspect.signature(func)
     return arg_name in signature.parameters
 
+
 def get_random_string(length=10):
-    return ''.join(choice(ascii_letters + digits) for _ in range(length))
+    return "".join(choice(ascii_letters + digits) for _ in range(length))
+
 
 def retry_on_exception(func, retries=3):
     for _ in range(retries):
@@ -98,6 +103,7 @@ def retry_on_exception(func, retries=3):
             print(f"Retry due to: {e}")
     print("Max retries exceeded")
 
+
 def measure_execution_time(func):
     start_time = time()
     result = func()
@@ -105,32 +111,43 @@ def measure_execution_time(func):
     print(f"Execution time: {end_time - start_time} seconds")
     return result
 
+
 def int_to_binary(n):
     return bin(n)[2:]
+
 
 def binary_to_int(b):
     return int(b, 2)
 
+
 def str_to_base64(s):
     import base64
+
     return base64.b64encode(s.encode()).decode()
+
 
 def base64_to_str(b64):
     import base64
+
     return base64.b64decode(b64.encode()).decode()
+
 
 def get_memory_usage():
     memory_info = virtual_memory()
     return memory_info.percent
 
+
 def get_os_info():
     return system(), release()
 
+
 def get_process_list():
-    return [(p.pid, p.info['name']) for p in process_iter(['name'])]
+    return [(p.pid, p.info["name"]) for p in process_iter(["name"])]
+
 
 def get_ip_address():
     return gethostbyname(gethostname())
+
 
 def download_content(url):
     response = requests.get(url)
@@ -139,71 +156,93 @@ def download_content(url):
     else:
         return None
 
+
 def get_host_name():
     return gethostname()
+
 
 def reverse_string(s):
     return s[::-1]
 
+
 def is_palindrome(s):
-    cleaned = ''.join(c.lower() for c in s if c.isalnum())
+    cleaned = "".join(c.lower() for c in s if c.isalnum())
     return cleaned == reverse_string(cleaned)
+
 
 def add_days(date, days):
     return date + timedelta(days=days)
+
 
 def get_days_between_dates(date1, date2):
     delta = date2 - date1
     return delta.days
 
+
 def get_weekday(date):
     return date.strftime("%A")
 
+
 def word_count(s):
     from collections import Counter
+
     words = s.split()
     return Counter(words)
+
 
 def get_cpu_usage():
     return cpu_percent(interval=1)
 
+
 def get_disk_space():
-    usage = disk_usage('/')
-    return usage.free / (1024 ** 3)  # Free space in GB
+    usage = disk_usage("/")
+    return usage.free / (1024**3)  # Free space in GB
+
 
 def get_system_uptime():
     return time() - boot_time()
 
+
 def is_valid_email(email):
-    pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+    pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
     return match(pattern, email) is not None
+
 
 def is_valid_url(url):
     import validators
+
     return validators.url(url)
+
 
 def is_valid_ip(ip):
     import ipaddress
+
     try:
         ipaddress.ip_address(ip)
         return True
     except ValueError:
         return False
 
-def celsius_fahrenheit_conversion(Temp, IsCelsius = True):
+
+def celsius_fahrenheit_conversion(Temp, IsCelsius=True):
     if IsCelsius:
-        return (Temp * 9/5) + 32
+        return (Temp * 9 / 5) + 32
     else:
-        return 5 / 9*(Temp - 32)
+        return 5 / 9 * (Temp - 32)
+
 
 def json_to_xml(json_data):
     import json
     import dicttoxml
+
     return dicttoxml.dicttoxml(json.loads(json_data))
+
 
 def flatten_list(nested_list):
     import itertools
+
     return list(itertools.chain(*nested_list))
+
 
 def merge_dicts(*dicts):
     result = {}
@@ -211,29 +250,37 @@ def merge_dicts(*dicts):
         result.update(d)
     return result
 
+
 def shuffle_list(lst):
     import random
+
     shuffle(lst)
     return lst
+
 
 def date_difference(date1, date2):
     delta = date2 - date1
     return delta.days
 
+
 def is_leap_year(year):
     return year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)
 
+
 def get_current_time_in_timezone(timezone_str):
     import pytz
+
     tz = pytz.timezone(timezone_str)
     return datetime.now(tz)
 
-def clamp(value, min = 0, max = 0):
+
+def clamp(value, min=0, max=0):
     if value < min:
         value = min
     if value > max:
         value = max
     return value
+
 
 def is_executable(code_str):
     code_str = code_str.strip()
@@ -241,18 +288,23 @@ def is_executable(code_str):
         return False
     try:
         # Parse the code to ensure it is syntactically correct
-        tree = ast.parse(code_str, mode='exec')
-        
+        tree = ast.parse(code_str, mode="exec")
+
         # Walk through the AST to find undefined names
         for node in ast.walk(tree):
             if isinstance(node, ast.Name) and isinstance(node.ctx, ast.Load):
                 # Check if the name is a built-in, defined locally in code, or globally available
-                if node.id not in dir(builtins) and node.id not in globals() and node.id not in locals():
+                if (
+                    node.id not in dir(builtins)
+                    and node.id not in globals()
+                    and node.id not in locals()
+                ):
                     return False  # Name is not defined
-        
+
         return True
     except (SyntaxError, TypeError):
         return False
+
 
 def get_holiday():
     today = date.today()
@@ -271,19 +323,20 @@ def get_holiday():
 
     # Check if today is near Halloween
     if halloween_start <= today <= halloween_end:
-        return 'halloween'
-    
+        return "halloween"
+
     # Check if today is near Christmas
     elif christmas_start <= today <= christmas_end:
-        return 'christmas'
-    
+        return "christmas"
+
     # Check if today is near Easter
     elif easter_start <= today <= easter_end:
-        return 'easter'
-    
+        return "easter"
+
     # No holiday near today
     else:
         return None
+
 
 # Easter calculation (based on the "Computus" algorithm)
 def calculate_easter_date(year):
@@ -304,17 +357,21 @@ def calculate_easter_date(year):
 
     return date(year, month, day)
 
+
 def play_sound(sound_file):
     playsound(sound_file)
 
+
 def truncate_text(text: str, max_length: int = 234):
-    return text[:max_length] + '...' if len(text) > max_length else text
+    return text[:max_length] + "..." if len(text) > max_length else text
+
 
 def download_file(url, filename):
     response = requests.get(url)
     if response.status_code == 200:
-        with open(filename, 'wb') as file:
+        with open(filename, "wb") as file:
             file.write(response.content)
+
 
 def check_internet_connection():
     try:
@@ -323,75 +380,85 @@ def check_internet_connection():
     except OSError:
         return False
 
+
 def get_current_timestamp():
     return datetime.now().timestamp()
+
 
 def format_date(date: datetime):
     return date.strftime("%Y-%m-%d %H:%M:%S")
 
+
 def delay(seconds):
     sleep(seconds)
+
 
 # All classes:
 class TextEdits:
     # Text colors
-    BLACK = '\033[30m'      # Black
-    RED = '\033[31m'        # Red
-    GREEN = '\033[32m'      # Green
-    YELLOW = '\033[33m'     # Yellow
-    BLUE = '\033[34m'       # Blue
-    MAGENTA = '\033[35m'    # Magenta
-    CYAN = '\033[36m'       # Cyan
-    WHITE = '\033[37m'      # White
-    
+    BLACK = "\033[30m"  # Black
+    RED = "\033[31m"  # Red
+    GREEN = "\033[32m"  # Green
+    YELLOW = "\033[33m"  # Yellow
+    BLUE = "\033[34m"  # Blue
+    MAGENTA = "\033[35m"  # Magenta
+    CYAN = "\033[36m"  # Cyan
+    WHITE = "\033[37m"  # White
+
     # Custom colors (adjusted for more contrast)
-    PINK = '\033[38;5;205m'  # Brighter Pink (ANSI 256-color code)
-    PURPLE = '\033[38;5;53m' # Darker Purple (ANSI 256-color code)
-    ORANGE = '\033[38;5;208m' # Orange (ANSI 256-color code)
-    BROWN = '\033[38;5;94m'  # Brown (ANSI 256-color code)
+    PINK = "\033[38;5;205m"  # Brighter Pink (ANSI 256-color code)
+    PURPLE = "\033[38;5;53m"  # Darker Purple (ANSI 256-color code)
+    ORANGE = "\033[38;5;208m"  # Orange (ANSI 256-color code)
+    BROWN = "\033[38;5;94m"  # Brown (ANSI 256-color code)
 
     # Background colors
-    BLACK_BG = '\033[40m'   # Black background
-    RED_BG = '\033[41m'     # Red background
-    GREEN_BG = '\033[42m'   # Green background
-    YELLOW_BG = '\033[43m'  # Yellow background
-    BLUE_BG = '\033[44m'    # Blue background
-    MAGENTA_BG = '\033[45m' # Magenta background
-    CYAN_BG = '\033[46m'    # Cyan background
-    WHITE_BG = '\033[47m'   # White background
+    BLACK_BG = "\033[40m"  # Black background
+    RED_BG = "\033[41m"  # Red background
+    GREEN_BG = "\033[42m"  # Green background
+    YELLOW_BG = "\033[43m"  # Yellow background
+    BLUE_BG = "\033[44m"  # Blue background
+    MAGENTA_BG = "\033[45m"  # Magenta background
+    CYAN_BG = "\033[46m"  # Cyan background
+    WHITE_BG = "\033[47m"  # White background
 
     # Text styles
-    BOLD = '\033[1m'        # Bold text
-    UNDERLINE = '\033[4m'   # Underlined text
-    BLINK = '\033[5m'       # Blinking text, nonworking
-    REVERSE = '\033[7m'     # Reversed (invert the foreground and background colors)
-    HIDDEN = '\033[8m'      # Hidden (invisible) text
-    LINETHROUGH = '\033[9m' # Strikethrough (linethrough) text
-    ITALIC = '\033[3m'
+    BOLD = "\033[1m"  # Bold text
+    UNDERLINE = "\033[4m"  # Underlined text
+    BLINK = "\033[5m"  # Blinking text, nonworking
+    REVERSE = "\033[7m"  # Reversed (invert the foreground and background colors)
+    HIDDEN = "\033[8m"  # Hidden (invisible) text
+    LINETHROUGH = "\033[9m"  # Strikethrough (linethrough) text
+    ITALIC = "\033[3m"
 
     # Reset all formatting
-    RESET = '\033[0m'
+    RESET = "\033[0m"
+
 
 class Y_N:
     def __init__(self, Value: str) -> None:
         Value = Value.lower()
-        if Value == 'y':
+        if Value == "y":
             Value = True
-        elif Value == 'n':
+        elif Value == "n":
             Value = False
         else:
             raise ValueError("That wasn't Y or N")
         self.value = Value
 
+
 def all_same_value(lst, value):
     return all(x == value for x in lst)
 
+
 def generate_id(start_str: str = "ObjectName_ObjectDetals", length: int = 32):
     characters = ascii_letters + digits
-    random_part = ''.join(choice(characters) for _ in range(length - len(start_str)))
+    random_part = "".join(choice(characters) for _ in range(length - len(start_str)))
     return start_str + "_" + random_part
 
-def type_text(text: str, newline: bool = True, delay: float = 0.075, colorTrue: bool = True):
+
+def type_text(
+    text: str, newline: bool = True, delay: float = 0.075, colorTrue: bool = True
+):
     """
     Function to type text with optional color formatting.
 
@@ -400,8 +467,8 @@ def type_text(text: str, newline: bool = True, delay: float = 0.075, colorTrue: 
     newline -- whether to print a newline at the end (default: True)
     delay -- delay between each character in seconds (default: 0.075)
     """
-    color_start = '%*'
-    color_end = '*%'
+    color_start = "%*"
+    color_end = "*%"
 
     key_pressed = False
 
@@ -410,16 +477,16 @@ def type_text(text: str, newline: bool = True, delay: float = 0.075, colorTrue: 
         key_pressed = True
 
     keyboard.hook(on_key_event)
-    
+
     i = 0
     while i < len(text):
         if key_pressed:
             delay = 0
 
-        if text[i:i+len(color_start)] == color_start:
+        if text[i : i + len(color_start)] == color_start:
             color_end_index = text.find(color_end, i)
             if color_end_index != -1:
-                color_code = text[i+len(color_start):color_end_index]
+                color_code = text[i + len(color_start) : color_end_index]
                 color = getattr(TextEdits, color_code, TextEdits.RESET)
                 if colorTrue:
                     stdout.write(color)
@@ -430,18 +497,26 @@ def type_text(text: str, newline: bool = True, delay: float = 0.075, colorTrue: 
         i += 1
         stdout.flush()
         sleep(delay)
-        
+
     stdout.write(TextEdits.RESET)  # Reset color
     stdout.flush()
     if newline:
         print()
-    
+
     keyboard.unhook(on_key_event)
 
-def rounding(x: int, base: int = 5):
-    return int(base * round(x/base))
 
-def loop_til_valid_input(input_text: str, bad_text: str, Class: classmethod, delay: int = 0.075, input_method: str = '>'):
+def rounding(x: int, base: int = 5):
+    return int(base * round(x / base))
+
+
+def loop_til_valid_input(
+    input_text: str,
+    bad_text: str,
+    Class: classmethod,
+    delay: int = 0.075,
+    input_method: str = ">",
+):
     while True:
         try:
             type_text(input_text, delay=delay)
