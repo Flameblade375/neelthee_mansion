@@ -737,10 +737,11 @@ You notice a "
             "west": Door("Room name"),
             "bookcase": Door("Cavern 3"),
         },
+        "creatures stats": [Geraldo()],
         "containers": {
             "bookcases": container(sample(books, 3)),
         },
-        "info": "Towering %*RED*%bookcases%*RESET*% filled with odd, mismatched books line the walls. Some have faded titles, others are blank, arranged almost deliberately. One bookcase stands slightly forward, leaving a faint scrape on the floor. The air is still, as if waiting for you to notice.",
+        "info": "Towering %*RED*%bookcases%*RESET*% filled with odd, mismatched books line the walls. A cat named %*BROWN*%geraldo times%*RESET*%. Some have faded titles, others are blank, arranged almost deliberately. One bookcase stands slightly forward, leaving a faint scrape on the floor. The air is still, as if waiting for you to notice.",
         "map": """
 █████████
 █       █

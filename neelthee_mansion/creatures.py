@@ -457,3 +457,120 @@ class PC_action:
         if isinstance(value, PC_action):
             return self.value == value.value
         return self.value == value
+
+
+class NPC(Guard):
+
+    def __init__(
+        self,
+        name,
+        hp,
+        atpw,
+        dropped_items=[],
+        description=None,
+        flavor_text=None,
+        type=creature_type("humanoid"),
+        crit_chance=0.05,
+        current_room=None,
+        patrol_route=None,
+        patrol_type="normal",
+        frendly_text="",
+        responses={
+            "introduction": "Oh, hello. I didn't see you there.",
+        },
+        keyword_variations={
+            "introduction": ["hello", "hi", "greetings", "hey"],
+        },
+        generic_response="The person looks like they don't see you.",
+    ):
+        super().__init__(
+            name,
+            hp,
+            atpw,
+            dropped_items,
+            description,
+            flavor_text,
+            type,
+            crit_chance,
+            current_room,
+            patrol_route,
+            patrol_type,
+            frendly_text,
+        )
+        self.frendly = True
+        # Define the responses for each topic
+        self.responses = responses
+
+        # Define keyword variations that map to the same topic
+        self.keyword_variations = keyword_variations
+
+        # To keep track of which topics the player has asked about
+        self.asked_about = set()
+        self.generic_response = generic_response
+
+    def talk(self):
+        while True:
+            player_input = loop_til_valid_input(
+                f"What do you want to say to %*BROWN*%{self.name}%*RESET*%?",
+                "",
+                str,
+            )
+
+            # Normalize the input to lowercase
+            player_input = player_input.lower()
+
+            # Exit the loop if the player says "goodbye"
+            if player_input == "goodbye":
+                type_text(f"Goodbye then. Don't get lost!")
+                break
+
+            # Check for keywords and map to corresponding response
+            for topic, variations in self.keyword_variations.items():
+                if any(variation in player_input for variation in variations):
+                    self.asked_about.add(topic)
+                    type_text(self._get_response(topic))
+                    break  # Stop further keyword checks and wait for the next input
+            else:
+                # If no keywords found, return a generic response
+                type_text(self._generic_response())
+
+    def _get_response(self, topic):
+        """Return a response from the NPC based on the topic asked."""
+        return f"{self.responses[topic]}"
+
+    def _generic_response(self):
+        """Default response if no known keyword is found in the player's input."""
+        return self.generic_response
+
+
+class Geraldo(NPC):
+
+    def __init__(self):
+        super().__init__(
+            "geraldo times",
+            9999999999,
+            999,
+            type=creature_type("beast", "cat"),
+            flavor_text="You see a cat sitting on a bookshelf.",
+            description="The cat looks at you with a bored look on its face.",
+            responses={
+                "introduction": "Oh, you're here. Didn't think you'd make it. But I suppose I'm not the one making the decisions around here, am I?",
+                "mansion": "The mansion? Well, it's not as grand as it may seem. Inside, it's as much a prison as it is a home. Everyone you find here has been trapped by Neel-thee. You’ll find that out soon enough.",
+                "neel-thee": "Neel-thee? Oh, you've heard of him, have you? He’s not one to be trifled with, but then again, neither am I.",
+                "escape": "Escape? Ha. If only it were that simple. If you're planning to leave, you'd better have a better idea than just running out the door.",
+                "danger": "Danger? Well, it’s always lurking, isn’t it? You might not see it, but I feel it in the air. Something's coming, something... wrong.",
+            },
+            keyword_variations={
+                "introduction": ["hello", "hi", "greetings", "hey"],
+                "mansion": ["mansion", "this place", "the mansion", "home", "house"],
+                "neel-thee": [
+                    "neel-thee",
+                    "who is neel-thee",
+                    "tell me about neel-thee",
+                    "who is this neel-thee",
+                ],
+                "escape": ["escape", "leave", "get out", "break free"],
+                "danger": ["danger", "something wrong", "something’s off", "dangerous"],
+            },
+            generic_response="The cat looks at you with those mysterious eyes, as if deciding whether or not to speak.",
+        )

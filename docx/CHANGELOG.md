@@ -7,3 +7,9 @@ Change .gitignore line 27 to `*.egg-info`
 ## 11:18
 
 Updated all .py files to comply with PEP 8 standards
+
+# 03/12/2024
+
+## 11:00
+
+add NPCs to the game

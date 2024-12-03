@@ -531,6 +531,13 @@ def Examine(*Args):
                 type_text(f"The container {Name} has no lock.")
         else:
             type_text(f"There is no container named {Name} in this room.")
+    elif "creatures stats" in ROOMS[player.CURRENTROOM]:
+        for Creature in ROOMS[player.CURRENTROOM]["creatures stats"]:
+            if isinstance(Creature, creature):
+                if isinstance(Creature, NPC):
+                    if Creature.name.lower() == Name:
+                        Creature.talk()
+                        return
     else:
         type_text(f"There is nothing special about the {Name}.")
 
@@ -1276,34 +1283,39 @@ def main():
 
             for enemy in enemies:
                 if isinstance(enemy, creature):
-                    if enemy.hp > 0:
-                        enemy.type_text_flavor_text()
-                        if ask_for_consent(f"Do you want to examine the {enemy.name}"):
-                            enemy.type_text_description()
+                    if not isinstance(enemy, NPC):
+                        if enemy.hp > 0:
+                            enemy.type_text_flavor_text()
+                            if ask_for_consent(
+                                f"Do you want to examine the {enemy.name}"
+                            ):
+                                enemy.type_text_description()
 
-                        # Handle specific creatures
-                        if enemy.name == "hungry bear":
-                            enemy_REF = handle_hungry_bear(player, enemy)
-                        elif enemy.name == "grumpy pig":
-                            enemy_REF = handle_grumpy_pig(player, enemy)
-                        elif enemy.name == "greedy goblin":
-                            enemy_REF = handle_greedy_goblin(player, enemy)
-                        else:
-                            enemy_REF = enemy
+                            is_reacting = False
 
-                        if isinstance(enemy_REF, list):
-                            is_reacting = enemy_REF[1]
-                            enemy_REF = enemy_REF[0]
-                            is_reactings.append(is_reacting)
-
-                        enemies[enemies.index(enemy)] = enemy_REF
-
-                        # Add to good or bad lists if reacting
-                        if is_reacting:
-                            if enemy_REF.frendly:
-                                good_guys.append(enemy_REF)
+                            # Handle specific creatures
+                            if enemy.name == "hungry bear":
+                                enemy_REF = handle_hungry_bear(player, enemy)
+                            elif enemy.name == "grumpy pig":
+                                enemy_REF = handle_grumpy_pig(player, enemy)
+                            elif enemy.name == "greedy goblin":
+                                enemy_REF = handle_greedy_goblin(player, enemy)
                             else:
-                                bad_guys.append(enemy_REF)
+                                enemy_REF = enemy
+
+                            if isinstance(enemy_REF, list):
+                                is_reacting = enemy_REF[1]
+                                enemy_REF = enemy_REF[0]
+                                is_reactings.append(is_reacting)
+
+                            enemies[enemies.index(enemy)] = enemy_REF
+
+                            # Add to good or bad lists if reacting
+                            if is_reacting:
+                                if enemy_REF.frendly:
+                                    good_guys.append(enemy_REF)
+                                else:
+                                    bad_guys.append(enemy_REF)
 
             if all_same_value(enemies, False):
                 del ROOMS[player.CURRENTROOM]["creatures stats"]
