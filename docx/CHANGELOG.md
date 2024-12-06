@@ -20,3 +20,6 @@ add NPCs to the game
 
 I added a new line of dialog to Geraldo
 
+## 11:57
+
+I have added some books, like the Founder’s Journal.
