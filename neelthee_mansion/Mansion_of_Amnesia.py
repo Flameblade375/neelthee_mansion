@@ -287,12 +287,11 @@ def Use(*Args):
                 Use_quill()
             elif Item == "grappling-hook":
                 Use_grappling_hook()
+            else:
+                item_obj.use()
     elif len(Item) >= 2 and Item[0] == "note" and Item[1]:
         Use_note(Item[1])
-    elif Item == "0":
-        type_text("You can't use nothing", colorTrue=color_coding)
-    else:
-        type_text("You can't use that", colorTrue=color_coding)
+            
 
 
 def PickKey(locked_obj):
@@ -495,6 +494,9 @@ def Examine(*Args):
                             type_text(_.GetContense())
                         else:
                             type_text(_.value)
+                elif isinstance(_, Recorder):
+                    type_text("This device records sound. The current message is:")
+                    type_text(_.message)
     elif Name in ROOMS[player.CURRENTROOM]["directions"]:  # Check exits in the room
         door = ROOMS[player.CURRENTROOM]["directions"][Name]
         if isinstance(door, Door):
@@ -512,9 +514,7 @@ def Examine(*Args):
                 type_text(f"The exit {Name} has no lock.")
         else:
             type_text(f"There is nothing special about the exit {Name}.")
-    elif (
-        Name in ROOMS[player.CURRENTROOM]["containers"]
-    ):  # Check containers in the room
+    elif "containers" in ROOMS[player.CURRENTROOM] and Name in ROOMS[player.CURRENTROOM]["containers"]:
         containerins = ROOMS[player.CURRENTROOM]["containers"][Name]
         if isinstance(containerins, container):
             if isinstance(containerins.lock, Lock):

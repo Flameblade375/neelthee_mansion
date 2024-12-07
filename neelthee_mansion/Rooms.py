@@ -52,9 +52,6 @@ class Door:
         self.destination = RoomName
         self.lock = Lock(KeyCode) if KeyCode else None
         self.reveal_count = 0
-        self.CurentRevealStr = (
-            "=" * len(self.lock.key_code) if isinstance(self.lock, Lock) else ""
-        )
 
     def Unlock(self, key: Key, player):
         return self.lock.unlock(key, player)
@@ -67,7 +64,7 @@ class Door:
             return currentroom
 
     def __str__(self) -> str:
-        return self.CurentRevealStr
+        return self.lock.CurentRevealStr if self.lock else ""
 
 
 class SwitchDoor(Door):
@@ -343,6 +340,12 @@ my diary. This is the last thing you will hear from Geraldo Times.”
         "directions": {
             "north": Door("Dining Room"),
             "west": Door("Kitchen"),
+        },
+        "items": {
+            "recorder": Recorder(
+                "recorder 143",
+                "The prince is out of control! Neel-thee's gone crazy! Get him to the safehouse!"
+            )
         },
         "info": "You are in a bright garden you are in a garden with a gate out of the house.",
         "map": """

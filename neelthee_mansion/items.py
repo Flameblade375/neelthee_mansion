@@ -14,6 +14,9 @@ class item:
             return True
         else:
             return False
+    
+    def use(self):
+        pass
 
 
 class Lock:
@@ -188,4 +191,22 @@ class container:
         return self.lock.unlock(key, player)
 
     def __str__(self) -> str:
-        return self.CurentRevealStr
+        return self.lock.CurentRevealStr if self.lock else ""
+
+class Recorder(item):
+
+
+    def __init__(self, name = "", message = None):
+        super().__init__(name, "recorder", 0)
+        self.message = message
+    
+    def __str__(self):
+        return self.record if self.record else "This recorder has no record on it."
+    
+    def Record(self):
+        type_text("What record do you want to put on the recorder? \n>", newline=False)
+        message = input()
+        self.message = message
+    
+    def use(self):
+        self.Record()

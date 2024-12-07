@@ -52,9 +52,6 @@ class Door:
         self.destination = RoomName
         self.lock = Lock(KeyCode) if KeyCode else None
         self.reveal_count = 0
-        self.CurentRevealStr = (
-            "=" * len(self.lock.key_code) if isinstance(self.lock, Lock) else ""
-        )
 
     def Unlock(self, key: Key, player):
         return self.lock.unlock(key, player)
@@ -67,7 +64,7 @@ class Door:
             return currentroom
 
     def __str__(self) -> str:
-        return self.CurentRevealStr
+        return self.lock.CurentRevealStr if self.lock else ""
 
 
 class SwitchDoor(Door):
@@ -179,7 +176,53 @@ ROOMS = {
             "torch": item("torch"),
         },
         "containers": {
-            "drawers": container([]),
+            "drawers": container([
+                Book(
+                    "Founder’s Journal",
+                    """
+Entry 1 - Beginnings of a Dream
+“I have begun the construction of the mansion. The site was perfect: secluded, hidden in the shadow of the mountains, far from the prying eyes of the world. This will be my legacy—a 
+grand estate that will stand as a testament to my success. But it will be more than just a home. This place will be a sanctuary. For what, I am not yet sure, but I feel as though I 
+am building something that will outlast me. Something... greater.”
+
+Entry 7 - The Architect's Warnings
+“I’ve received strange advice from the architect. He suggests that the mansion be built not just to endure the ravages of time, but to manipulate it. He speaks of a force beyond our 
+understanding, something that could sustain us, even preserve us for eternity. I am beginning to think he knows more than he’s letting on. Is it possible? Time itself, as fluid as 
+the air we breathe, could be contained within these walls? I am intrigued... and yet, wary.”
+
+Entry 13 - Neel-thee’s Influence
+“He has arrived. Neel-thee. I do not know where he comes from, nor do I understand his true purpose, but his presence is undeniable. He claims to be an expert in the study of the 
+mind. He has offered to assist me with the mansion’s ‘true potential.’ There are whispers of immortality, of breaking free from the boundaries of time. I am not entirely convinced, 
+but he has a peculiar way about him. A quiet power, and a gaze that chills me to the core. I have agreed to allow him to stay, for now.”
+
+Entry 22 - The Pact
+“Neel-thee’s influence has grown. It is clear that he is not simply an academic. He has performed experiments in the mansion’s hidden chambers—secret rituals, something that bends 
+the very laws of nature. The walls seem to pulse with a strange energy now, an unseen force that makes me feel both powerful and fearful. We’ve come to an agreement: he will oversee 
+the mansion’s true purpose, and in return, I will give him access to its most hidden secrets. I have committed myself to this, for better or worse.”
+
+Entry 31 - A Changing Mind
+“Something is wrong. The mansion is no longer just a building. It is alive. The air is thick with a sense of dread, and the once calm halls now echo with whispers I cannot explain. 
+Neel-thee has begun to speak of ‘preserving the mansion’s essence’—his words are becoming less coherent, and his requests more bizarre. I fear he has crossed a line, one that cannot 
+be undone. I must find a way to stop him, but I am unsure of how. Perhaps... perhaps it is already too late.”
+
+Entry 38 - Neel-thee is Gone
+“Neel-thee has been gone for three days now. I do not know when he will return, but I hope he will return soon”
+
+Entry 39 - Neel-thee's Return
+“Neel-thee has returned now. He seems angry. I have not seen him since he stomped through the door. I wonder what is bothering him?”
+
+Entry 40 - The Price of Immortality
+“The pact has been sealed. Neel-thee has shown me the cost of eternal life, and I am now bound to this place. I have seen the future, and I do not like what I have seen. The mansion 
+is a prison, its walls closing in on us, its time-frozen halls trapping us in an endless loop. I will never escape. Neither will Neel-thee. And yet, he seems unperturbed. He remains 
+obsessed with his work, his experiments, his need to control everything—everything but the very thing that will consume him in the end. I wonder if I am already beyond saving. 
+Perhaps the mansion is not just a building. It is the keeper of souls.”
+
+Entry 78 - The Change
+“There is another price of immortality. Over the last 34 days I have been changing, and soon I will not be able to write in this diary anymore. This is the last thing I will put in 
+my diary. This is the last thing you will hear from Geraldo Times.”
+"""
+                )
+    ]),
         },
         "info": "You are in the hall of the house. There is a chest of %*RED*%drawers%*RESET*% against one wall, and flaming %*BLUE*%torch%*RESET*%es on the walls. You hear a \
 %*YELLOW*%smash%*RESET*% from the %*GREEN*%south%*RESET*%.",
@@ -297,6 +340,12 @@ ROOMS = {
         "directions": {
             "north": Door("Dining Room"),
             "west": Door("Kitchen"),
+        },
+        "items": {
+            "recorder": Recorder(
+                "recorder 143",
+                "The prince is out of control! Neel-thee's gone crazy! Get him to the safehouse!"
+            )
         },
         "info": "You are in a bright garden you are in a garden with a gate out of the house.",
         "map": """

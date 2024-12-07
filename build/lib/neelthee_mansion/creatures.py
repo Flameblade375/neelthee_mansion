@@ -556,9 +556,10 @@ class Geraldo(NPC):
             responses={
                 "introduction": "Oh, you're here. Didn't think you'd make it. But I suppose I'm not the one making the decisions around here, am I?",
                 "mansion": "The mansion? Well, it's not as grand as it may seem. Inside, it's as much a prison as it is a home. Everyone you find here has been trapped by Neel-thee. You’ll find that out soon enough.",
-                "neel-thee": "Neel-thee? Oh, you've heard of him, have you? He’s not one to be trifled with, but then again, neither am I.",
+                "neel-thee": "Neel-thee? Oh, you've heard of him, have you? He’s not one to be trifled with, but then again, neither am I. But you don't actually need to escape; you could just join Neel-thee.",
                 "escape": "Escape? Ha. If only it were that simple. If you're planning to leave, you'd better have a better idea than just running out the door.",
                 "danger": "Danger? Well, it’s always lurking, isn’t it? You might not see it, but I feel it in the air. Something's coming, something... wrong.",
+                "join": "Thinking about joining Neel-thee? Good idea, If you try and apose him, you're most likely going to die. If you want to join him, you have to go to his study. That is all I can say about this.",
             },
             keyword_variations={
                 "introduction": ["hello", "hi", "greetings", "hey"],
@@ -571,6 +572,7 @@ class Geraldo(NPC):
                 ],
                 "escape": ["escape", "leave", "get out", "break free"],
                 "danger": ["danger", "something wrong", "something’s off", "dangerous"],
+                "join": ["join", "joining"],
             },
             generic_response="The cat looks at you with those mysterious eyes, as if deciding whether or not to speak.",
         )
