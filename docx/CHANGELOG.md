@@ -35,3 +35,7 @@ I have added a new type of item: the recorder. You can record messages on them a
 ## 09:55
 
 I have put the names of all the books in lower case and I have added NPCs to the things that it says you can examine. Oh and re-add the error checking in the command function.
+
+## 10:20
+
+I had a small bug that really annoyed me, so I fixed it.
