@@ -126,7 +126,7 @@ get [%*BLUE*%item%*RESET*%] - Pick up an item from your current location
 search [%*RED*%container%*RESET*%] - Search a container in your current location
 use [%*BLUE*%item%*RESET*%] - Use an item from your inventory
 put [%*BLUE*%item%*RESET*%] [in] [%*RED*%container%*RESET*%] - Put an item from your inventory into a container in your current location
-examine [%*GREEN*%direction%*RESET*%/%*RED*%container%*RESET*%/%*BLUE*%item%*RESET*%] - Find out some info about the object
+examine [%*GREEN*%direction%*RESET*%/%*RED*%container%*RESET*%/%*BLUE*%item%*RESET*%/%*BROWN*%NPC%*RESET*%] - Find out some info about the object
 sleep - Rest for a bit and regain some health
 look - Look around your current location
 quit - Quit the game

@@ -562,7 +562,6 @@ class Geraldo(NPC):
                 "join": "Thinking about joining Neel-thee? Good idea, If you try and apose him, you're most likely going to die. If you want to join him, you have to go to his study. That is all I can say about this.",
             },
             keyword_variations={
-                "introduction": ["hello", "hi", "greetings", "hey"],
                 "mansion": ["mansion", "this place", "the mansion", "home", "house"],
                 "neel-thee": [
                     "neel-thee",
@@ -573,6 +572,7 @@ class Geraldo(NPC):
                 "escape": ["escape", "leave", "get out", "break free"],
                 "danger": ["danger", "something wrong", "something’s off", "dangerous"],
                 "join": ["join", "joining"],
+                "introduction": ["hello", "hi", "greetings", "hey"],
             },
             generic_response="The cat looks at you with those mysterious eyes, as if deciding whether or not to speak.",
         )

@@ -39,3 +39,7 @@ I have put the names of all the books in lower case and I have added NPCs to the
 ## 10:20
 
 I had a small bug that really annoyed me, so I fixed it.
+
+## 10:25
+
+I just did a bit of bug fixing.
