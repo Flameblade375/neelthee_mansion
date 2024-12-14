@@ -178,7 +178,7 @@ ROOMS = {
         "containers": {
             "drawers": container([
                 Book(
-                    "Founder’s Journal",
+                    "founder’s journal",
                     """
 Entry 1 - Beginnings of a Dream
 “I have begun the construction of the mansion. The site was perfect: secluded, hidden in the shadow of the mountains, far from the prying eyes of the world. This will be my legacy—a 

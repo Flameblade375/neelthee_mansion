@@ -408,7 +408,7 @@ no limits, and that curiosity was their guiding star. The library’s mysteries 
 """,
     ),
     Book(
-        "The Warning",
+        "the warning",
         """
 I’ve tried everything. The windows don’t open, the doors are all locked. If you’re reading this, you’ve made the same mistake I did. Don’t trust Neel-thee. Don’t listen to him. He 
 knows how to get inside your mind. He will not let you leave. The walls are his prison, and now they are yours too.

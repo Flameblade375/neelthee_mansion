@@ -29,3 +29,9 @@ I have added some books, like the Founder’s Journal.
 ## 12:28
 
 I have added a new type of item: the recorder. You can record messages on them and they can have messages already on them.
+
+# 14/12/2024
+
+## 09:55
+
+I have put the names of all the books in lower case and I have added NPCs to the things that it says you can examine. Oh and re-add the error checking in the command function.

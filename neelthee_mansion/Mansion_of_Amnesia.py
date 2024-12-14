@@ -749,45 +749,43 @@ def select_target(chooser, targets: list):
 
 def command():
     global player
-    # try:
-    ShouldBreak = False
+    try:
+        ShouldBreak = False
 
-    while True:
-        showStatus()
-        user_input = get_player_input(False)
+        while True:
+            showStatus()
+            user_input = get_player_input(False)
 
-        if user_input:
-            commands_list = user_input.split(",")
-            for command_str in commands_list:
-                action, targets = parse_command(command_str.strip(), commands)
+            if user_input:
+                commands_list = user_input.split(",")
+                for command_str in commands_list:
+                    action, targets = parse_command(command_str.strip(), commands)
 
-                if action in commands:
-                    if has_named_arg(commands[action], "player"):
-                        if targets:
-                            commands[action](player, *targets)
+                    if action in commands:
+                        if has_named_arg(commands[action], "player"):
+                            if targets:
+                                commands[action](player, *targets)
+                            else:
+                                commands[action](player)
+                        elif targets:
+                            commands[action](*targets)
                         else:
-                            commands[action](player)
-                    elif targets:
-                        commands[action](*targets)
+                            commands[action]()
                     else:
-                        commands[action]()
-                else:
-                    type_text(
-                        f"Unknown command '{action}'. Type 'help' for a list of commands.",
-                        colorTrue=color_coding,
-                    )
-                if action in commands:
-                    ShouldBreak = True
-        if ShouldBreak:
-            return
-
-
-# except KeyError as e:
-#    type_text(f"KeyError: {e} - This might be due to an undefined command or incorrect arguments.", colorTrue=color_coding)
-# except ValueError as e:
-#    type_text(f"ValueError: {e} - This might be due to incorrect arguments provided.", colorTrue=color_coding)
-# except Exception as e:
-#    type_text(f"Unexpected Error: {e}", colorTrue=color_coding)
+                        type_text(
+                            f"Unknown command '{action}'. Type 'help' for a list of commands.",
+                            colorTrue=color_coding,
+                        )
+                    if action in commands:
+                        ShouldBreak = True
+            if ShouldBreak:
+                return
+    except KeyError as e:
+       type_text(f"KeyError: {e} - This might be due to an undefined command or incorrect arguments.", colorTrue=color_coding)
+    except ValueError as e:
+       type_text(f"ValueError: {e} - This might be due to incorrect arguments provided.", colorTrue=color_coding)
+    except Exception as e:
+       type_text(f"Unexpected Error: {e}", colorTrue=color_coding)
 
 
 def handle_sleep_command(player: PC):
