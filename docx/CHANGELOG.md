@@ -23,3 +23,9 @@ I added a new line of dialog to Geraldo
 ## 11:57
 
 I have added some books, like the Founder’s Journal.
+
+# 07/12/2024
+
+## 12:28
+
+I have added a new type of item: the recorder. You can record messages on them and they can have messages already on them.
