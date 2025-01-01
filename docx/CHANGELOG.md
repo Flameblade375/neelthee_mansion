@@ -49,3 +49,7 @@ I just did a bit of bug fixing.
 ## 10:45
 
 I added a few things to my `.github` folder.
+
+## 10:55
+
+I changed my `publish-to-pypi.yml` file so that it should work now.
