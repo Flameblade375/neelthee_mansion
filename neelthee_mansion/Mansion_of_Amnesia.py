@@ -497,6 +497,8 @@ def Examine(*Args):
                 elif isinstance(_, Recorder):
                     type_text("This device records sound. The current message is:")
                     type_text(_.message)
+                else:
+                    type_text(_.value)
     elif Name in ROOMS[player.CURRENTROOM]["directions"]:  # Check exits in the room
         door = ROOMS[player.CURRENTROOM]["directions"][Name]
         if isinstance(door, Door):
