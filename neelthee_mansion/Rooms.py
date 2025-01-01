@@ -837,7 +837,7 @@ Oh and before I forget, If you go through the door to the north, there wil be no
                     'containers': {
                         'table': container([item("unknown map", "map", "This map is of some strange land, far away. At the top of the map, it says 'Sword Coast.'")]),
                     },
-                    'info': 'You are in a dimly lit room with a table in the middle of it, and a looming figre to your left. The figre has a name badge that says, "%*BROWN*%dungeon master%*RESET*%".',
+                    'info': 'You are in a dimly lit room with a table in the middle of it, and a looming figure to your left. The figure has a name badge that says "%*BROWN*%dungeon master%*RESET*%".',
                     'map': '''
 ████║████
 █       █
