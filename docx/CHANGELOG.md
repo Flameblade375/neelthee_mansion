@@ -43,3 +43,9 @@ I had a small bug that really annoyed me, so I fixed it.
 ## 10:25
 
 I just did a bit of bug fixing.
+
+# 01/01/2025
+
+## 10:45
+
+I added a few things to my `.github` folder.
