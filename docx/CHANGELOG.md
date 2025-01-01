@@ -53,3 +53,8 @@ I added a few things to my `.github` folder.
 ## 10:55
 
 I changed my `publish-to-pypi.yml` file so that it should work now.
+
+## 11:00
+
+I got the `publish-to-pypi.yml` file to work.
+
