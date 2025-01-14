@@ -67,3 +67,9 @@ I'm working on a DND easter egg. You can't go north from the DND room.
 I've added the description of the room and the map.
 
 I've spellchecked my description.
+
+# 14/01/2025
+
+## 10:40
+
+added more stuff to publish-to-pypi.yml.

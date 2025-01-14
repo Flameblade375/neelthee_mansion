@@ -40,3 +40,18 @@ jobs:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: twine upload dist/*
+      
+      # Step 7: Send to alexander@xandyspi.local
+      - name: send to xandyspi
+        run: |
+          $version = "3-20-20"
+          $date = Get-Date -Format "dd-MM-yyyy"
+          $directoryName = "neelthee_mansion_$version_$date"
+          $destinationDirectory = "alexander@xandsypi.local:/home/alexander/Documents/$directoryName"
+          
+          # Ensure the destination directory exists or create it
+          ssh alexander@xandsypi.local "mkdir -p /home/alexander/Documents/$directoryName"
+
+          # Run SCP to transfer files
+          scp -r C:\Users\alexa\OneDrive\code\.py\python_stuff\neelthee_mansion\* $destinationDirectory
+
