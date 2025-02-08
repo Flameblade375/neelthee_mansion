@@ -77,3 +77,9 @@ added more stuff to publish-to-pypi.yml.
 ## 10:45
 
 remove the stuff I added.
+
+# 08/02/2025
+
+## 11:50
+
+I have put the initilization inputs in a GUI

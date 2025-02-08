@@ -3,6 +3,7 @@ from .creatures import *
 from .items import *
 from .Quests import *
 from .all_game_utils import *
+import tkinter as tk
 
 
 GameState = {
@@ -1114,106 +1115,137 @@ def handle_guard_action(guard):
 def initializer():
     global color_coding, player, CHARACTERSLIST
     df = pd.DataFrame(CHARACTERSLIST)
-    Standord_Player = loop_til_valid_input(
-        "Do you want to use a premade character?", "you didn't answer Y or N.", Y_N
-    ).value
 
-    if Standord_Player:
-        while True:
-            type_text("Who do you want to play as?", colorTrue=False)
-            print(df)
-            selected_character = loop_til_valid_input(
-                "Who do you want to play as? (please select the number to the left of there stats)",
-                "That wasn't one of the characters. Please choose one.",
-                int,
-            )
-            lstIndex = last_index(CHARACTERSLIST)
-            if selected_character <= lstIndex:
-                character_info = CHARACTERSLIST[selected_character]
-                name = character_info["name"]
-                age = character_info["age"]
-                height = character_info["height"]
-                weight = character_info["weight(LBs)"]
-                break
-            else:
-                type_text(colorTrue=False)
+    # A tkinter window that asks these questions, instead of the console.Include a button that says "Exit Game". When the button is clicked, the game exits. Include a button that says "premade character". When the button is clicked, a new window opens that lets you choose one of the premade characters from teh CHARACTERSLIST var. Include a button that says "custom character". When the button is clicked, a new window opens that asks them for a name, age, hight, and waight(LBs).
+    def create_main_menu():
+        def select_character():
+            selected_index = character_listbox.curselection()
+            if selected_index:
+                selected_character = CHARACTERSLIST[selected_index[0]]
+                name_entry.delete(0, tk.END)
+                name_entry.insert(0, selected_character['name'])
+                age_entry.delete(0, tk.END)
+                age_entry.insert(0, selected_character['age'])
+                height_entry.delete(0, tk.END)
+                height_entry.insert(0, selected_character['height'])
+                weight_entry.delete(0, tk.END)
+                weight_entry.insert(0, selected_character['weight(LBs)'])
+                character_window.destroy()
 
-    else:
-        type_text(
-            "You will now have to enter a name, age, height, and weight. Please enter the height in this format: _ft _. These will be used throughout the game.",
-            colorTrue=False,
-        )
+        def show_premade_characters():
+            global character_window, character_listbox
+            character_window = tk.Toplevel(root)
+            character_window.title("Select Premade Character")
+            character_listbox = tk.Listbox(character_window, width=50)
+            for character in CHARACTERSLIST:
+                character_info = f"Name: {character['name']}, Age: {character['age']}, Height: {character['height']}, Weight: {character['weight(LBs)']} LBs"
+                character_listbox.insert(tk.END, character_info)
+            character_listbox.pack()
+            select_button = tk.Button(character_window, text="Select", command=select_character)
+            select_button.pack()
 
-        name = loop_til_valid_input(
-            "What is your name?",
-            "You didn't enter a string. Please enter a string.",
-            str,
-        )
-        age = loop_til_valid_input(
-            "What is your age (in whole years)?",
-            "You didn't enter an integer. Please enter an integer.",
-            int,
-        )
-        height = loop_til_valid_input(
-            "What is your height?",
-            "You didn't enter your height in the correct format. Please enter your height in the correct format.",
-            Height,
-        )
-        weight = loop_til_valid_input(
-            "What is your weight (in lbs)?",
-            "You didn't enter an integer. Please enter an integer.",
-            int,
-        )
+        def custom_character():
+            name_entry.delete(0, tk.END)
+            age_entry.delete(0, tk.END)
+            height_entry.delete(0, tk.END)
+            weight_entry.delete(0, tk.END)
+        
+        def choose_background():
+            background_window = tk.Toplevel(root)
+            background_window.title("Choose Background")
 
-    color_coding = loop_til_valid_input(
-        "Do you want color coding (Y/N)?", "you didn't answer Y or N.", Y_N
-    ).value
+            tk.Label(background_window, text="Select a Background for Your Character:").pack()
 
-    background_name = []
-    background_skills = []
+            background_listbox = tk.Listbox(background_window)
+            for background in BACKGROUNDS.keys():
+                background_listbox.insert(tk.END, background)
+            background_listbox.pack()
 
-    while True:
-        type_text("")  # Prints an empty line
-        type_text("0. Random")
+            def select_background():
+                selected_index = background_listbox.curselection()
+                if selected_index:
+                    background = list(BACKGROUNDS.keys())[selected_index[0]]
+                    background_skills = BACKGROUNDS[background]
+                    global player
+                    selected_character = {
+                        "name": name_entry.get(),
+                        "age": age_entry.get(),
+                        "height": height_entry.get(),
+                        "weight": weight_entry.get()
+                    }
+                    player = PC(
+                        selected_character["name"],
+                        selected_character["age"],
+                        background,
+                        1,
+                        "Solder",
+                        selected_character["height"],
+                        selected_character["weight"],
+                        Skills=background_skills,
+                        CURRENTROOM="Hall"
+                    )
+                    start_game()
 
-        # Display each background with its skills formatted correctly.
-        for idx, (background_name, background_skills) in enumerate(BACKGROUNDS.items()):
-            formatted_skills = ", ".join(background_skills)
-            type_text(f"{idx + 1}. {background_name} - {formatted_skills}")
+            select_button = tk.Button(background_window, text="Select", command=select_background)
+            select_button.pack()
 
-        # Prompt the user to pick a background by number.
-        background = loop_til_valid_input(
-            "What background do you want? (please select the number to the left of them)",
-            "You didn't pick one",
-            int,
-        )
+        def exit_game():
+            exit()
 
-        length = len(BACKGROUNDS)
-        if 1 <= background <= length:
-            # Get the background name and skills based on user choice.
-            background_name = list(BACKGROUNDS.keys())[background - 1]
-            background_skills = BACKGROUNDS[background_name]
-            break
-        elif background == 0:
-            # Randomly select a background and get its associated skills.
-            background_name = choice(list(BACKGROUNDS.keys()))
-            background_skills = BACKGROUNDS[background_name]
-            break
-        else:
-            type_text("You didn't pick one")
+        def continue_setup():
+            ask_color_coding()
+        
+        def start_game():
+            # I will add more logic for starting the game later
+            root.destroy()
 
-    # start the player in the Hall and sets up everything else
-    player = PC(
-        name,
-        age,
-        background,
-        1,
-        "Soldier",
-        height,
-        weight,
-        CURRENTROOM="Hall",
-        Skills=background_skills,
-    )
+        def ask_color_coding():
+            color_window = tk.Toplevel(root)
+            color_window.title("Color Coding")
+            tk.Label(color_window, text="Do you want color coding?").pack()
+            tk.Button(color_window, text="Yes", command=lambda: set_color_coding(True)).pack()
+            tk.Button(color_window, text="No", command=lambda: set_color_coding(False)).pack()
+
+        def set_color_coding(choice):
+            global color_coding
+            color_coding = choice
+            # Add your logic for enabling/disabling color coding here
+            choose_background()
+
+        root = tk.Tk()
+        root.title("Character Creation")
+
+        tk.Label(root, text="Name:").pack()
+        name_entry = tk.Entry(root)
+        name_entry.pack()
+
+        tk.Label(root, text="Age:").pack()
+        age_entry = tk.Entry(root)
+        age_entry.pack()
+
+        tk.Label(root, text="Height:").pack()
+        height_entry = tk.Entry(root)
+        height_entry.pack()
+
+        tk.Label(root, text="Weight (LBs):").pack()
+        weight_entry = tk.Entry(root)
+        weight_entry.pack()
+
+        premade_button = tk.Button(root, text="Premade Character", command=show_premade_characters)
+        premade_button.pack()
+
+        custom_button = tk.Button(root, text="Custom Character", command=custom_character)
+        custom_button.pack()
+
+        continue_button = tk.Button(root, text="Continue", command=continue_setup)
+        continue_button.pack()
+
+        exit_button = tk.Button(root, text="Exit Game", command=exit_game)
+        exit_button.pack()
+
+        root.mainloop()
+
+    create_main_menu()
 
 
 def main():

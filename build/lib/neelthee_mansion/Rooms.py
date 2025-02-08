@@ -648,6 +648,7 @@ You notice a "
         "directions": {
             "south": Door("Basement 3"),
             "east": Door("Basement 1"),
+            "north": Door("DND"),
         },
         "items": {
             "torch": item("torch"),
@@ -659,7 +660,7 @@ You notice a "
         "info": "You are in a dimly lit underground armoury (all the light in the room comes from 3 %*BLUE*%torch%*RESET*%es on the walls) with 2 racks full of damaged weapons,\n\
 %*RED*%rack-1%*RESET*% has damaged bows and %*RED*%rack-2%*RESET*% has damaged spears.",
         "map": """
-█████████
+██████║██
 █╦      █
 █      ╦█
 █       █
@@ -805,6 +806,65 @@ You notice a "
             'Is it just me or are the first letters of all of those book names spelling the words "He\'s watching you"',
         ],
     },
+                'DND': {
+                    'room type': 'type',
+                    'position': (0, 0, 0),
+                    'discovered': False,
+                    'directions': {
+                        'north': Door('Room name'),
+                        'south': Door("Basement Armoury"),
+                    },
+                    'creatures stats': [
+                        NPC(
+                            "dungeon master",
+                            1000,
+                            100,
+                            type=creature_type("god", "dungeon master"),
+                            responses={
+                                "introduction": "I see you’ve come to the next stage of your quest, player. But remember—your choices, even the smallest ones, will shape your fate.\
+Oh and before I forget, If you go through the door to the north, there wil be no turning back. You will ether have to join Neel-thee or fight him.",
+                                "map": "Oh, the map! That's the map of one of my favourite places! Sword Coast is an amazing place to be! I hope you can go there one day.",
+                                "you": "Me? I'm a prymodrial being from beyond the stars that can alter reality. You can call me the Dungeon Master."
+                            },
+                            keyword_variations={
+                                "introduction": ["hello", "hi ", "greetings", "hey"],
+                                "map": ["the map", "map", "sword coast", "strange map"],
+                                "you": ["you"],
+                            },
+                            generic_response="I will not answer that question at this time."
+                        ),
+                    ],
+                    'containers': {
+                        'table': container([item("unknown map", "map", "This map is of some strange land, far away. At the top of the map, it says 'Sword Coast.'")]),
+                    },
+                    'info': 'You are in a dimly lit room with a table in the middle of it, and a looming figure to your left. The figure has a name badge that says "%*BROWN*%dungeon master%*RESET*%".',
+                    'map': '''
+████║████
+█       █
+█       █
+█  ┬┬┬  █
+█  ┬┬┬  █
+█  ┬┬┬  █
+█       █
+█       █
+██████║██''',
+                    'random_events': [
+                        RandomEvent(
+                            name='rumble',
+                            probability=0.4,  # Adjust this for the probability of the event running (e.g., 0.1 is 10% chance)
+                            condition=lambda player: True,  # Condition under which the event can occur
+                            effect=lambda player: type_text("You hear a strange rumbling sound."),  # Define the effect of the event
+                        )
+                    ],
+                    'random_events': [
+                        RandomEvent(
+                            name='fire',
+                            probability=0.3,  # Adjust this for the probability of the event running (e.g., 0.1 is 10% chance)
+                            condition=lambda player: True,  # Condition under which the event can occur
+                            effect=lambda player: type_text("Fire comes gushing out of a crack in the roof and into the wall."),  # Define the effect of the event
+                        )
+                    ],
+                    },
     "Cavern 1": {
         "room type": "cavern",
         "position": (-2, 0, 0),
