@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="neelthee_mansion",
-    version="3.21.0",  # Update version number for each release
+    version="3.22.10",  # Update version number for each release
     packages=find_packages(),  # Automatically finds all packages and modules
     install_requires=[
         "wheel",

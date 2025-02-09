@@ -18,6 +18,9 @@ Neel-thee's Mansion of Amnesia
 
 global player, evil_mage, commands, NOTE_NUM, credits, color_coding, quest_manager, revealer, CHARACTERSLIST, BACKGROUNDS
 
+player_info_root = None
+player_info_label = None
+
 BACKGROUNDS = {
     "Adventurer": ["survival", "climbing"],
     "Artist": ["painting", "sculpting"],
@@ -399,17 +402,46 @@ def start():
     showInstructions()
 
 
+def get_inventory_text():
+    the_inventory = [
+        itemnum.name for itemnum in player.inventory if isinstance(itemnum, item)
+    ]
+    return f'\nInventory: {", ".join(the_inventory)}; Money: {player.money}; XP: {player.xp}; Level: {player.Level}'
+
+def show_player_info():
+    global player_info_root, player_info_label
+    player_info_root = tk.Tk()
+    player_info_root.title("Player Info")
+    
+    info_text = get_inventory_text()
+    player_info_label = tk.Label(player_info_root, text=info_text)
+    player_info_label.pack()
+
+    update_button = tk.Button(player_info_root, text="Update Info", command=update_player_info)
+    update_button.pack()
+
+    player_info_root.mainloop()
+
+def update_player_info():
+    global player_info_root, player_info_label
+    if player_info_root and player_info_label:
+        info_text = get_inventory_text()
+        player_info_root.after(0, lambda: player_info_label.config(text=info_text))
+
+def start_tkinter_thread():
+    thread = threading.Thread(target=show_player_info)
+    thread.daemon = True
+    thread.start()
+
+
 def showStatus():
     global player
 
     # Display player's current status
     text = f"\n---------------------------"
 
-    # Display the current inventory
-    the_inventory = [
-        itemnum.name for itemnum in player.inventory if isinstance(itemnum, item)
-    ]
-    text += f'\nInventory: %*BLUE*%{", ".join(the_inventory)}%*RESET*%; Money: {player.money}; XP: {player.xp}; Level: {player.Level}'
+    # Display the current stats
+    update_player_info()
 
     # Display possible directions of travel
     text = display_directions(text)
@@ -751,8 +783,8 @@ def select_target(chooser, targets: list):
 
 
 def command():
-    global player
-    try:
+        global player
+    #try:
         ShouldBreak = False
 
         while True:
@@ -783,12 +815,12 @@ def command():
                         ShouldBreak = True
             if ShouldBreak:
                 return
-    except KeyError as e:
-       type_text(f"KeyError: {e} - This might be due to an undefined command or incorrect arguments.", colorTrue=color_coding)
-    except ValueError as e:
-       type_text(f"ValueError: {e} - This might be due to incorrect arguments provided.", colorTrue=color_coding)
-    except Exception as e:
-       type_text(f"Unexpected Error: {e}", colorTrue=color_coding)
+    #except KeyError as e:
+    #   type_text(f"KeyError: {e} - This might be due to an undefined command or incorrect arguments.", colorTrue=color_coding)
+    #except ValueError as e:
+    #   type_text(f"ValueError: {e} - This might be due to incorrect arguments provided.", colorTrue=color_coding)
+    #except Exception as e:
+    #   type_text(f"Unexpected Error: {e}", colorTrue=color_coding)
 
 
 def handle_sleep_command(player: PC):
@@ -1162,11 +1194,11 @@ def initializer():
             background_listbox.pack()
 
             def select_background():
+                global player
                 selected_index = background_listbox.curselection()
                 if selected_index:
                     background = list(BACKGROUNDS.keys())[selected_index[0]]
                     background_skills = BACKGROUNDS[background]
-                    global player
                     selected_character = {
                         "name": name_entry.get(),
                         "age": age_entry.get(),
@@ -1181,7 +1213,8 @@ def initializer():
                         "Solder",
                         selected_character["height"],
                         selected_character["weight"],
-                        Skills=background_skills
+                        Skills=background_skills,
+                        CURRENTROOM="Hall"
                     )
                     start_game()
 
@@ -1246,107 +1279,6 @@ def initializer():
 
     create_main_menu()
 
-    #Standord_Player = loop_til_valid_input(
-    #    "Do you want to use a premade character?", "you didn't answer Y or N.", Y_N
-    #).value
-
-    #if Standord_Player:
-    #    while True:
-    #        type_text("Who do you want to play as?", colorTrue=False)
-    #        print(df)
-    #        selected_character = loop_til_valid_input(
-    #            "Who do you want to play as? (please select the number to the left of there stats)",
-    #            "That wasn't one of the characters. Please choose one.",
-    #            int,
-    #        )
-    #        lstIndex = last_index(CHARACTERSLIST)
-    #        if selected_character <= lstIndex:
-    #            character_info = CHARACTERSLIST[selected_character]
-    #            name = character_info["name"]
-    #            age = character_info["age"]
-    #            height = character_info["height"]
-    #            weight = character_info["weight(LBs)"]
-    #            break
-    #        else:
-    #            type_text(colorTrue=False)
-
-    #else:
-    #    type_text(
-    #        "You will now have to enter a name, age, height, and weight. Please enter the height in this format: _ft _. These will be used throughout the game.",
-    #        colorTrue=False,
-    #    )
-
-    #    name = loop_til_valid_input(
-    #        "What is your name?",
-    #        "You didn't enter a string. Please enter a string.",
-    #        str,
-    #    )
-    #    age = loop_til_valid_input(
-    #        "What is your age (in whole years)?",
-    #        "You didn't enter an integer. Please enter an integer.",
-    #        int,
-    #    )
-    #    height = loop_til_valid_input(
-    #        "What is your height?",
-    #        "You didn't enter your height in the correct format. Please enter your height in the correct format.",
-    #        Height,
-    #    )
-    #    weight = loop_til_valid_input(
-    #        "What is your weight (in lbs)?",
-    #        "You didn't enter an integer. Please enter an integer.",
-    #        int,
-    #    )
-
-    #color_coding = loop_til_valid_input(
-    #    "Do you want color coding (Y/N)?", "you didn't answer Y or N.", Y_N
-    #).value
-
-    #background_name = []
-    #background_skills = []
-
-    #while True:
-    #    type_text("")  # Prints an empty line
-    #    type_text("0. Random")
-
-    #    # Display each background with its skills formatted correctly.
-    #    for idx, (background_name, background_skills) in enumerate(BACKGROUNDS.items()):
-    #        formatted_skills = ", ".join(background_skills)
-    #        type_text(f"{idx + 1}. {background_name} - {formatted_skills}")
-
-    #    # Prompt the user to pick a background by number.
-    #    background = loop_til_valid_input(
-    #        "What background do you want? (please select the number to the left of them)",
-    #        "You didn't pick one",
-    #        int,
-    #    )
-
-    #    length = len(BACKGROUNDS)
-    #    if 1 <= background <= length:
-    #        # Get the background name and skills based on user choice.
-    #        background_name = list(BACKGROUNDS.keys())[background - 1]
-    #        background_skills = BACKGROUNDS[background_name]
-    #        break
-    #    elif background == 0:
-    #        # Randomly select a background and get its associated skills.
-    #        background_name = choice(list(BACKGROUNDS.keys()))
-    #        background_skills = BACKGROUNDS[background_name]
-    #        break
-    #    else:
-    #        type_text("You didn't pick one")
-
-    ## start the player in the Hall and sets up everything else
-    #player = PC(
-    #    name,
-    #    age,
-    #    background,
-    #    1,
-    #    "Soldier",
-    #    height,
-    #    weight,
-    #    CURRENTROOM="Hall",
-    #    Skills=background_skills,
-    #)
-
 
 def main():
     global player, color_coding
@@ -1356,6 +1288,9 @@ def main():
 
     # shows the instructions
     start()
+
+    # starts the tkinter thread that shows the player's stats
+    start_tkinter_thread()
 
     # loop forever while the player wants to play
     while True:

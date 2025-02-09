@@ -83,3 +83,10 @@ remove the stuff I added.
 ## 11:50
 
 I have put the initilization inputs in a GUI
+
+# 09/02/2025
+
+## 09:45
+
+I have put the player's stats in a seperat window
+

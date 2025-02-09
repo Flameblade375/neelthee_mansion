@@ -18,6 +18,9 @@ Neel-thee's Mansion of Amnesia
 
 global player, evil_mage, commands, NOTE_NUM, credits, color_coding, quest_manager, revealer, CHARACTERSLIST, BACKGROUNDS
 
+player_info_root = None
+player_info_label = None
+
 BACKGROUNDS = {
     "Adventurer": ["survival", "climbing"],
     "Artist": ["painting", "sculpting"],
@@ -399,17 +402,45 @@ def start():
     showInstructions()
 
 
+def get_inventory_text():
+    the_inventory = [
+        itemnum.name for itemnum in player.inventory if isinstance(itemnum, item)
+    ]
+    return f'\nInventory: {", ".join(the_inventory)}; Money: {player.money}; XP: {player.xp}; Level: {player.Level}'
+
+def show_player_info():
+    global player_info_root, player_info_label
+    player_info_root = tk.Tk()
+    player_info_root.title("Player Info")
+    
+    info_text = get_inventory_text()
+    player_info_label = tk.Label(player_info_root, text=info_text)
+    player_info_label.pack()
+
+    update_button = tk.Button(player_info_root, text="Update Info", command=update_player_info)
+    update_button.pack()
+
+    player_info_root.mainloop()
+
+def update_player_info():
+    global player_info_root, player_info_label
+    if player_info_root and player_info_label:
+        info_text = get_inventory_text()
+        player_info_root.after(0, lambda: player_info_label.config(text=info_text))
+
+def start_tkinter_thread():
+    player_info_thread = threading.Thread(target=show_player_info)
+    player_info_thread.daemon = True
+    player_info_thread.start()
+
 def showStatus():
     global player
 
     # Display player's current status
     text = f"\n---------------------------"
 
-    # Display the current inventory
-    the_inventory = [
-        itemnum.name for itemnum in player.inventory if isinstance(itemnum, item)
-    ]
-    text += f'\nInventory: %*BLUE*%{", ".join(the_inventory)}%*RESET*%; Money: {player.money}; XP: {player.xp}; Level: {player.Level}'
+    # Display the current stats
+    update_player_info()
 
     # Display possible directions of travel
     text = display_directions(text)
@@ -751,8 +782,8 @@ def select_target(chooser, targets: list):
 
 
 def command():
-    global player
-    try:
+        global player
+    #try:
         ShouldBreak = False
 
         while True:
@@ -783,12 +814,12 @@ def command():
                         ShouldBreak = True
             if ShouldBreak:
                 return
-    except KeyError as e:
-       type_text(f"KeyError: {e} - This might be due to an undefined command or incorrect arguments.", colorTrue=color_coding)
-    except ValueError as e:
-       type_text(f"ValueError: {e} - This might be due to incorrect arguments provided.", colorTrue=color_coding)
-    except Exception as e:
-       type_text(f"Unexpected Error: {e}", colorTrue=color_coding)
+    #except KeyError as e:
+    #   type_text(f"KeyError: {e} - This might be due to an undefined command or incorrect arguments.", colorTrue=color_coding)
+    #except ValueError as e:
+    #   type_text(f"ValueError: {e} - This might be due to incorrect arguments provided.", colorTrue=color_coding)
+    #except Exception as e:
+    #   type_text(f"Unexpected Error: {e}", colorTrue=color_coding)
 
 
 def handle_sleep_command(player: PC):
@@ -1162,11 +1193,11 @@ def initializer():
             background_listbox.pack()
 
             def select_background():
+                global player
                 selected_index = background_listbox.curselection()
                 if selected_index:
                     background = list(BACKGROUNDS.keys())[selected_index[0]]
                     background_skills = BACKGROUNDS[background]
-                    global player
                     selected_character = {
                         "name": name_entry.get(),
                         "age": age_entry.get(),
@@ -1256,6 +1287,9 @@ def main():
 
     # shows the instructions
     start()
+
+    # starts the tkinter thread that shows the player's stats
+    start_tkinter_thread()
 
     # loop forever while the player wants to play
     while True:
