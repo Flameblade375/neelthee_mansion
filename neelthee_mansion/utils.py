@@ -14,6 +14,8 @@ try:
 
     # Importing the whole module
     import pickle as pk
+    import tkinter as tk
+    from tkinter import scrolledtext
     import inspect
     import threading
     import json
@@ -43,6 +45,21 @@ identifiers, and formatting dates.
 
 These utilities aim to simplify development processes, promote code reuse, and improve the efficiency of Python applications.
 """
+
+
+def debug(text: str):
+    print(f"DEBUG: {text}")
+
+
+# a function that adds text to a text box and scrolls to the bottom and updates it
+def add_text_to_textbox(text_area: scrolledtext.ScrolledText, text, newline=True):
+    # Enable the text box to insert text
+    text_area.config(state=tk.NORMAL)
+    text_area.insert(tk.END, text + ("\n" if newline else ""))
+    text_area.see(tk.END)
+    text_area.update_idletasks()
+    # Set the text box back to read-only
+    text_area.config(state=tk.DISABLED)
 
 
 def perform_action_on_matches(input_list, target, action):

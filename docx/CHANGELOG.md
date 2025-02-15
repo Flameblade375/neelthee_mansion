@@ -90,3 +90,14 @@ I have put the initilization inputs in a GUI
 
 I have put the player's stats in a seperat window
 
+# 15/02/2025
+
+## 11:35
+
+I've done a lot in this update. I've:
+ - made the map in it's own GUI
+ - put the output info in a GUI
+ - removed colour coding
+ - fixed some bugs
+ - and some more stuff
+

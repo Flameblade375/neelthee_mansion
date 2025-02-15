@@ -92,8 +92,8 @@ def SetMapsAndPosiitionsDicts(map_dict, positions):
 
     positions = {}
     for RoomName, RoomItem in ROOMS.items():
-        if "discovered" in RoomItem and "position" in RoomItem and "map" in RoomItem:
-            if RoomItem["discovered"]:
+        if "descovered" in RoomItem and "position" in RoomItem and "map" in RoomItem:
+            if RoomItem["descovered"]:
                 map_dict[RoomName] = string_to_2d_list(RoomItem["map"])
                 positions[RoomName] = RoomItem["position"]
     return map_dict, positions
@@ -164,7 +164,7 @@ ROOMS = {
     "Hall": {
         "room type": "house",
         "position": (0, 8, 0),
-        "discovered": True,
+        "descovered": True,
         "directions": {
             "south": Door("Kitchen"),
             "east": Door("Dining Room"),
@@ -218,14 +218,13 @@ obsessed with his work, his experiments, his need to control everything—everyt
 Perhaps the mansion is not just a building. It is the keeper of souls.”
 
 Entry 78 - The Change
-“There is another price of immortality. Over the last 34 days I have been changing, and soon I will not be able to write in this diary anymore. This is the last thing I will put in 
-my diary. This is the last thing you will hear from Geraldo Times.”
+“There is another price of immortality. Over the last 34 days I have been changing, and soon I will not be able to write in this diary anymore. This is the last thing I will put in my diary. This is the last thing you will hear from Geraldo Times.”
 """
                 )
     ]),
         },
-        "info": "You are in the hall of the house. There is a chest of %*RED*%drawers%*RESET*% against one wall, and flaming %*BLUE*%torch%*RESET*%es on the walls. You hear a \
-%*YELLOW*%smash%*RESET*% from the %*GREEN*%south%*RESET*%.",
+        "info": "You are in the hall of the house. There is a chest of drawers against one wall, and flaming torches on the walls. You hear a \
+smash from the south.",
         "map": """
 ████║████
 █☼☼     █
@@ -237,11 +236,11 @@ my diary. This is the last thing you will hear from Geraldo Times.”
 █╖      █
 ████║████""",
         "Hints": [
-            "Those %*RED*%drawers%*RESET*% look intresting.",
-            "I wonder if those %*RED*%drawers%*RESET*% are locked.",
-            "I wonder if I can get this %*BLUE*%torch%*RESET*% out of it's holder.",
-            "I wonder what that %*YELLOW*%smash%*RESET*% from the %*GREEN*%south%*RESET*% was.",
-            "I should probably aviod that %*YELLOW*%smash%*RESET*%ing sound.",
+            "Those drawers look intresting.",
+            "I wonder if those drawers are locked.",
+            "I wonder if I can get this torch out of it's holder.",
+            "I wonder what that smash from the south was.",
+            "I should probably aviod that smashing sound.",
         ],
     },
     "Cavegame": {
@@ -254,7 +253,7 @@ my diary. This is the last thing you will hear from Geraldo Times.”
     "Kitchen": {
         "room type": "house",
         "position": (0, 16, 0),
-        "discovered": False,
+        "descovered": False,
         "directions": {
             "north": Door("Hall"),
             "east": Door("Garden"),
@@ -272,10 +271,10 @@ my diary. This is the last thing you will hear from Geraldo Times.”
                 5,
                 [item("claw", "valuable", 1)],
                 "A large 7ft 8 brown bear that looks hungry",
-                "A %*CYAN*%hungry%*RESET*% bear attacks you!",
+                "A hungry bear attacks you!",
             ),
         ],
-        "info": "You are in the kitchen, there are several trashed %*RED*%cupboards%*RESET*%, one of them has a knotted cord sticking out, and a fireplace.",
+        "info": "You are in the kitchen, there are several trashed cupboards, one of them has a knotted cord sticking out, and a fireplace.",
         "map": """
 ████║████
 █       █
@@ -287,12 +286,12 @@ my diary. This is the last thing you will hear from Geraldo Times.”
 █ææææ√ææ█
 █████████""",
         "Hints": [
-            "I wonder if there is anything salvageable in the %*RED*%cupboards%*RESET*%.",
+            "I wonder if there is anything salvageable in the cupboards.",
             "I should probably look around.",
         ],
         "random_events": [
             RandomEvent(
-                name="Event name",
+                name="Empty cupboards",
                 probability=0.15,  # Adjust this for the probability of the event running (e.g., 0.1 is 10% chance)
                 condition=lambda player: True,  # Condition under which the event can occur
                 effect=lambda player: ROOMS["Kitchen"]["containers"][
@@ -304,7 +303,7 @@ my diary. This is the last thing you will hear from Geraldo Times.”
     "Dining Room": {
         "room type": "house",
         "position": (0, 8, 8),
-        "discovered": False,
+        "descovered": False,
         "directions": {
             "west": Door("Hall"),
             "south": Door("Garden"),
@@ -316,8 +315,8 @@ my diary. This is the last thing you will hear from Geraldo Times.”
         "containers": {
             "chandelier": container([item("gem", "valuable", 50)]),
         },
-        "info": "You are in the dining room, there is a dining table with 8 chairs around it in the middle of the room, and a %*RED*%chandelier%*RESET*% on the ceiling. You hear \
-%*YELLOW*%ripping%*RESET*% from the %*GREEN*%north%*RESET*%.",
+        "info": "You are in the dining room, there is a dining table with 8 chairs around it in the middle of the room, and a chandelier on the ceiling. You hear \
+ripping from the north.",
         "map": """
 ████║████
 █       █
@@ -329,14 +328,14 @@ my diary. This is the last thing you will hear from Geraldo Times.”
 █       █
 ████║████""",
         "Hints": [
-            "I wonder if there is anything in the %*RED*%chandelier.",
+            "I wonder if there is anything in the chandelier.",
             "I wonder if there is anything around the room.",
         ],
     },
     "Garden": {
         "room type": "house",
         "position": (0, 16, 8),
-        "discovered": False,
+        "descovered": False,
         "directions": {
             "north": Door("Dining Room"),
             "west": Door("Kitchen"),
@@ -359,13 +358,13 @@ my diary. This is the last thing you will hear from Geraldo Times.”
 █       í
 █íííííííí""",
         "Hints": [
-            "I think I need a %*BLUE*%key%*RESET*% for the gate.",
+            "I think I need a key for the gate.",
         ],
     },
     "Armoury": {
         "room type": "house",
         "position": (0, 0, 0),
-        "discovered": False,
+        "descovered": False,
         "directions": {
             "south": Door("Hall"),
             "east": Door("Sitting Room"),
@@ -376,9 +375,9 @@ my diary. This is the last thing you will hear from Geraldo Times.”
             "stand": container([item("armour")]),
             "storage": container([item("grappling-hook")]),
         },
-        "info": "You are in a dimly lit armoury with 3 %*RED*%racks%*RESET*% full of damaged weapons, and a armour %*RED*%stand%*RESET*% with battered armour. \n\
+        "info": "You are in a dimly lit armoury with 3 racks full of damaged weapons, and a armour stand with battered armour. \n\
 You notice a "
-        "%*RED*%storage%*RESET*% device in one corner. You hear a %*YELLOW*%ripping%*RESET*% from the %*GREEN*%east%*RESET*%.",
+        "storage device in one corner. You hear a ripping from the east.",
         "map": """
 █████████
 █š     ╖█
@@ -390,14 +389,14 @@ You notice a "
 █       █
 ████║████""",
         "Hints": [
-            "Maybe there is something salvageable on the %*RED*%racks%*RESET*%.",
+            "Maybe there is something salvageable on the racks.",
             "I wonder if that armour is salvageable.",
         ],
     },
     "Sitting Room": {
         "room type": "house",
         "position": (0, 0, 8),
-        "discovered": False,
+        "descovered": False,
         "directions": {
             "west": Door("Armoury"),
             "south": Door("Dining Room"),
@@ -410,13 +409,13 @@ You notice a "
                 4,
                 [item("savaged cushion")],
                 "A oxford sandy & black pig with a savaged cushion on it's head",
-                "A %*CYAN*%grumpy pig%*RESET*% spots you and comes towards you!",
+                "A grumpy pig spots you and comes towards you!",
             ),
         ],
         "containers": {
             "sofas": container([item("cushion")]),
         },
-        "info": "You are in a bright sitting room with several %*RED*%sofas%*RESET*%.",
+        "info": "You are in a bright sitting room with several sofas.",
         "map": """
 █████████
 █      ╖█
@@ -428,15 +427,15 @@ You notice a "
 █       █
 ████║████""",
         "Hints": [
-            "That %*CYAN*%pig%*RESET*% seems dangerous.",
-            "Those %*RED*%sofas%*RESET*% look comfy.",
-            "I wonder what's %*GREEN*%down%*RESET*% those stairs.",
+            "That pig seems dangerous.",
+            "Those sofas look comfy.",
+            "I wonder what's down those stairs.",
         ],
     },
     "Landing": {
         "room type": "house",
         "position": (1, 8, 0),
-        "discovered": False,
+        "descovered": False,
         "directions": {
             "down": Door("Hall"),
             "north": Door("Tower Bottom"),
@@ -446,7 +445,7 @@ You notice a "
         "containers": {
             "floorboards": container([item("money-pouch", "valuable", 10)]),
         },
-        "info": "You are in a dark landing with creaky %*RED*%floorboards%*RESET*%.",
+        "info": "You are in a dark landing with creaky floorboards.",
         "map": """
 ████║████
 █       █
@@ -457,12 +456,12 @@ You notice a "
 █╖      █
 █╖      █
 ████║████""",
-        "Hints": ["I wonder if I can pry one of the %*RED*%floorboards%*RESET*% back."],
+        "Hints": ["I wonder if I can pry one of the floorboards back."],
     },
     "Bedroom": {
         "room type": "house",
         "position": (1, 8, 8),
-        "discovered": False,
+        "descovered": False,
         "directions": {
             "west": Door("Landing"),
             "north": Door("Office"),
@@ -472,7 +471,7 @@ You notice a "
             "drawers": container([item("waterskin")]),
             "wardrobe": container([item("pig-rod")]),
         },
-        "info": "You are in a dark yet airy bedroom, with a double %*RED*%bed%*RESET*%, a chest of %*RED*%drawers%*RESET*%, and a %*RED*%wardrobe%*RESET*%.",
+        "info": "You are in a dark yet airy bedroom, with a double bed, a chest of drawers, and a wardrobe.",
         "map": """
 ████║████
 █       █
@@ -484,16 +483,16 @@ You notice a "
 █╬  ☼☼§§█
 █████████""",
         "Hints": [
-            "I wonder what's %*GREEN*%north%*RESET*%.",
-            "I wonder if there is anything under the %*RED*%bed%*RESET*%.",
-            "I wonder if there is anything in the %*RED*%drawers%*RESET*%.",
-            "I wonder what's in the %*RED*%wardrobe%*RESET*%.",
+            "I wonder what's north.",
+            "I wonder if there is anything under the bed.",
+            "I wonder if there is anything in the drawers.",
+            "I wonder what's in the wardrobe.",
         ],
     },
     "Office": {
         "room type": "house",
         "position": (1, 0, 8),
-        "discovered": False,
+        "descovered": False,
         "directions": {
             "south": Door("Bedroom"),
             "west": Door("Tower Bottom"),
@@ -509,7 +508,7 @@ You notice a "
             ),
             "desk": container([item("quill")]),
         },
-        "info": "You are in a bright office with a %*RED*%desk%*RESET*%, several %*RED*%storage%*RESET*% devices, and a lot of windows.",
+        "info": "You are in a bright office with a desk, several storage devices, and a lot of windows.",
         "map": """
 █████████
 █ š    š█
@@ -521,15 +520,15 @@ You notice a "
 █       █
 ████║████""",
         "Hints": [
-            "I wonder what's in the %*RED*%storage%*RESET*%, if anything.",
-            "I wonder what's through the %*GREEN*%south%*RESET*%ern door.",
-            "I wonder if there is anything on the %*RED*%desk%*RESET*%.",
+            "I wonder what's in the storage, if anything.",
+            "I wonder what's through the southern door.",
+            "I wonder if there is anything on the desk.",
         ],
     },
     "Balcony": {
         "room type": "house",
         "position": (1, 16, 0),
-        "discovered": False,
+        "descovered": False,
         "directions": {
             "north": Door("Landing"),
         },
@@ -545,13 +544,13 @@ You notice a "
 ∟       ∟
 ∟∟∟∟∟∟∟∟∟""",
         "Hints": [
-            "If I had a %*BLUE*%grappling-hook%*RESET*% I might be able to throw it into the trees and swing down into the forest.",
+            "If I had a grappling-hook I might be able to throw it into the trees and swing down into the forest.",
         ],
     },
     "Tower Bottom": {
         "room type": "house",
         "position": (1, 0, 0),
-        "discovered": False,
+        "descovered": False,
         "directions": {
             "south": Door("Landing"),
             "east": Door("Office"),
@@ -570,16 +569,16 @@ You notice a "
 █╖      █
 ████║████""",
         "Hints": [
-            "I wonder what's %*GREEN*%south%*RESET*%.",
-            "I wonder what's %*GREEN*%east%*RESET*%.",
-            "I wonder what's %*GREEN*%up%*RESET*%.",
-            "I wonder what's %*GREEN*%down%*RESET*%.",
+            "I wonder what's south.",
+            "I wonder what's east.",
+            "I wonder what's up.",
+            "I wonder what's down.",
         ],
     },
     "Tower Middle": {
         "room type": "house",
         "position": (2, 0, 0),
-        "discovered": False,
+        "descovered": False,
         "directions": {
             "down": Door("Tower Bottom"),
             "up": Door("Tower Top"),
@@ -610,7 +609,7 @@ You notice a "
     "Tower Top": {
         "room type": "house",
         "position": (3, 0, 0),
-        "discovered": False,
+        "descovered": False,
         "directions": {
             "down": Door("Tower Middle"),
             "teleport": Door("Teleportation Deck"),
@@ -622,7 +621,7 @@ You notice a "
                 7,
                 [item("knife", "weapon", 2), item("money-pouch", "valuable", 5)],
                 "A 4ft 7 dirty and greedy goblin",
-                "A %*CYAN*%greedy goblin%*RESET*% spots you and your money pouch!",
+                "A greedy goblin spots you and your money pouch!",
                 creature_type("humanoid", "goblin"),
             ),
         ],
@@ -638,13 +637,13 @@ You notice a "
 █       █
 █████████""",
         "Hints": [
-            "I could %*GREEN*%teleport%*RESET*%.",
+            "I could teleport.",
         ],
     },
     "Basement Armoury": {
         "room type": "house",
         "position": (-1, 0, 0),
-        "discovered": False,
+        "descovered": False,
         "directions": {
             "south": Door("Basement 3"),
             "east": Door("Basement 1"),
@@ -657,8 +656,8 @@ You notice a "
             "rack-1": container([item("bow", "weapon", 4)]),
             "rack-2": container([item("spear", "weapon", 3)]),
         },
-        "info": "You are in a dimly lit underground armoury (all the light in the room comes from 3 %*BLUE*%torch%*RESET*%es on the walls) with 2 racks full of damaged weapons,\n\
-%*RED*%rack-1%*RESET*% has damaged bows and %*RED*%rack-2%*RESET*% has damaged spears.",
+        "info": "You are in a dimly lit underground armoury (all the light in the room comes from 3 torches on the walls) with 2 racks full of damaged weapons,\n\
+rack-1 has damaged bows and rack-2 has damaged spears.",
         "map": """
 ██████║██
 █╦      █
@@ -670,14 +669,14 @@ You notice a "
 █       █
 ████║████""",
         "Hints": [
-            "The things in %*RED*%rack-1%*RESET*% and %*RED*%rack-2%*RESET*% are salvigable.",
-            "I wonder if I can get this %*BLUE*%torch%*RESET*% out of it's holder.",
+            "The things in rack-1 and rack-2 are salvigable.",
+            "I wonder if I can get this torch out of it's holder.",
         ],
     },
     "Basement 1": {
         "room type": "house",
         "position": (-1, 0, 8),
-        "discovered": False,
+        "descovered": False,
         "directions": {
             "south": Door("Basement 2"),
             "west": Door("Basement Armoury"),
@@ -686,8 +685,8 @@ You notice a "
         "items": {
             "torch": item("torch"),
         },
-        "info": "You are in an dimly lit underground (all the light in the room comes from 3 %*BLUE*%torch%*RESET*%es on the walls). You hear a %*YELLOW*%ripping%*RESET*% from the\
- stairs going %*GREEN*%up%*RESET*%.",
+        "info": "You are in an dimly lit underground (all the light in the room comes from 3 torches on the walls). You hear a ripping from the\
+ stairs going up.",
         "map": """
 █████████
 █      ╖█
@@ -699,13 +698,13 @@ You notice a "
 █       █
 ████║████""",
         "Hints": [
-            "I wonder if I can get this %*BLUE*%torch%*RESET*% out of it's holder.",
+            "I wonder if I can get this torch out of it's holder.",
         ],
     },
     "Basement 2": {
         "room type": "house",
         "position": (-1, 8, 8),
-        "discovered": False,
+        "descovered": False,
         "directions": {
             "north": Door("Basement 1"),
             "west": Door("Basement 3"),
@@ -713,7 +712,7 @@ You notice a "
         "items": {
             "torch": item("torch"),
         },
-        "info": "You are in an dimly lit underground (all the light in the room comes from 3 %*BLUE*%torch%*RESET*%es on the walls).",
+        "info": "You are in an dimly lit underground (all the light in the room comes from 3 torches on the walls).",
         "map": """
 ████║████
 █       █
@@ -725,13 +724,13 @@ You notice a "
 █       █
 █████████""",
         "Hints": [
-            "I wonder if I can get this %*BLUE*%torch%*RESET*% out of it's holder.",
+            "I wonder if I can get this torch out of it's holder.",
         ],
     },
     "Basement 3": {
         "room type": "house",
         "position": (-1, 8, 0),
-        "discovered": False,
+        "descovered": False,
         "directions": {
             "south": Door("Basement 4"),
             "east": Door("Basement 2"),
@@ -740,7 +739,7 @@ You notice a "
         "items": {
             "torch": item("torch"),
         },
-        "info": "You are in an dimly lit underground (all the light in the room comes from 3 %*BLUE*%torch%*RESET*%es on the walls).",
+        "info": "You are in an dimly lit underground (all the light in the room comes from 3 torches on the walls).",
         "map": """
 ████║████
 █       █
@@ -755,7 +754,7 @@ You notice a "
     "Basement 4": {
         "room type": "house",
         "position": (-1, 16, 0),
-        "discovered": False,
+        "descovered": False,
         "directions": {
             "north": Door("Basement 3"),
             "east": Door("Library"),
@@ -764,7 +763,7 @@ You notice a "
         "items": {
             "torch": item("torch"),
         },
-        "info": "You are in an dimly lit underground (all the light in the room comes from 3 %*BLUE*%torch%*RESET*%es on the walls). there is a choot in the floor (type: 'go shoot' to go down the shoot).",
+        "info": "You are in an dimly lit underground (all the light in the room comes from 3 torches on the walls). there is a choot in the floor (type: 'go shoot' to go down the shoot).",
         "map": """
 ████║████
 █       █
@@ -776,13 +775,13 @@ You notice a "
 █       █
 █████████""",
         "Hints": [
-            "I wonder if I can get this %*BLUE*%torch%*RESET*% out of it's holder.",
+            "I wonder if I can get this torch out of it's holder.",
         ],
     },
     "Library": {
         "room type": "house",
         "position": (-1, 16, 8),
-        "discovered": False,
+        "descovered": False,
         "directions": {
             "west": Door("Room name"),
             "bookcase": Door("Cavern 3"),
@@ -791,7 +790,7 @@ You notice a "
         "containers": {
             "bookcases": container(sample(books, 3)),
         },
-        "info": "Towering %*RED*%bookcases%*RESET*% filled with odd, mismatched books line the walls. A cat named %*BROWN*%geraldo times%*RESET*%. Some have faded titles, others are blank, arranged almost deliberately. One bookcase stands slightly forward, leaving a faint scrape on the floor. The air is still, as if waiting for you to notice.",
+        "info": "Towering bookcases filled with odd, mismatched books line the walls. A cat named geraldo times. Some have faded titles, others are blank, arranged almost deliberately. One bookcase stands slightly forward, leaving a faint scrape on the floor. The air is still, as if waiting for you to notice.",
         "map": """
 █████████
 █       █
@@ -808,8 +807,8 @@ You notice a "
     },
                 'DND': {
                     'room type': 'type',
-                    'position': (0, 0, 0),
-                    'discovered': False,
+                    'position': (-1, -8, 0),
+                    'descovered': False,
                     'directions': {
                         'north': Door('Room name'),
                         'south': Door("Basement Armoury"),
@@ -837,7 +836,7 @@ Oh and before I forget, If you go through the door to the north, there wil be no
                     'containers': {
                         'table': container([item("unknown map", "map", "This map is of some strange land, far away. At the top of the map, it says 'Sword Coast.'")]),
                     },
-                    'info': 'You are in a dimly lit room with a table in the middle of it, and a looming figure to your left. The figure has a name badge that says "%*BROWN*%dungeon master%*RESET*%".',
+                    'info': 'You are in a dimly lit room with a table in the middle of it, and a looming figure to your left. The figure has a name badge that says "dungeon master".',
                     'map': '''
 ████║████
 █       █
@@ -868,7 +867,7 @@ Oh and before I forget, If you go through the door to the north, there wil be no
     "Cavern 1": {
         "room type": "cavern",
         "position": (-2, 0, 0),
-        "discovered": False,
+        "descovered": False,
         "directions": {
             "up": Door("Basement 4"),
             "down": Door("Cavern 2"),
@@ -891,7 +890,7 @@ Oh and before I forget, If you go through the door to the north, there wil be no
     "Cavern 2": {
         "room type": "cavern",
         "position": (-3, 0, 0),
-        "discovered": False,
+        "descovered": False,
         "directions": {"up": SwitchDoor("Cavern 1", "Cavern 3", "7k69fImz4y")},
         "info": "you are in a dark cavern with the only light coming from the shoot you came through. A voice in the back of your head says: 'You fool! You can never get back now!'",
         "map": """
@@ -912,12 +911,12 @@ Oh and before I forget, If you go through the door to the north, there wil be no
     "Cavern 3": {
         "room type": "cavern",
         "position": (-2, 8, 0),
-        "discovered": False,
+        "descovered": False,
         "directions": {
             "down": Door("Cavern 2"),
             "bookcase": Door("Library"),
         },
-        "info": "you are in a dark cavern with the only light coming from the crack behind a %*GREEN*%bookcase%*RESET*%. A voice in the back of your head says: 'I give up.'",
+        "info": "you are in a dark cavern with the only light coming from the crack behind a bookcase. A voice in the back of your head says: 'I give up.'",
         "map": """
 █████████
 █       █
@@ -929,7 +928,7 @@ Oh and before I forget, If you go through the door to the north, there wil be no
 █       █
 █████████""",
         "Hints": [
-            "I wander what's behind that %*GREEN*%bookcase%*RESET*%.",
+            "I wander what's behind that bookcase.",
         ],
     },
     "Forest Clearing": {
@@ -1018,16 +1017,16 @@ The main locations are: The Teleportation Deck, The Dancing Jellyfish Inn, The S
 The Town Hall, The Thieves Guild, The Watch Castle, and The Old Manor.
 
 Do you want to:
-%*GREEN*%0%*RESET*%. Charter a ship away (Costs 10 money).
-%*GREEN*%1%*RESET*%. Go to The Dancing Jellyfish Inn.
-%*GREEN*%2%*RESET*%. Go to The Slopy Plasmoid Tapphouse.
-%*GREEN*%3%*RESET*%. Go to The Centaurbow Weapon Shop.
-%*GREEN*%4%*RESET*%. Go to The Gadabout Bakery.
-%*GREEN*%5%*RESET*%. Go to The Shifterspender St.
-%*GREEN*%6%*RESET*%. Go to The Town Hall.
-%*GREEN*%7%*RESET*%. Go to The Assassins Guild.
-%*GREEN*%8%*RESET*%. Go to The Watch Castle.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+0. Charter a ship away (Costs 10 money).
+1. Go to The Dancing Jellyfish Inn.
+2. Go to The Slopy Plasmoid Tapphouse.
+3. Go to The Centaurbow Weapon Shop.
+4. Go to The Gadabout Bakery.
+5. Go to The Shifterspender St.
+6. Go to The Town Hall.
+7. Go to The Assassins Guild.
+8. Go to The Watch Castle.
+9. Go to The Old Manor.""",
     },
     "Charter ship": {
         "room type": "asteroid-1",
@@ -1050,18 +1049,18 @@ Do you want to:
 You charter a ship, and the Captain says: "You can go anywhere you like before you land back on this here asteriod!"
 
 Do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Dancing Jellyfish Inn.
-%*GREEN*%3%*RESET*%. Go to The Slopy Plasmoid Tapphouse.
-%*GREEN*%4%*RESET*%. Go to The Centaurbow Weapon Shop.
-%*GREEN*%5%*RESET*%. Go to The Gadabout Bakery.
-%*GREEN*%6%*RESET*%. Go to The Shifterspender St.
-%*GREEN*%7%*RESET*%. Go to The Town Hall.
-%*GREEN*%8%*RESET*%. Go to The Assassins Guild.
-%*GREEN*%9%*RESET*%. Go to The Watch Castle.
-%*GREEN*%10%*RESET*%. Go to The Old Manor.
-%*GREEN*%11%*RESET*%. Go to The 2nd Asteriod.
-%*GREEN*%12%*RESET*%. Go to The 3rd Asteriod.""",
+1. Go to the Teleportation Deck.
+2. Go to The Dancing Jellyfish Inn.
+3. Go to The Slopy Plasmoid Tapphouse.
+4. Go to The Centaurbow Weapon Shop.
+5. Go to The Gadabout Bakery.
+6. Go to The Shifterspender St.
+7. Go to The Town Hall.
+8. Go to The Assassins Guild.
+9. Go to The Watch Castle.
+10. Go to The Old Manor.
+11. Go to The 2nd Asteriod.
+12. Go to The 3rd Asteriod.""",
     },
     "The Dancing Jellyfish Inn": {
         "room type": "asteroid-1",
@@ -1079,15 +1078,15 @@ Do you want to:
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Slopy Plasmoid Tapphouse.
-%*GREEN*%3%*RESET*%. Go to The Centaurbow Weapon Shop.
-%*GREEN*%4%*RESET*%. Go to The Gadabout Bakery.
-%*GREEN*%5%*RESET*%. Go to The Shifterspender St.
-%*GREEN*%6%*RESET*%. Go to The Town Hall.
-%*GREEN*%7%*RESET*%. Go to The Assassins Guild.
-%*GREEN*%8%*RESET*%. Go to The Watch Castle.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Slopy Plasmoid Tapphouse.
+3. Go to The Centaurbow Weapon Shop.
+4. Go to The Gadabout Bakery.
+5. Go to The Shifterspender St.
+6. Go to The Town Hall.
+7. Go to The Assassins Guild.
+8. Go to The Watch Castle.
+9. Go to The Old Manor.""",
     },
     "The Slopy Plasmoid Tapphouse": {
         "room type": "asteroid-1",
@@ -1105,15 +1104,15 @@ do you want to:
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Dancing Jellyfish Inn.
-%*GREEN*%3%*RESET*%. Go to The Centaurbow Weapon Shop.
-%*GREEN*%4%*RESET*%. Go to The Gadabout Bakery.
-%*GREEN*%5%*RESET*%. Go to The Shifterspender St.
-%*GREEN*%6%*RESET*%. Go to The Town Hall.
-%*GREEN*%7%*RESET*%. Go to The Assassins Guild.
-%*GREEN*%8%*RESET*%. Go to The Watch Castle.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Dancing Jellyfish Inn.
+3. Go to The Centaurbow Weapon Shop.
+4. Go to The Gadabout Bakery.
+5. Go to The Shifterspender St.
+6. Go to The Town Hall.
+7. Go to The Assassins Guild.
+8. Go to The Watch Castle.
+9. Go to The Old Manor.""",
     },
     "The Centaurbow Weapon Shop": {
         "room type": "asteroid-1",
@@ -1131,15 +1130,15 @@ do you want to:
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Dancing Jellyfish Inn.
-%*GREEN*%3%*RESET*%. Go to The Slopy Plasmoid Tapphouse.
-%*GREEN*%4%*RESET*%. Go to The Gadabout Bakery.
-%*GREEN*%5%*RESET*%. Go to The Shifterspender St.
-%*GREEN*%6%*RESET*%. Go to The Town Hall.
-%*GREEN*%7%*RESET*%. Go to The Assassins Guild.
-%*GREEN*%8%*RESET*%. Go to The Watch Castle.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Dancing Jellyfish Inn.
+3. Go to The Slopy Plasmoid Tapphouse.
+4. Go to The Gadabout Bakery.
+5. Go to The Shifterspender St.
+6. Go to The Town Hall.
+7. Go to The Assassins Guild.
+8. Go to The Watch Castle.
+9. Go to The Old Manor.""",
     },
     "The Gadabout Bakery": {
         "room type": "asteroid-1",
@@ -1157,15 +1156,15 @@ do you want to:
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Dancing Jellyfish Inn.
-%*GREEN*%3%*RESET*%. Go to The Slopy Plasmoid Tapphouse.
-%*GREEN*%4%*RESET*%. Go to The Centaurbow Weapon Shop.
-%*GREEN*%5%*RESET*%. Go to The Shifterspender St.
-%*GREEN*%6%*RESET*%. Go to The Town Hall.
-%*GREEN*%7%*RESET*%. Go to The Assassins Guild.
-%*GREEN*%8%*RESET*%. Go to The Watch Castle.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Dancing Jellyfish Inn.
+3. Go to The Slopy Plasmoid Tapphouse.
+4. Go to The Centaurbow Weapon Shop.
+5. Go to The Shifterspender St.
+6. Go to The Town Hall.
+7. Go to The Assassins Guild.
+8. Go to The Watch Castle.
+9. Go to The Old Manor.""",
     },
     "The Shifterspender St": {
         "room type": "asteroid-1",
@@ -1183,15 +1182,15 @@ do you want to:
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Dancing Jellyfish Inn.
-%*GREEN*%3%*RESET*%. Go to The Slopy Plasmoid Tapphouse.
-%*GREEN*%4%*RESET*%. Go to The Centaurbow Weapon Shop.
-%*GREEN*%5%*RESET*%. Go to The Gadabout Bakery.
-%*GREEN*%6%*RESET*%. Go to The Town Hall.
-%*GREEN*%7%*RESET*%. Go to The Assassins Guild.
-%*GREEN*%8%*RESET*%. Go to The Watch Castle.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Dancing Jellyfish Inn.
+3. Go to The Slopy Plasmoid Tapphouse.
+4. Go to The Centaurbow Weapon Shop.
+5. Go to The Gadabout Bakery.
+6. Go to The Town Hall.
+7. Go to The Assassins Guild.
+8. Go to The Watch Castle.
+9. Go to The Old Manor.""",
     },
     "The Town Hall": {
         "room type": "asteroid-1",
@@ -1209,15 +1208,15 @@ do you want to:
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Dancing Jellyfish Inn.
-%*GREEN*%3%*RESET*%. Go to The Slopy Plasmoid Tapphouse.
-%*GREEN*%4%*RESET*%. Go to The Centaurbow Weapon Shop.
-%*GREEN*%5%*RESET*%. Go to The Gadabout Bakery.
-%*GREEN*%6%*RESET*%. Go to The Shifterspender St.
-%*GREEN*%7%*RESET*%. Go to The Assassins Guild.
-%*GREEN*%8%*RESET*%. Go to The Watch Castle.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Dancing Jellyfish Inn.
+3. Go to The Slopy Plasmoid Tapphouse.
+4. Go to The Centaurbow Weapon Shop.
+5. Go to The Gadabout Bakery.
+6. Go to The Shifterspender St.
+7. Go to The Assassins Guild.
+8. Go to The Watch Castle.
+9. Go to The Old Manor.""",
     },
     "The Assassins Guild": {
         "room type": "asteroid-1",
@@ -1235,15 +1234,15 @@ do you want to:
         "info": """,
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Dancing Jellyfish Inn.
-%*GREEN*%3%*RESET*%. Go to The Slopy Plasmoid Tapphouse.
-%*GREEN*%4%*RESET*%. Go to The Centaurbow Weapon Shop.
-%*GREEN*%5%*RESET*%. Go to The Gadabout Bakery.
-%*GREEN*%6%*RESET*%. Go to The Shifterspender St.
-%*GREEN*%7%*RESET*%. Go to The Town Hall.
-%*GREEN*%8%*RESET*%. Go to The Watch Castle.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Dancing Jellyfish Inn.
+3. Go to The Slopy Plasmoid Tapphouse.
+4. Go to The Centaurbow Weapon Shop.
+5. Go to The Gadabout Bakery.
+6. Go to The Shifterspender St.
+7. Go to The Town Hall.
+8. Go to The Watch Castle.
+9. Go to The Old Manor.""",
     },
     "The Watch Castle": {
         "room type": "asteroid-1",
@@ -1261,15 +1260,15 @@ do you want to:
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Dancing Jellyfish Inn.
-%*GREEN*%3%*RESET*%. Go to The Slopy Plasmoid Tapphouse.
-%*GREEN*%4%*RESET*%. Go to The Centaurbow Weapon Shop.
-%*GREEN*%5%*RESET*%. Go to The Gadabout Bakery.
-%*GREEN*%6%*RESET*%. Go to The Shifterspender St.
-%*GREEN*%7%*RESET*%. Go to The Town Hall.
-%*GREEN*%8%*RESET*%. Go to The Assassins Guild.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Dancing Jellyfish Inn.
+3. Go to The Slopy Plasmoid Tapphouse.
+4. Go to The Centaurbow Weapon Shop.
+5. Go to The Gadabout Bakery.
+6. Go to The Shifterspender St.
+7. Go to The Town Hall.
+8. Go to The Assassins Guild.
+9. Go to The Old Manor.""",
     },
     "The Old Manor": {
         "room type": "asteroid-1",
@@ -1287,15 +1286,15 @@ do you want to:
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Dancing Jellyfish Inn.
-%*GREEN*%3%*RESET*%. Go to The Slopy Plasmoid Tapphouse.
-%*GREEN*%4%*RESET*%. Go to The Centaurbow Weapon Shop.
-%*GREEN*%5%*RESET*%. Go to The Gadabout Bakery.
-%*GREEN*%6%*RESET*%. Go to The Shifterspender St.
-%*GREEN*%7%*RESET*%. Go to The Town Hall.
-%*GREEN*%8%*RESET*%. Go to The Assassins Guild.
-%*GREEN*%9%*RESET*%. Go to The Watch Castle.""",
+1. Go to the Teleportation Deck.
+2. Go to The Dancing Jellyfish Inn.
+3. Go to The Slopy Plasmoid Tapphouse.
+4. Go to The Centaurbow Weapon Shop.
+5. Go to The Gadabout Bakery.
+6. Go to The Shifterspender St.
+7. Go to The Town Hall.
+8. Go to The Assassins Guild.
+9. Go to The Watch Castle.""",
     },
     "2nd Teleportation Deck": {
         "room type": "asteroid-2",
@@ -1319,16 +1318,16 @@ There is a sign on the wall. It is a map of a city on an asteriod.
 The main locations are: The Teleportation Deck, The Dancing Jellyfish Inn, The Slopy Plasmoid Tapphouse, The GiffHammer Weapon Shop, The Gadabout Bakery, The Githspender Store,
 The Town Hall, The Thieves Guild, The Watch Castle, and The Old Manor.
 do you want to:
-%*GREEN*%1%*RESET*%. Charter a ship away.
-%*GREEN*%2%*RESET*%. Go to The Dancing Jellyfish Inn.
-%*GREEN*%3%*RESET*%. Go to The Slopy Plasmoid Tapphouse.
-%*GREEN*%4%*RESET*%. Go to The Giffhammer Weapon Shop.
-%*GREEN*%5%*RESET*%. Go to The Gadabout Bakery.
-%*GREEN*%6%*RESET*%. Go to The Githspender St.
-%*GREEN*%7%*RESET*%. Go to The Town Hall.
-%*GREEN*%8%*RESET*%. Go to The Thieves Guild.
-%*GREEN*%9%*RESET*%. Go to The Watch Castle.
-%*GREEN*%10%*RESET*%. Go to The Old Manor.""",
+1. Charter a ship away.
+2. Go to The Dancing Jellyfish Inn.
+3. Go to The Slopy Plasmoid Tapphouse.
+4. Go to The Giffhammer Weapon Shop.
+5. Go to The Gadabout Bakery.
+6. Go to The Githspender St.
+7. Go to The Town Hall.
+8. Go to The Thieves Guild.
+9. Go to The Watch Castle.
+10. Go to The Old Manor.""",
     },
     "Charter 2nd Ship": {
         "room type": "asteroid-2",
@@ -1362,18 +1361,18 @@ do you want to:
 You charter a ship, and the Captain says: "You can go anywhere you like before you land back on this here asteriod!"
 
 Do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Dancing Jellyfish Inn.
-%*GREEN*%3%*RESET*%. Go to The Slopy Plasmoid Tapphouse.
-%*GREEN*%4%*RESET*%. Go to The GiffHammer Weapon Shop.
-%*GREEN*%5%*RESET*%. Go to The Gadabout Bakery.
-%*GREEN*%6%*RESET*%. Go to The Githspender St.
-%*GREEN*%7%*RESET*%. Go to The Town Hall.
-%*GREEN*%8%*RESET*%. Go to The Thieves Guild.
-%*GREEN*%9%*RESET*%. Go to The Watch Castle.
-%*GREEN*%10%*RESET*%. Go to The Old Manor.
-%*GREEN*%11%*RESET*%. Go to The 1st Asteriod.
-%*GREEN*%12%*RESET*%. Go to The 3rd Asteriod.""",
+1. Go to the Teleportation Deck.
+2. Go to The Dancing Jellyfish Inn.
+3. Go to The Slopy Plasmoid Tapphouse.
+4. Go to The GiffHammer Weapon Shop.
+5. Go to The Gadabout Bakery.
+6. Go to The Githspender St.
+7. Go to The Town Hall.
+8. Go to The Thieves Guild.
+9. Go to The Watch Castle.
+10. Go to The Old Manor.
+11. Go to The 1st Asteriod.
+12. Go to The 3rd Asteriod.""",
     },
     "The 2nd Dancing Jellyfish Inn": {
         "room type": "asteroid-2",
@@ -1391,15 +1390,15 @@ Do you want to:
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Slopy Plasmoid Tapphouse.
-%*GREEN*%3%*RESET*%. Go to The GiffHammer Weapon Shop.
-%*GREEN*%4%*RESET*%. Go to The Gadabout Bakery.
-%*GREEN*%5%*RESET*%. Go to The Shifterspender St.
-%*GREEN*%6%*RESET*%. Go to The Town Hall.
-%*GREEN*%7%*RESET*%. Go to The Thieves Guild.
-%*GREEN*%8%*RESET*%. Go to The Watch Castle.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Slopy Plasmoid Tapphouse.
+3. Go to The GiffHammer Weapon Shop.
+4. Go to The Gadabout Bakery.
+5. Go to The Shifterspender St.
+6. Go to The Town Hall.
+7. Go to The Thieves Guild.
+8. Go to The Watch Castle.
+9. Go to The Old Manor.""",
     },
     "The 2nd Slopy Plasmoid Tapphouse": {
         "room type": "asteroid-2",
@@ -1417,15 +1416,15 @@ do you want to:
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Dancing Jellyfish Inn.
-%*GREEN*%3%*RESET*%. Go to The GiffHammer Weapon Shop.
-%*GREEN*%4%*RESET*%. Go to The Gadabout Bakery.
-%*GREEN*%5%*RESET*%. Go to The Githspender St.
-%*GREEN*%6%*RESET*%. Go to The Town Hall.
-%*GREEN*%7%*RESET*%. Go to The Thieves Guild.
-%*GREEN*%8%*RESET*%. Go to The Watch Castle.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Dancing Jellyfish Inn.
+3. Go to The GiffHammer Weapon Shop.
+4. Go to The Gadabout Bakery.
+5. Go to The Githspender St.
+6. Go to The Town Hall.
+7. Go to The Thieves Guild.
+8. Go to The Watch Castle.
+9. Go to The Old Manor.""",
     },
     "The 2nd GiffHammer Weapon Shop": {
         "room type": "asteroid-2",
@@ -1443,15 +1442,15 @@ do you want to:
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Dancing Jellyfish Inn.
-%*GREEN*%3%*RESET*%. Go to The Slopy Plasmoid Tapphouse.
-%*GREEN*%4%*RESET*%. Go to The Gadabout Bakery.
-%*GREEN*%5%*RESET*%. Go to The Githspender St.
-%*GREEN*%6%*RESET*%. Go to The Town Hall.
-%*GREEN*%7%*RESET*%. Go to The Thieves Guild.
-%*GREEN*%8%*RESET*%. Go to The Watch Castle.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Dancing Jellyfish Inn.
+3. Go to The Slopy Plasmoid Tapphouse.
+4. Go to The Gadabout Bakery.
+5. Go to The Githspender St.
+6. Go to The Town Hall.
+7. Go to The Thieves Guild.
+8. Go to The Watch Castle.
+9. Go to The Old Manor.""",
     },
     "The 2nd Gadabout Bakery": {
         "room type": "asteroid-2",
@@ -1469,15 +1468,15 @@ do you want to:
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Dancing Jellyfish Inn.
-%*GREEN*%3%*RESET*%. Go to The Slopy Plasmoid Tapphouse.
-%*GREEN*%4%*RESET*%. Go to The GiffHammer Weapon Shop.
-%*GREEN*%5%*RESET*%. Go to The Githspender St.
-%*GREEN*%6%*RESET*%. Go to The Town Hall.
-%*GREEN*%7%*RESET*%. Go to The Thieves Guild.
-%*GREEN*%8%*RESET*%. Go to The Watch Castle.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Dancing Jellyfish Inn.
+3. Go to The Slopy Plasmoid Tapphouse.
+4. Go to The GiffHammer Weapon Shop.
+5. Go to The Githspender St.
+6. Go to The Town Hall.
+7. Go to The Thieves Guild.
+8. Go to The Watch Castle.
+9. Go to The Old Manor.""",
     },
     "The 2nd Githspender St": {
         "room type": "asteroid-2",
@@ -1495,15 +1494,15 @@ do you want to:
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Dancing Jellyfish Inn.
-%*GREEN*%3%*RESET*%. Go to The Slopy Plasmoid Tapphouse.
-%*GREEN*%4%*RESET*%. Go to The GiffHammer Weapon Shop.
-%*GREEN*%5%*RESET*%. Go to The Gadabout Bakery.
-%*GREEN*%6%*RESET*%. Go to The Town Hall.
-%*GREEN*%7%*RESET*%. Go to The Thieves Guild.
-%*GREEN*%8%*RESET*%. Go to The Watch Castle.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Dancing Jellyfish Inn.
+3. Go to The Slopy Plasmoid Tapphouse.
+4. Go to The GiffHammer Weapon Shop.
+5. Go to The Gadabout Bakery.
+6. Go to The Town Hall.
+7. Go to The Thieves Guild.
+8. Go to The Watch Castle.
+9. Go to The Old Manor.""",
     },
     "The 2nd Town Hall": {
         "room type": "asteroid-2",
@@ -1521,15 +1520,15 @@ do you want to:
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Dancing Jellyfish Inn.
-%*GREEN*%3%*RESET*%. Go to The Slopy Plasmoid Tapphouse.
-%*GREEN*%4%*RESET*%. Go to The GiffHammer Weapon Shop.
-%*GREEN*%5%*RESET*%. Go to The Gadabout Bakery.
-%*GREEN*%6%*RESET*%. Go to The Githspender St.
-%*GREEN*%7%*RESET*%. Go to The Thieves Guild.
-%*GREEN*%8%*RESET*%. Go to The Watch Castle.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Dancing Jellyfish Inn.
+3. Go to The Slopy Plasmoid Tapphouse.
+4. Go to The GiffHammer Weapon Shop.
+5. Go to The Gadabout Bakery.
+6. Go to The Githspender St.
+7. Go to The Thieves Guild.
+8. Go to The Watch Castle.
+9. Go to The Old Manor.""",
     },
     "The 2nd Thieves Guild": {
         "room type": "asteroid-2",
@@ -1551,22 +1550,22 @@ do you want to:
                 4,
                 [item("knife", "weapon", 2), item("money-pouch", "valuable", 25)],
                 "A hooded 5ft 11 humanoid thief, thief level 3",
-                "You see a %*CYAN*%thief%*RESET*% at the door",
+                "You see a thief at the door",
                 creature_type("humanoid", "cowfolk"),
             ),
         ],
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Dancing Jellyfish Inn.
-%*GREEN*%3%*RESET*%. Go to The Slopy Plasmoid Tapphouse.
-%*GREEN*%4%*RESET*%. Go to The GiffHammer Weapon Shop.
-%*GREEN*%5%*RESET*%. Go to The Gadabout Bakery.
-%*GREEN*%6%*RESET*%. Go to The Githspender St.
-%*GREEN*%7%*RESET*%. Go to The Town Hall.
-%*GREEN*%8%*RESET*%. Go to The Watch Castle.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Dancing Jellyfish Inn.
+3. Go to The Slopy Plasmoid Tapphouse.
+4. Go to The GiffHammer Weapon Shop.
+5. Go to The Gadabout Bakery.
+6. Go to The Githspender St.
+7. Go to The Town Hall.
+8. Go to The Watch Castle.
+9. Go to The Old Manor.""",
     },
     "The 2nd Watch Castle": {
         "room type": "asteroid-2",
@@ -1584,15 +1583,15 @@ do you want to:
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Dancing Jellyfish Inn.
-%*GREEN*%3%*RESET*%. Go to The Slopy Plasmoid Tapphouse.
-%*GREEN*%4%*RESET*%. Go to The GiffHammer Weapon Shop.
-%*GREEN*%5%*RESET*%. Go to The Gadabout Bakery.
-%*GREEN*%6%*RESET*%. Go to The Githspender St.
-%*GREEN*%7%*RESET*%. Go to The Town Hall.
-%*GREEN*%8%*RESET*%. Go to The Thieves Guild.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Dancing Jellyfish Inn.
+3. Go to The Slopy Plasmoid Tapphouse.
+4. Go to The GiffHammer Weapon Shop.
+5. Go to The Gadabout Bakery.
+6. Go to The Githspender St.
+7. Go to The Town Hall.
+8. Go to The Thieves Guild.
+9. Go to The Old Manor.""",
     },
     "The 2nd Old Manor": {
         "room type": "asteroid-2",
@@ -1610,15 +1609,15 @@ do you want to:
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Dancing Jellyfish Inn.
-%*GREEN*%3%*RESET*%. Go to The Slopy Plasmoid Tapphouse.
-%*GREEN*%4%*RESET*%. Go to The GiffHammer Weapon Shop.
-%*GREEN*%5%*RESET*%. Go to The Gadabout Bakery.
-%*GREEN*%6%*RESET*%. Go to The Githspender St.
-%*GREEN*%7%*RESET*%. Go to The Town Hall.
-%*GREEN*%8%*RESET*%. Go to The Thieves Guild.
-%*GREEN*%9%*RESET*%. Go to The Watch Castle.""",
+1. Go to the Teleportation Deck.
+2. Go to The Dancing Jellyfish Inn.
+3. Go to The Slopy Plasmoid Tapphouse.
+4. Go to The GiffHammer Weapon Shop.
+5. Go to The Gadabout Bakery.
+6. Go to The Githspender St.
+7. Go to The Town Hall.
+8. Go to The Thieves Guild.
+9. Go to The Watch Castle.""",
     },
     "3rd Teleportation Deck": {
         "room type": "asteroid-2",
@@ -1642,16 +1641,16 @@ There is a sign on the wall. It is a map of a city on an asteriod.
 The main locations are: The Teleportation Deck, The Dancing Jellyfish Inn, The Slopy Plasmoid Tapphouse, The GiffHammer Weapon Shop, The Gadabout Bakery, The Githspender Store,
 The Town Hall, The Thieves Guild, The Watch Castle, and The Old Manor.
 do you want to:
-%*GREEN*%1%*RESET*%. Charter a ship away.
-%*GREEN*%2%*RESET*%. Go to The Main Guildhall.
-%*GREEN*%3%*RESET*%. Go to The Magic Guild.
-%*GREEN*%4%*RESET*%. Go to The Explorers' Guild.
-%*GREEN*%5%*RESET*%. Go to The Craftsmen's Guild.
-%*GREEN*%6%*RESET*%. Go to The Stealth Guild.
-%*GREEN*%7%*RESET*%. Go to The Nature Guild.
-%*GREEN*%8%*RESET*%. Go to The Trade Guild.
-%*GREEN*%9%*RESET*%. Go to The Watch Castle.
-%*GREEN*%10%*RESET*%. Go to The Old Manor.""",
+1. Charter a ship away.
+2. Go to The Main Guildhall.
+3. Go to The Magic Guild.
+4. Go to The Explorers' Guild.
+5. Go to The Craftsmen's Guild.
+6. Go to The Stealth Guild.
+7. Go to The Nature Guild.
+8. Go to The Trade Guild.
+9. Go to The Watch Castle.
+10. Go to The Old Manor.""",
     },
     "Charter 3rd Ship": {
         "room type": "asteroid-3",
@@ -1674,18 +1673,18 @@ do you want to:
 You charter a ship, and the Captain says: "You can go anywhere you like before you land back on this here asteriod!"
 
 Do you want to:
-%*GREEN*%1%*RESET*%. Go to The Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Main Guildhall.
-%*GREEN*%3%*RESET*%. Go to The Magic Guild.
-%*GREEN*%4%*RESET*%. Go to The Explorers' Guild.
-%*GREEN*%5%*RESET*%. Go to The Craftsmen's Guild.
-%*GREEN*%6%*RESET*%. Go to The Stealth Guild.
-%*GREEN*%7%*RESET*%. Go to The Nature Guild.
-%*GREEN*%8%*RESET*%. Go to The Trade Guild.
-%*GREEN*%9%*RESET*%. Go to The Guards Guild.
-%*GREEN*%10%*RESET*%. Go to The Old Manor.
-%*GREEN*%11%*RESET*%. Go to The 1st Asteriod.
-%*GREEN*%12%*RESET*%. Go to The 2nd Asteriod.""",
+1. Go to The Teleportation Deck.
+2. Go to The Main Guildhall.
+3. Go to The Magic Guild.
+4. Go to The Explorers' Guild.
+5. Go to The Craftsmen's Guild.
+6. Go to The Stealth Guild.
+7. Go to The Nature Guild.
+8. Go to The Trade Guild.
+9. Go to The Guards Guild.
+10. Go to The Old Manor.
+11. Go to The 1st Asteriod.
+12. Go to The 2nd Asteriod.""",
     },
     "The Main Guildhall": {
         "description": """
@@ -1713,16 +1712,16 @@ from across the realm flock to the Forge, drawn by the promise of glory and the 
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to The Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Magic Guild.
-%*GREEN*%3%*RESET*%. Go to The Explorers' Guild.
-%*GREEN*%4%*RESET*%. Go to The Craftsmen's Guild.
-%*GREEN*%5%*RESET*%. Go to The Stealth Guild.
-%*GREEN*%6%*RESET*%. Go to The Nature Guild.
-%*GREEN*%7%*RESET*%. Go to The Trade Guild.
-%*GREEN*%8%*RESET*%. Go to The Guards Guild.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.
-%*GREEN*%10%*RESET*%. Go to The Arena""",
+1. Go to The Teleportation Deck.
+2. Go to The Magic Guild.
+3. Go to The Explorers' Guild.
+4. Go to The Craftsmen's Guild.
+5. Go to The Stealth Guild.
+6. Go to The Nature Guild.
+7. Go to The Trade Guild.
+8. Go to The Guards Guild.
+9. Go to The Old Manor.
+10. Go to The Arena""",
     },
     "The Grand Coliseum": {
         "description": """
@@ -1747,14 +1746,14 @@ Coliseum stands as a testament to the enduring appeal of gladiatorial combat and
                 6,
                 [item("longsword", "weapon", 4)],
                 "A large 6ft 7 humaniod gladiator",
-                'As you enter the Arena a hulking %*CYAN*%gladiator%*RESET*% walks up to you and says: "You sould run while you still can or face me!"',
+                'As you enter the Arena a hulking gladiator walks up to you and says: "You sould run while you still can or face me!"',
                 creature_type("humaniod", "goliath"),
             ),
         ],
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to The The Main Guildhall.""",
+1. Go to The The Main Guildhall.""",
     },
     "The Order of the Arcane Scribes": {
         "description": """
@@ -1782,15 +1781,15 @@ magic.""",
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Main Guildhall.
-%*GREEN*%3%*RESET*%. Go to The Explorers' Guild.
-%*GREEN*%4%*RESET*%. Go to The Craftsmen's Guild.
-%*GREEN*%5%*RESET*%. Go to The Stealth Guild.
-%*GREEN*%6%*RESET*%. Go to The Nature Guild.
-%*GREEN*%7%*RESET*%. Go to The Trade Guild.
-%*GREEN*%8%*RESET*%. Go to The Guards Guild.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Main Guildhall.
+3. Go to The Explorers' Guild.
+4. Go to The Craftsmen's Guild.
+5. Go to The Stealth Guild.
+6. Go to The Nature Guild.
+7. Go to The Trade Guild.
+8. Go to The Guards Guild.
+9. Go to The Old Manor.""",
     },
     "The Wayfarers' Brotherhood": {
         "description": """
@@ -1817,15 +1816,15 @@ eager to uncover the mysteries that lie beyond the horizon.""",
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Main Guildhall.
-%*GREEN*%3%*RESET*%. Go to The Magic Guild.
-%*GREEN*%4%*RESET*%. Go to The Craftsmen's Guild.
-%*GREEN*%5%*RESET*%. Go to The Stealth Guild.
-%*GREEN*%6%*RESET*%. Go to The Nature Guild.
-%*GREEN*%7%*RESET*%. Go to The Trade Guild.
-%*GREEN*%8%*RESET*%. Go to The Guards Guild.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Main Guildhall.
+3. Go to The Magic Guild.
+4. Go to The Craftsmen's Guild.
+5. Go to The Stealth Guild.
+6. Go to The Nature Guild.
+7. Go to The Trade Guild.
+8. Go to The Guards Guild.
+9. Go to The Old Manor.""",
     },
     "The Artisans' Collective": {
         "description": """
@@ -1853,15 +1852,15 @@ potential of skilled craftsmanship.""",
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Main Guildhall.
-%*GREEN*%3%*RESET*%. Go to The Magic Guild.
-%*GREEN*%4%*RESET*%. Go to The Explorers' Guild.
-%*GREEN*%5%*RESET*%. Go to The Stealth Guild.
-%*GREEN*%6%*RESET*%. Go to The Nature Guild.
-%*GREEN*%7%*RESET*%. Go to The Trade Guild.
-%*GREEN*%8%*RESET*%. Go to The Guards Guild.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Main Guildhall.
+3. Go to The Magic Guild.
+4. Go to The Explorers' Guild.
+5. Go to The Stealth Guild.
+6. Go to The Nature Guild.
+7. Go to The Trade Guild.
+8. Go to The Guards Guild.
+9. Go to The Old Manor.""",
     },
     "The Silent Shadows Syndicate": {
         "description": """
@@ -1889,15 +1888,15 @@ willing to operate outside the boundaries of conventional morality.""",
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Main Guildhall.
-%*GREEN*%3%*RESET*%. Go to The Magic Guild.
-%*GREEN*%4%*RESET*%. Go to The Explorers' Guild.
-%*GREEN*%5%*RESET*%. Go to The Craftsmen's Guild.
-%*GREEN*%6%*RESET*%. Go to The Nature Guild.
-%*GREEN*%7%*RESET*%. Go to The Trade Guild.
-%*GREEN*%8%*RESET*%. Go to The Guards Guild.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Main Guildhall.
+3. Go to The Magic Guild.
+4. Go to The Explorers' Guild.
+5. Go to The Craftsmen's Guild.
+6. Go to The Nature Guild.
+7. Go to The Trade Guild.
+8. Go to The Guards Guild.
+9. Go to The Old Manor.""",
     },
     "The Guardians of the Wilds": {
         "description": """
@@ -1925,15 +1924,15 @@ wildlife, the Guardians of the Wilds stand as vigilant protectors of the natural
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Main Guildhall.
-%*GREEN*%3%*RESET*%. Go to The Magic Guild.
-%*GREEN*%4%*RESET*%. Go to The Explorers' Guild.
-%*GREEN*%5%*RESET*%. Go to The Craftsmen's Guild.
-%*GREEN*%6%*RESET*%. Go to The Stealth Guild.
-%*GREEN*%7%*RESET*%. Go to The Trade Guild.
-%*GREEN*%8%*RESET*%. Go to The Guards Guild.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Main Guildhall.
+3. Go to The Magic Guild.
+4. Go to The Explorers' Guild.
+5. Go to The Craftsmen's Guild.
+6. Go to The Stealth Guild.
+7. Go to The Trade Guild.
+8. Go to The Guards Guild.
+9. Go to The Old Manor.""",
     },
     "The Mercantile Consortium": {
         "description": """
@@ -1961,15 +1960,15 @@ of wealth.""",
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Main Guildhall.
-%*GREEN*%3%*RESET*%. Go to The Magic Guild.
-%*GREEN*%4%*RESET*%. Go to The Explorers' Guild.
-%*GREEN*%5%*RESET*%. Go to The Craftsmen's Guild.
-%*GREEN*%6%*RESET*%. Go to The Stealth Guild.
-%*GREEN*%7%*RESET*%. Go to The Trade Guild.
-%*GREEN*%8%*RESET*%. Go to The Guards Guild.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Main Guildhall.
+3. Go to The Magic Guild.
+4. Go to The Explorers' Guild.
+5. Go to The Craftsmen's Guild.
+6. Go to The Stealth Guild.
+7. Go to The Trade Guild.
+8. Go to The Guards Guild.
+9. Go to The Old Manor.""",
     },
     "The Sentinels of the Shield": {
         "description": """
@@ -2005,15 +2004,15 @@ new recruits, fostering a sense of camaraderie and unity among the ranks.""",
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Main Guildhall.
-%*GREEN*%3%*RESET*%. Go to The Magic Guild.
-%*GREEN*%4%*RESET*%. Go to The Explorers' Guild.
-%*GREEN*%5%*RESET*%. Go to The Craftsmen's Guild.
-%*GREEN*%6%*RESET*%. Go to The Stealth Guild.
-%*GREEN*%7%*RESET*%. Go to The Nature Guild.
-%*GREEN*%8%*RESET*%. Go to The Trade Guild.
-%*GREEN*%9%*RESET*%. Go to The Old Manor.""",
+1. Go to the Teleportation Deck.
+2. Go to The Main Guildhall.
+3. Go to The Magic Guild.
+4. Go to The Explorers' Guild.
+5. Go to The Craftsmen's Guild.
+6. Go to The Stealth Guild.
+7. Go to The Nature Guild.
+8. Go to The Trade Guild.
+9. Go to The Old Manor.""",
     },
     "The 3rd Old Manor": {
         "room type": "asteroid-3",
@@ -2031,14 +2030,14 @@ do you want to:
         "info": """
 
 do you want to:
-%*GREEN*%1%*RESET*%. Go to the Teleportation Deck.
-%*GREEN*%2%*RESET*%. Go to The Main Guildhall.
-%*GREEN*%3%*RESET*%. Go to The Magic Guild.
-%*GREEN*%4%*RESET*%. Go to The Explorers' Guild.
-%*GREEN*%5%*RESET*%. Go to The Craftsmen's Guild.
-%*GREEN*%6%*RESET*%. Go to The Stealth Guild.
-%*GREEN*%7%*RESET*%. Go to The Nature Guild.
-%*GREEN*%8%*RESET*%. Go to The Trade Guild.
-%*GREEN*%9%*RESET*%. Go to The Guards Guild.""",
+1. Go to the Teleportation Deck.
+2. Go to The Main Guildhall.
+3. Go to The Magic Guild.
+4. Go to The Explorers' Guild.
+5. Go to The Craftsmen's Guild.
+6. Go to The Stealth Guild.
+7. Go to The Nature Guild.
+8. Go to The Trade Guild.
+9. Go to The Guards Guild.""",
     },
 }

@@ -4,6 +4,7 @@ from .items import *
 from .Quests import *
 from .all_game_utils import *
 import tkinter as tk
+from tkinter import scrolledtext
 
 
 GameState = {
@@ -16,10 +17,13 @@ GameState = {
 Neel-thee's Mansion of Amnesia
 """
 
-global player, evil_mage, commands, NOTE_NUM, credits, color_coding, quest_manager, revealer, CHARACTERSLIST, BACKGROUNDS
+global player, evil_mage, commands, NOTE_NUM, credits, quest_manager, revealer, CHARACTERSLIST, BACKGROUNDS, info_text_area, map_root, map_label, player_info_root, player_info_label
 
 player_info_root = None
 player_info_label = None
+map_root = None
+map_label = None
+info_text_area = None
 
 BACKGROUNDS = {
     "Adventurer": ["survival", "climbing"],
@@ -30,8 +34,6 @@ BACKGROUNDS = {
 revealer = KeyRevealer()
 
 quest_manager = QuestManager()
-
-color_coding = False
 
 credits = """
 Made by: Alexander.E.F
@@ -121,16 +123,16 @@ def parse_command(command_str: str, commands: dict):
 def showInstructions():
     global player
     # Display the game instructions
-    type_text(
+    add_text_to_textbox(info_text_area, 
         """
 ===========================
 Commands:
-go [%*GREEN*%direction%*RESET*%/%*GREEN*%teleport%*RESET*%/%*GREEN*%number%*RESET*%] - Move to another location
-get [%*BLUE*%item%*RESET*%] - Pick up an item from your current location
-search [%*RED*%container%*RESET*%] - Search a container in your current location
-use [%*BLUE*%item%*RESET*%] - Use an item from your inventory
-put [%*BLUE*%item%*RESET*%] [in] [%*RED*%container%*RESET*%] - Put an item from your inventory into a container in your current location
-examine [%*GREEN*%direction%*RESET*%/%*RED*%container%*RESET*%/%*BLUE*%item%*RESET*%/%*BROWN*%NPC%*RESET*%] - Find out some info about the object
+go [direction/teleport/number] - Move to another location
+get [item] - Pick up an item from your current location
+search [container] - Search a container in your current location
+use [item] - Use an item from your inventory
+put [item] [in] [container] - Put an item from your inventory into a container in your current location
+examine [direction/container/item/NPC] - Find out some info about the object
 sleep - Rest for a bit and regain some health
 look - Look around your current location
 quit - Quit the game
@@ -138,18 +140,17 @@ help - Show these instructions
 hint - Get a random hint for your current location
 map - Display the map of places you have been to
 """,
-        colorTrue=color_coding,
     )
 
 
 def showHint():
     global player
     if "Hints" in ROOMS[player.CURRENTROOM]:
-        type_text("You think:", colorTrue=color_coding)
+        add_text_to_textbox(info_text_area, "You think:")
         hint = choice(ROOMS[player.CURRENTROOM]["Hints"])
-        type_text(hint, colorTrue=color_coding)
+        add_text_to_textbox(info_text_area, hint)
     else:
-        type_text("You can't think of anything", colorTrue=color_coding)
+        add_text_to_textbox(info_text_area, "You can't think of anything")
 
 
 def check_direction(var: str, directions: list):
@@ -162,27 +163,25 @@ def check_direction(var: str, directions: list):
 
 def End(text: str, win: bool = True):
     global player
-    type_text(text, colorTrue=color_coding)
+    add_text_to_textbox(info_text_area, text)
     if win:
-        type_text("Do you want to leave the game? Y/N", colorTrue=color_coding)
+        add_text_to_textbox(info_text_area, "Do you want to leave the game? Y/N")
         while True:
-            leave = input(">").lower()
+            leave = loop_til_valid_input("", ).lower()
             if leave == "n":
-                type_text("You decide to continue exploring.", colorTrue=color_coding)
+                add_text_to_textbox(info_text_area, "You decide to continue exploring.")
                 break
             elif leave == "y":
-                type_text(
+                add_text_to_textbox(info_text_area, 
                     "You escaped the house... %*BOLD*%GAME OVER, YOU WIN!",
-                    colorTrue=color_coding,
                 )
                 commands["quit"]()
             else:
-                type_text(
+                add_text_to_textbox(info_text_area, 
                     "Sorry, that wasn't 'y' or 'n'. Please enter 'y' or 'n'.",
-                    colorTrue=color_coding,
                 )
     else:
-        type_text("%*BOLD*%GAME OVER, YOU LOSE!", colorTrue=color_coding)
+        add_text_to_textbox(info_text_area, "%*BOLD*%GAME OVER, YOU LOSE!")
         commands["quit"]()
 
 
@@ -198,7 +197,7 @@ def add_note(note, parchment_index=None):
         del player.inventory[parchment_index]
     except IndexError:
         pass
-    player.inventory_add([item(inv_note)])
+    player.inventory_add([item(inv_note)], info_text_area)
 
 
 def Use_grappling_hook():
@@ -206,32 +205,28 @@ def Use_grappling_hook():
 
     def swing_into_forest():
         global player
-        type_text(
-            "You throw your grappling-hook, it catches a branch of a nearby tree and hooks back onto itself. \nYou can swing into the forest!",
-            colorTrue=color_coding,
+        add_text_to_textbox(info_text_area, 
+            "You throw your grappling-hook, it catches a branch of a nearby tree and hooks back onto itself. \nYou can swing into the forest!"
         )
         if ask_for_consent("Do you want to swing into the forest"):
-            type_text("You swing into the forest", colorTrue=color_coding)
+            add_text_to_textbox(info_text_area, "You swing into the forest")
             Move("Forest Clearing")
         else:
-            type_text(
-                "You flick the rope and it unhooks. You continue exploring the house.",
-                colorTrue=color_coding,
+            add_text_to_textbox(info_text_area, 
+                "You flick the rope and it unhooks. You continue exploring the house."
             )
 
     def climb_into_house():
         global player
-        type_text(
-            "You throw your grappling-hook, it catches the railing of the nearby house and hooks back onto itself. \nYou can climb into the house!",
-            colorTrue=color_coding,
+        add_text_to_textbox(info_text_area, 
+            "You throw your grappling-hook, it catches the railing of the nearby house and hooks back onto itself. \nYou can climb into the house!"
         )
         if ask_for_consent("Do you want to climb into the house"):
-            type_text("You climb into the house", colorTrue=color_coding)
+            add_text_to_textbox(info_text_area, "You climb into the house")
             Move("Balcony")
         else:
-            type_text(
-                "You flick the rope and it unhooks. You continue exploring the forest",
-                colorTrue=color_coding,
+            add_text_to_textbox(info_text_area, 
+                "You flick the rope and it unhooks. You continue exploring the forest"
             )
 
     if player.CURRENTROOM == "Balcony" and "grappling-hook" in player.inventory:
@@ -247,17 +242,16 @@ def Use_quill():
 
     if all(item in player.inventory for item in ["ink-pot", "parchment", "quill"]):
         parchment_index = player.inventory.index("parchment")
-        type_text("What do you want to write", colorTrue=color_coding)
+        add_text_to_textbox(info_text_area, "What do you want to write")
         write = str(input(">")).strip()
 
         if write:
             add_note(write, parchment_index)
         else:
-            type_text("You can't write nothing", colorTrue=color_coding)
+            add_text_to_textbox(info_text_area, "You can't write nothing")
     else:
-        type_text(
-            "You need an ink pot, parchment, and a quill to write.",
-            colorTrue=color_coding,
+        add_text_to_textbox(info_text_area, 
+            "You need an ink pot, parchment, and a quill to write."
         )
 
 
@@ -267,10 +261,10 @@ def Use_note(note_number):
     note_key = f"note {note_number}"
     if note_key in player.inventory:
         note_index = int(note_number) - 1
-        type_text(f"You read:", colorTrue=color_coding)
-        type_text(player.NOTES[note_index], colorTrue=color_coding)
+        add_text_to_textbox(info_text_area, f"You read:")
+        add_text_to_textbox(info_text_area, player.NOTES[note_index])
     else:
-        type_text("You do not have that note", colorTrue=color_coding)
+        add_text_to_textbox(info_text_area, "You do not have that note")
 
 
 def Use(*Args):
@@ -283,8 +277,8 @@ def Use(*Args):
         item_obj = player.inventory[player.inventory.index(Item)]
         if isinstance(item_obj, item):
             if item_obj.sell(player):
-                type_text(
-                    f"You sell the %*BLUE*%{Item}%*RESET*%", colorTrue=color_coding
+                add_text_to_textbox(info_text_area, 
+                    f"You sell the {Item}"
                 )
                 player.inventory.remove(item_obj.name)
             elif Item == "quill":
@@ -305,13 +299,13 @@ def PickKey(locked_obj):
 
     if keys:
         while True:
-            type_text(
+            add_text_to_textbox(info_text_area, 
                 f"Please pick which key you want to use in the lock. This is what you know about the lock: {locked_obj}. These are your keys:"
             )
 
             # Enumerate keys and display them
             for idx, key in enumerate(keys, 1):  # Starts numbering at 1
-                type_text(f"{idx}. {key.name} - {key.CurentRevealStr}")
+                add_text_to_textbox(info_text_area, f"{idx}. {key.name} - {key.CurentRevealStr}")
 
             # Use loop_til_valid_input to get a valid integer within the correct range
             choice = loop_til_valid_input(
@@ -338,8 +332,8 @@ def Move(move):
                 ROOMS[newRoom]["descovered"] = True
             return ROOMS[player.CURRENTROOM]["directions"][move]
         else:
-            type_text(
-                "You don't have enough money to charter a ship.", colorTrue=color_coding
+            add_text_to_textbox(info_text_area, 
+                "You don't have enough money to charter a ship."
             )
             return player.CURRENTROOM
 
@@ -349,13 +343,13 @@ def Move(move):
         if key.GetKeyCode() == "629.IdnXwnt":
             End("You unlock the gate to the garden with the key!")
             return newRoom
-        type_text("The gate is locked.", colorTrue=color_coding)
+        add_text_to_textbox(info_text_area, "The gate is locked.")
         return newRoom
 
     def move_to_room():
         global player
         player.LASTROOM = player.CURRENTROOM
-        if "descovered" in ROOMS[newRoom] and not ROOMS[newRoom]["descovered"]:
+        if "descovered" in ROOMS[newRoom]:
             ROOMS[newRoom]["descovered"] = True
         if move == "0":
             return attempt_charter()
@@ -389,15 +383,17 @@ def Move(move):
                 if isinstance(randomEvent, RandomEvent):
                     randomEvent.check_and_trigger(player)
         return
-    type_text(f"There is no exit {move}", colorTrue=color_coding)
+    add_text_to_textbox(info_text_area, f"There is no exit {move}")
 
 
 def start():
-    global player
+    global player, info_text_area
+    # Wait until info_text_area is initialized
+    while info_text_area is None or map_label is None:
+        sleep(0.1)
     # shows the main menu
-    type_text(
-        f"\nHello %*MAGENTA*%{player.name}%*RESET*% and welcome to my Role Playing Game. \nI hope you have fun!",
-        colorTrue=color_coding,
+    add_text_to_textbox(info_text_area, 
+        f"\nHello {player.name} and welcome to my Role Playing Game. \nI hope you have fun!",
     )
     showInstructions()
 
@@ -428,10 +424,39 @@ def update_player_info():
         info_text = get_inventory_text()
         player_info_root.after(0, lambda: player_info_label.config(text=info_text))
 
+def get_map():
+    text = ""
+    if "map" in ROOMS[player.CURRENTROOM]:
+        text += f'\n\nKey: {"; ".join(KEY)}\n'
+        text += f'\n{ROOMS[player.CURRENTROOM]["map"]}\n'
+    else:
+        text += f"\nNo map available for this room."
+    return text
+
+def show_map():
+    global map_root, map_label
+    map_root = tk.Tk()
+    map_root.title("Map")
+
+    map_text = get_map()
+    map_label = tk.Label(map_root, text=map_text, font=("Courier", 10), width=65, height=16, wraplength=500)
+    map_label.pack()
+
+    map_root.mainloop()
+
+def update_map():
+    global map_root, map_label
+    if map_root and map_label:
+        map_text = get_map()
+        map_root.after(0, lambda: map_label.config(text=map_text))
+
 def start_tkinter_thread():
     player_info_thread = threading.Thread(target=show_player_info)
     player_info_thread.daemon = True
     player_info_thread.start()
+    map_thread = threading.Thread(target=show_map)
+    map_thread.daemon = True
+    map_thread.start()
 
 def showStatus():
     global player
@@ -445,24 +470,22 @@ def showStatus():
     # Display possible directions of travel
     text = display_directions(text)
 
-    # Display the map if available
-    if "map" in ROOMS[player.CURRENTROOM]:
-        text += f'\n\nKey: {"; ".join(KEY)}\n'
-        text += f'\n{ROOMS[player.CURRENTROOM]["map"]}\n'
+    ## Display the map if available
+    update_map()
 
     # Display the description of the current room
-    text += "\n" + str(ROOMS[player.CURRENTROOM]["info"])
+    text += "\n\n" + str(ROOMS[player.CURRENTROOM]["info"])
 
     text += f"\n---------------------------"
 
-    type_text(text, colorTrue=color_coding)
+    add_text_to_textbox(info_text_area, text)
 
     # Optionally display additional room description
     if "description" in ROOMS[player.CURRENTROOM] and ask_for_consent(
         "Do you want to observe the area"
     ):
-        type_text("The area:", colorTrue=color_coding)
-        type_text(ROOMS[player.CURRENTROOM]["description"], colorTrue=color_coding)
+        add_text_to_textbox(info_text_area, "The area:")
+        add_text_to_textbox(info_text_area, ROOMS[player.CURRENTROOM]["description"])
 
 
 def display_directions(text):
@@ -500,10 +523,10 @@ def display_directions(text):
         for direction in directions:
             if direction in ROOMS[player.CURRENTROOM]["directions"]:
                 if direction != "teleport":
-                    text += f"\n{direction_descriptions[room_type][direction]} %*GREEN*%{direction}%*RESET*%."
+                    text += f"\n{direction_descriptions[room_type][direction]} {direction}."
 
     if "teleport" in ROOMS[player.CURRENTROOM]["directions"]:
-        text += "\nThere is a %*GREEN*%teleport%*RESET*%ation circle on the ground."
+        text += "\nThere is a teleportation circle on the ground."
 
     return text
 
@@ -515,27 +538,27 @@ def Examine(*Args):
     if item_index is not None:  # Check explicitly if item_index is valid
         _ = player.inventory[item_index]
         if isinstance(_, item):
-            type_text("You look at your item and you figure out this about it:")
+            add_text_to_textbox(info_text_area, "You look at your item and you figure out this about it:")
             if not revealer.reveal_key_code(_):
                 if _.type == "weapon":
-                    type_text(f"This item is a weapon that adds {_.value} damage.")
+                    add_text_to_textbox(info_text_area, f"This item is a weapon that adds {_.value} damage.")
                 elif _.type == "readable":
                     if "reading" in player.Skills:
-                        type_text(f"You read {_.name} and it contains:")
+                        add_text_to_textbox(info_text_area, f"You read {_.name} and it contains:")
                         if isinstance(_, Book):
-                            type_text(_.GetContense())
+                            add_text_to_textbox(info_text_area, _.GetContense())
                         else:
-                            type_text(_.value)
+                            add_text_to_textbox(info_text_area, _.value)
                 elif isinstance(_, Recorder):
-                    type_text("This device records sound. The current message is:")
-                    type_text(_.message)
+                    add_text_to_textbox(info_text_area, "This device records sound. The current message is:")
+                    add_text_to_textbox(info_text_area, _.message)
                 else:
-                    type_text(_.value)
+                    add_text_to_textbox(info_text_area, _.value)
     elif Name in ROOMS[player.CURRENTROOM]["directions"]:  # Check exits in the room
         door = ROOMS[player.CURRENTROOM]["directions"][Name]
         if isinstance(door, Door):
             if isinstance(door.lock, Lock):
-                type_text(
+                add_text_to_textbox(info_text_area, 
                     (
                         "The door is locked,"
                         if door.lock.is_locked
@@ -545,14 +568,14 @@ def Examine(*Args):
                 )
                 revealer.reveal_key_code(door)
             else:
-                type_text(f"The exit {Name} has no lock.")
+                add_text_to_textbox(info_text_area, f"The exit {Name} has no lock.")
         else:
-            type_text(f"There is nothing special about the exit {Name}.")
+            add_text_to_textbox(info_text_area, f"There is nothing special about the exit {Name}.")
     elif "containers" in ROOMS[player.CURRENTROOM] and Name in ROOMS[player.CURRENTROOM]["containers"]:
         containerins = ROOMS[player.CURRENTROOM]["containers"][Name]
         if isinstance(containerins, container):
             if isinstance(containerins.lock, Lock):
-                type_text(
+                add_text_to_textbox(info_text_area, 
                     (
                         "The container is locked,"
                         if containerins.lock.is_locked
@@ -562,18 +585,18 @@ def Examine(*Args):
                 )
                 revealer.reveal_key_code(containerins)
             else:
-                type_text(f"The container {Name} has no lock.")
+                add_text_to_textbox(info_text_area, f"The container {Name} has no lock.")
         else:
-            type_text(f"There is no container named {Name} in this room.")
+            add_text_to_textbox(info_text_area, f"There is no container named {Name} in this room.")
     elif "creatures stats" in ROOMS[player.CURRENTROOM]:
         for Creature in ROOMS[player.CURRENTROOM]["creatures stats"]:
             if isinstance(Creature, creature):
                 if isinstance(Creature, NPC):
                     if Creature.name.lower() == Name:
-                        Creature.talk()
+                        Creature.talk(info_text_area)
                         return
     else:
-        type_text(f"There is nothing special about the {Name}.")
+        add_text_to_textbox(info_text_area, f"There is nothing special about the {Name}.")
 
 
 def battle(player: PC, good_guys: list, bad_guys: list, last_room):
@@ -638,7 +661,7 @@ def player_turn(player: PC, monster: creature):
         perform_attack(player, monster)
     elif player_action == "defend":
         player.defending = True
-        type_text("You brace yourself for the next attack.", colorTrue=color_coding)
+        add_text_to_textbox(info_text_area, "You brace yourself for the next attack.")
     elif player_action == "special":
         use_special_ability(player, monster)
 
@@ -651,9 +674,9 @@ def monster_turn(player: PC, monster: creature):
         player (PC): The player or ally.
         monster (creature): The monster attacking.
     """
-    type_text(f"The %*CYAN*%{monster.name}%*RESET*% attacks!", colorTrue=color_coding)
+    add_text_to_textbox(info_text_area, f"The {monster.name} attacks!")
     damage = calculate_damage(monster, player)
-    player.take_damage(damage)
+    player.take_damage(damage, info_text_area)
 
 
 def perform_attack(attacker: PC, defender: creature):
@@ -665,7 +688,7 @@ def perform_attack(attacker: PC, defender: creature):
         defender (creature): The defending monster.
     """
     damage = calculate_damage(attacker, defender)
-    defender.take_damage(damage)
+    defender.take_damage(damage, info_text_area)
 
 
 def handle_victory(player: PC, monsters: list):
@@ -676,10 +699,10 @@ def handle_victory(player: PC, monsters: list):
         player (PC): The player character.
         monsters (list): The list of defeated monsters.
     """
-    type_text("You have defeated all the enemies!", colorTrue=color_coding)
+    add_text_to_textbox(info_text_area, "You have defeated all the enemies!")
     for monster in monsters:
         if monster.hp <= 0:
-            player.inventory_add(monster.dropped_items)
+            player.inventory_add(monster.dropped_items, info_text_area)
 
 
 def calculate_damage(attacker, defender) -> int:
@@ -698,11 +721,11 @@ def calculate_damage(attacker, defender) -> int:
 
     if random() < attacker.crit_chance:
         damage *= 2
-        type_text("Critical hit!", colorTrue=color_coding)
+        add_text_to_textbox(info_text_area, "Critical hit!")
 
     if hasattr(defender, "defending") and defender.defending:
         damage //= 2
-        type_text("The attack is defended, reducing damage.", colorTrue=color_coding)
+        add_text_to_textbox(info_text_area, "The attack is defended, reducing damage.")
         defender.defending = False
 
     return damage
@@ -734,14 +757,13 @@ def use_special_ability(player: PC, monster: creature):
         monster (creature): The monster being fought.
     """
     if player.special_ability.ready:
-        player.special_ability.activate(monster)
-        type_text(
-            f"You use your special ability: {player.special_ability.name}.",
-            colorTrue=color_coding,
+        player.special_ability.activate(monster, randint(calculate_damage_range(player.atpw)), info_text_area)
+        add_text_to_textbox(info_text_area, 
+            f"You use your special ability: {player.special_ability.name}."
         )
         player.special_ability.ready = False
     else:
-        type_text("Your special ability is not ready yet.", colorTrue=color_coding)
+        add_text_to_textbox(info_text_area, "Your special ability is not ready yet.")
 
 
 def select_target(chooser, targets: list):
@@ -757,11 +779,11 @@ def select_target(chooser, targets: list):
     """
     if chooser == player:
         valid_targets = []
-        type_text("Who do you want to attack? The options:")
+        add_text_to_textbox(info_text_area, "Who do you want to attack? The options:")
         # Enumerate through the targets to get both the index and the enemy.
         for index, enemy in enumerate(targets):
             if enemy.hp > 0:
-                type_text(f"{index + 1}: {enemy.name} ({enemy.hp} HP)")
+                add_text_to_textbox(info_text_area, f"{index + 1}: {enemy.name} ({enemy.hp} HP)")
                 valid_targets.append(index)
 
         # Prompt the player to select a target
@@ -771,9 +793,9 @@ def select_target(chooser, targets: list):
                 if choice in valid_targets:
                     return targets[choice]
                 else:
-                    type_text("Invalid choice. Please select a valid target.")
+                    add_text_to_textbox(info_text_area, "Invalid choice. Please select a valid target.")
             except ValueError:
-                type_text("Invalid input. Please enter a number.")
+                add_text_to_textbox(info_text_area, "Invalid input. Please enter a number.")
     else:
         # AI or other logic for non-player chooser
         for target in targets:
@@ -782,8 +804,8 @@ def select_target(chooser, targets: list):
 
 
 def command():
-        global player
-    #try:
+    global player
+    try:
         ShouldBreak = False
 
         while True:
@@ -806,24 +828,24 @@ def command():
                         else:
                             commands[action]()
                     else:
-                        type_text(
+                        add_text_to_textbox(info_text_area, 
                             f"Unknown command '{action}'. Type 'help' for a list of commands.",
-                            colorTrue=color_coding,
+    
                         )
                     if action in commands:
                         ShouldBreak = True
             if ShouldBreak:
                 return
-    #except KeyError as e:
-    #   type_text(f"KeyError: {e} - This might be due to an undefined command or incorrect arguments.", colorTrue=color_coding)
-    #except ValueError as e:
-    #   type_text(f"ValueError: {e} - This might be due to incorrect arguments provided.", colorTrue=color_coding)
-    #except Exception as e:
-    #   type_text(f"Unexpected Error: {e}", colorTrue=color_coding)
+    except KeyError as e:
+       add_text_to_textbox(info_text_area, f"KeyError: {e} - This might be due to an undefined command or incorrect arguments.")
+    except ValueError as e:
+       add_text_to_textbox(info_text_area, f"ValueError: {e} - This might be due to incorrect arguments provided.")
+    except Exception as e:
+       add_text_to_textbox(info_text_area, f"Unexpected Error: {e}")
 
 
 def handle_sleep_command(player: PC):
-    type_text("You decide to rest for a while.", colorTrue=color_coding)
+    add_text_to_textbox(info_text_area, "You decide to rest for a while.")
 
     # Simulate some time passing
     sleep(2)  # Example: sleep for 2 seconds
@@ -832,7 +854,7 @@ def handle_sleep_command(player: PC):
     player.heal(3)  # Example: heal 3 health points during sleep
 
     # Optional: Print a message or effect that happens during sleep
-    type_text("You feel refreshed after a good rest.", colorTrue=color_coding)
+    add_text_to_textbox(info_text_area, "You feel refreshed after a good rest.")
 
 
 def get_player_input(split=True):
@@ -855,31 +877,29 @@ def handle_get_command(player: PC, *Args):
     if "items" in ROOMS[player.CURRENTROOM]:
         for ItemName in ROOMS[player.CURRENTROOM]["items"].keys():
             if item_name == ItemName:
-                player.inventory_add([ROOMS[player.CURRENTROOM]["items"][ItemName]])
+                player.inventory_add([ROOMS[player.CURRENTROOM]["items"][ItemName]], info_text_area)
                 del ROOMS[player.CURRENTROOM]["items"][ItemName]
-                type_text(f"%*BLUE*%{item_name}%*RESET*% got!", colorTrue=color_coding)
+                add_text_to_textbox(info_text_area, f"{item_name} got!")
                 return
-    type_text(f"Can't get {item_name}!", colorTrue=color_coding)
+    add_text_to_textbox(info_text_area, f"Can't get {item_name}!")
 
 
 def handle_look_command():
     global player
     should_return = False
     if "items" in ROOMS[player.CURRENTROOM]:
-        type_text(
-            f'The items in the room: %*BLUE*%{", ".join(ROOMS[player.CURRENTROOM]["items"].keys())}%*RESET*%.',
-            colorTrue=color_coding,
+        add_text_to_textbox(info_text_area, 
+            f'The items in the room: {", ".join(ROOMS[player.CURRENTROOM]["items"].keys())}.'
         )
         should_return = True
     if "containers" in ROOMS[player.CURRENTROOM]:
-        type_text(
-            f"The containers here are: %*RED*%{', '.join(ROOMS[player.CURRENTROOM]['containers'].keys())}%*RESET*%",
-            colorTrue=color_coding,
+        add_text_to_textbox(info_text_area, 
+            f"The containers here are: {', '.join(ROOMS[player.CURRENTROOM]['containers'].keys())}"
         )
         should_return = True
     if should_return:
         return
-    type_text("There is nothing of interest.", colorTrue=color_coding)
+    add_text_to_textbox(info_text_area, "There is nothing of interest.")
 
 
 def handle_use_command(*Args):
@@ -895,7 +915,7 @@ def handle_search_command(player, *Args):
         ):
             search_container(player, Container)
         else:
-            type_text(f"You cannot search the {Container}", colorTrue=color_coding)
+            add_text_to_textbox(info_text_area, f"You cannot search the {Container}")
 
 
 def search_container(player: PC, Container):
@@ -905,10 +925,9 @@ def search_container(player: PC, Container):
         if isinstance(Container.lock, Lock):
             key = PickKey(Container.lock)
             Container.Unlock(key, player)
-        type_text(
-            f"You search the{' secret' if Container.secret else ''} %*RED*%{ContainerName}%*RESET*% and find a ",
-            newline=False,
-            colorTrue=color_coding,
+        add_text_to_textbox(info_text_area, 
+            f"You search the{' secret' if Container.secret else ''} {ContainerName} and find a ",
+            newline=False
         )
         for searchitem in Container.contents:
             if searchitem:
@@ -919,49 +938,12 @@ def search_container(player: PC, Container):
                         < last_index(Container.contents)
                         else "\n"
                     )
-                    type_text(
-                        f"%*BLUE*%{searchitem.name}%*RESET*%{end_str}",
+                    add_text_to_textbox(info_text_area, 
+                        f"{searchitem.name}{end_str}",
                         newline=False,
-                        colorTrue=color_coding,
+
                     )
         Container.take_contents(player)
-
-
-def handle_put_command(player: PC, *Args):
-    arguments = " ".join(Args)
-    Arguments = arguments.split(" in ")
-
-    # Ensure we have exactly two parts
-    if len(Arguments) < 2:
-        type_text(
-            "You need to specify an item and where to put it (e.g., 'put book in drawer').",
-            colorTrue=color_coding,
-        )
-        return
-
-    # Strip whitespace
-    Arguments = [arg.strip() for arg in Arguments]
-    item_name = Arguments[0]
-    container_name = Arguments[1]
-
-    # Check if item is in inventory
-    if item_name not in [item.name for item in player.inventory]:
-        type_text(
-            f"You don't have {item_name} in your inventory.", colorTrue=color_coding
-        )
-        return
-
-    # Retrieve item and container
-    PutItem = player.inventory[
-        [item.name for item in player.inventory].index(item_name)
-    ]
-    if "containers" in ROOMS[player.CURRENTROOM]:
-        put_in_container(player, PutItem, container_name)
-    else:
-        type_text(
-            f"You cannot put the {PutItem.name} in the {container_name}",
-            colorTrue=color_coding,
-        )
 
 
 def put_in_container(player: PC, PutItem=None, container=None):
@@ -975,10 +957,44 @@ def put_in_container(player: PC, PutItem=None, container=None):
             ROOMS[player.CURRENTROOM]["containers"][container].contents
         ]
     ROOMS[player.CURRENTROOM]["containers"][container].contents += [PutItem]
-    type_text(
-        f"You put you're %*BLUE*%{PutItem.name}%*RESET*% into the %*RED*%{container}%*RESET*%",
-        colorTrue=color_coding,
+    add_text_to_textbox(info_text_area, 
+        f"You put you're {PutItem.name} into the {container}",
     )
+
+
+def handle_put_command(player: PC, *Args):
+    arguments = " ".join(Args)
+    Arguments = arguments.split(" in ")
+
+    # Ensure we have exactly two parts
+    if len(Arguments) < 2:
+        add_text_to_textbox(info_text_area, 
+            "You need to specify an item and where to put it (e.g., 'put book drawer')."
+        )
+        return
+
+    # Strip whitespace
+    Arguments = [arg.strip() for arg in Arguments]
+    item_name = Arguments[0]
+    container_name = Arguments[1]
+
+    # Check if item is in inventory
+    if item_name not in [item.name for item in player.inventory]:
+        add_text_to_textbox(info_text_area, 
+            f"You don't have {item_name} in your inventory."
+        )
+        return
+
+    # Retrieve item and container
+    PutItem = player.inventory[
+        [item.name for item in player.inventory].index(item_name)
+    ]
+    if "containers" in ROOMS[player.CURRENTROOM]:
+        put_in_container(player, PutItem, container_name)
+    else:
+        add_text_to_textbox(info_text_area, 
+            f"You cannot put the {PutItem.name} in the {container_name}"
+        )
 
 
 def handle_get_quest_command(questnum):
@@ -992,7 +1008,7 @@ def handle_get_quest_command(questnum):
 
 def PrintMap():
     global player
-    type_text(ShowMap())
+    add_text_to_textbox(info_text_area, ShowMap())
 
 
 # Define handling functions for different types of enemies
@@ -1002,9 +1018,8 @@ def handle_hungry_bear(player: PC, enemy: creature):
         if ask_for_consent("Do you want to throw your potion at the bear"):
             enemy_reacting = False
             del player.inventory[player.inventory.index("potion")]
-            type_text(
-                f"You throw the potion at the bear and it explodes into a puff of magic smoke that stuns the bear!",
-                colorTrue=color_coding,
+            add_text_to_textbox(info_text_area, 
+                f"You throw the potion at the bear and it explodes into a puff of magic smoke that stuns the bear!"
             )
     if enemy_reacting:
         return [enemy, enemy_reacting]
@@ -1015,21 +1030,19 @@ def handle_grumpy_pig(player: PC, enemy: creature):
     if "saddle" in player.inventory and "pig-rod" in player.inventory:
         if ask_for_consent("Do you want to use your saddle and pig-rod on the pig"):
             enemy_reacting = False
-            type_text(
-                f"You throw a saddle onto the pig and leap on steering it about with a pig fishing rod!",
-                colorTrue=color_coding,
+            add_text_to_textbox(info_text_area, 
+                f"You throw a saddle onto the pig and leap on steering it about with a pig fishing rod!"
             )
             del ROOMS[player.CURRENTROOM]["creatures stats"]
             del player.inventory[player.inventory.index("saddle")]
             del player.inventory[player.inventory.index("pig-rod")]
-            player.inventory_add(item["pig-steed"])
+            player.inventory_add(item["pig-steed"], info_text_area)
             player.xp += 20
     if "torch" in player.inventory:
         if ask_for_consent("Do you want to use your torch to scare the pig away"):
             enemy_reacting = False
-            type_text(
-                f"You wave your torch at the pig and it runs away through a tiny open window.",
-                colorTrue=color_coding,
+            add_text_to_textbox(info_text_area, 
+                f"You wave your torch at the pig and it runs away through a tiny open window."
             )
             del ROOMS[player.CURRENTROOM]["creatures stats"][
                 ROOMS[player.CURRENTROOM]["creatures stats"].index(enemy)
@@ -1038,9 +1051,8 @@ def handle_grumpy_pig(player: PC, enemy: creature):
     if "rations" in player.inventory:
         if ask_for_consent("Do you want to throw your ration at the pig"):
             enemy_reacting = False
-            type_text(
-                f"You quickly throw rations at the pig. It still doesn't look happy though.",
-                colorTrue=color_coding,
+            add_text_to_textbox(info_text_area, 
+                f"You quickly throw rations at the pig. It still doesn't look happy though."
             )
             del player.inventory[player.inventory.index("rations")]
             player.xp += 15
@@ -1054,9 +1066,8 @@ def handle_greedy_goblin(player: PC, enemy: creature):
     if player.money >= 15:
         if ask_for_consent("Do you want to pay the goblin to not attack you"):
             enemy_reacting = False
-            type_text(
-                f"You pay the {enemy.name} to not attack you for now, but he says you should run.",
-                colorTrue=color_coding,
+            add_text_to_textbox(info_text_area, 
+                f"You pay the {enemy.name} to not attack you for now, but he says you should run."
             )
             player.money -= 15
             enemy.dropped_items[1].value += 15
@@ -1116,9 +1127,8 @@ def handle_wolf(player: PC, wolf: Guard):
     if "rations" in player.inventory:
         if ask_for_consent("Do you want to give your ration to the wolf"):
             enemy_reacting = False
-            type_text(
-                "You quickly give your rations to the wolf. It looks happy, walks up to you, and nuzzles you.",
-                colorTrue=color_coding,
+            add_text_to_textbox(info_text_area, 
+                "You quickly give your rations to the wolf. It looks happy, walks up to you, and nuzzles you."
             )
             player.inventory.remove("rations")
             wolf.patrol_type = "follow"
@@ -1143,9 +1153,22 @@ def handle_guard_action(guard):
         return [False, [guard, True]]  # Function was not found
 
 
+def create_info_textbox():
+    global info_text_area
+    root = tk.Tk()
+    root.title("Main Window")
+
+    info_text_area = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=120, height=40)
+    info_text_area.pack(padx=10, pady=10)
+
+    # Set the text box to read-only
+    info_text_area.config(state=tk.DISABLED)
+
+    root.mainloop()
+
+
 def initializer():
     global color_coding, player, CHARACTERSLIST
-    df = pd.DataFrame(CHARACTERSLIST)
 
     # A tkinter window that asks these questions, instead of the console.Include a button that says "Exit Game". When the button is clicked, the game exits. Include a button that says "premade character". When the button is clicked, a new window opens that lets you choose one of the premade characters from teh CHARACTERSLIST var. Include a button that says "custom character". When the button is clicked, a new window opens that asks them for a name, age, hight, and waight(LBs).
     def create_main_menu():
@@ -1224,24 +1247,12 @@ def initializer():
             exit()
 
         def continue_setup():
-            ask_color_coding()
+            #ask_color_coding()
+            choose_background()
         
         def start_game():
             # I will add more logic for starting the game later
             root.destroy()
-
-        def ask_color_coding():
-            color_window = tk.Toplevel(root)
-            color_window.title("Color Coding")
-            tk.Label(color_window, text="Do you want color coding?").pack()
-            tk.Button(color_window, text="Yes", command=lambda: set_color_coding(True)).pack()
-            tk.Button(color_window, text="No", command=lambda: set_color_coding(False)).pack()
-
-        def set_color_coding(choice):
-            global color_coding
-            color_coding = choice
-            # Add your logic for enabling/disabling color coding here
-            choose_background()
 
         root = tk.Tk()
         root.title("Character Creation")
@@ -1278,6 +1289,9 @@ def initializer():
 
     create_main_menu()
 
+    info_text_thread = threading.Thread(target=create_info_textbox, daemon=True, name="Info Text Box Thread")
+    info_text_thread.start()
+
 
 def main():
     global player, color_coding
@@ -1285,11 +1299,11 @@ def main():
     # this is the initializer
     initializer()
 
-    # shows the instructions
-    start()
-
     # starts the tkinter thread that shows the player's stats
     start_tkinter_thread()
+
+    # shows the instructions
+    start()
 
     # loop forever while the player wants to play
     while True:
@@ -1312,7 +1326,7 @@ def main():
         for guard in guards:
             if isinstance(guard, Guard):
                 if guard.hp > 0:
-                    if guard.check_detection(player.CURRENTROOM):
+                    if guard.check_detection(player.CURRENTROOM, info_text_area):
                         guard_handled = handle_guard_action(guard)
                         if not isinstance(guard_handled, list):
                             guard_handled = [guard_handled]
@@ -1351,11 +1365,11 @@ def main():
                 if isinstance(enemy, creature):
                     if not isinstance(enemy, NPC):
                         if enemy.hp > 0:
-                            enemy.type_text_flavor_text()
+                            enemy.add_text_flavor_text(info_text_area)
                             if ask_for_consent(
                                 f"Do you want to examine the {enemy.name}"
                             ):
-                                enemy.type_text_description()
+                                enemy.add_text_description(info_text_area)
 
                             is_reacting = False
 
@@ -1392,20 +1406,7 @@ def main():
         if bad_guys:
             good_guys, bad_guys = battle(player, good_guys, bad_guys, player.LASTROOM)
 
-        # Handle NPC interactions
-        if "NPCs" in ROOMS[player.CURRENTROOM]:
-            for npcname, npcstats in ROOMS[player.CURRENTROOM]["NPCs"].items():
-                if (
-                    ask_for_consent("Do you want to interact with this NPC")
-                    or npcstats.aggressive
-                ):
-                    npcstats.interact()
-                    if npcstats.aggressive:
-                        ROOMS[player.CURRENTROOM]["NPCs"][npcname] = battle(
-                            player, [], [npcstats], player.LASTROOM
-                        )[1]
-
-        player.special_ability.Tick()
+        player.special_ability.Tick(info_text_area)
         quest_manager.update_objective(f"Kill {GameState['Enemies killed']} creatures")
         for Item in GameState["collected items"]:
             if isinstance(Item, item):

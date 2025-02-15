@@ -35,7 +35,7 @@ class base_character:
     Represents a base character in the game, including both players and creatures.
     """
 
-    def take_damage(self, damage_taken: int = 5):
+    def take_damage(self, damage_taken: int = 5, text_area=None):
         """
         Reduces the character's hit points by the specified amount of damage.
 
@@ -45,14 +45,14 @@ class base_character:
         Returns:
             None
         """
-        string_beginning = "%*MAGENTA*%"
+        string_beginning = ""
         if type(self) == creature:
-            string_beginning = "The %*CYAN*%"
+            string_beginning = "The "
         self.hp = self.hp - damage_taken
         if self.hp < 0:
             self.hp = 0
-        type_text(
-            f"{string_beginning}{self.name}%*RESET*% takes {damage_taken} damage and has {self.hp} HP left!"
+        add_text_to_textbox(text_area, 
+            f"{string_beginning}{self.name} takes {damage_taken} damage and has {self.hp} HP left!"
         )
 
 
@@ -142,35 +142,35 @@ class creature(base_character):
         self.dropped_items = dropped_items
         self.xp = rounding(self.difficulty * 2 + len(self.dropped_items))
         self.description = (
-            description if description else f"A %*CYAN*%{self.name}%*RESET."
+            description if description else f"A {self.name}."
         )
         self.flavor_text = (
-            flavor_text if flavor_text else f"You see a %*CYAN*%{self.name}%*RESET*%!"
+            flavor_text if flavor_text else f"You see a {self.name}!"
         )
         self.type = type
         self.crit_chance = crit_chance
         self.frendly = False
         self.frendly_text = frendly_text
 
-    def type_text_flavor_text(self):
+    def add_text_flavor_text(self, text_area):
         """
         Prints the flavor text associated with encountering the creature.
         """
-        type_text(self.flavor_text)
+        add_text_to_textbox(text_area, self.flavor_text)
 
-    def type_text_description(self):
+    def add_text_description(self, text_area):
         """
         Prints the description of the creature.
         """
-        type_text(self.description)
+        add_text_to_textbox(text_area, self.description)
         curent_holiday = get_holiday()
         if curent_holiday == "christmas":
-            type_text(f"The {self.name} also has a santa hat.")
+            add_text_to_textbox(text_area, f"The {self.name} also has a santa hat.")
         elif curent_holiday == "easter":
-            type_text(f"The {self.name} also has bunny ears.")
+            add_text_to_textbox(text_area, f"The {self.name} also has bunny ears.")
         elif curent_holiday == "halloween":
-            if random < 0.2:
-                type_text(f"The {self.name} also has a pumkin on it's head.")
+            if random() < 0.2:
+                add_text_to_textbox(text_area, f"The {self.name} also has a pumkin on it's head.")
 
 
 class Guard(creature):
@@ -252,7 +252,7 @@ class Guard(creature):
                     self.current_room = room.GetRoom(self.current_room)
                     return
 
-    def check_detection(self, player_room):
+    def check_detection(self, player_room, text_area):
         """
         Checks if the guard has detected the player.
 
@@ -263,13 +263,13 @@ class Guard(creature):
             bool: True if the player is detected, False otherwise.
         """
         if self.current_room == player_room and not self.frendly:
-            type_text(
+            add_text_to_textbox(text_area, 
                 f"You have been caught by {self.name} in the {self.current_room}!"
             )
             return True
         elif self.current_room == player_room and self.frendly:
             if random() <= 0.015:
-                type_text(self.frendly_text)
+                add_text_to_textbox(text_area, self.frendly_text)
         return False
 
 
@@ -280,18 +280,18 @@ class base_ability:
         self.cooldown_time = cooldown_time
         self.current_cooldown = 0
 
-    def activate(self, target: creature, damage: int = 5):
+    def activate(self, target: creature, damage: int = 5, text_area=None):
         self.ready = False
         self.current_cooldown = 0
-        print(f"Ability {self.name} will be ready after {self.cooldown_time} commands.")
+        add_text_to_textbox(f"Ability {self.name} will be ready after {self.cooldown_time} commands.")
 
-    def Tick(self):
+    def Tick(self, text_area):
         self.current_cooldown += 1
-        self.check_cooldown()
+        self.check_cooldown(text_area)
 
-    def check_cooldown(self):
+    def check_cooldown(self, text_area):
         if self.current_cooldown >= self.cooldown_time and not self.ready:
-            type_text(f"\nAbility {self.name} is ready to use again. ")
+            add_text_to_textbox(text_area, f"\nAbility {self.name} is ready to use again. ")
             self.ready = True
 
 
@@ -375,7 +375,7 @@ class PC(base_character):
         self.xp += xp_added
         self.check_xp()
 
-    def inventory_add(self, added: list[item]):
+    def inventory_add(self, added: list[item], text_area):
         try:
             if not isinstance(added, list):
                 added = [added]
@@ -389,62 +389,13 @@ class PC(base_character):
                         self.get_change_weapon(item_to_add.value)
                 else:
                     # Print an error message if the item is not an instance of Item class
-                    type_text(f"Error: {item_to_add} is not an instance of Item class")
+                    add_text_to_textbox(text_area, f"Error: {item_to_add} is not an instance of Item class")
         except Exception as e:
             # Print the full traceback if an exception occurs
-            type_text(f"Error: {e}")
+            add_text_to_textbox(text_area, f"Error: {e}")
 
     def heal(self, value):
         self.hp = clamp(value, 0, self.maxhp)
-
-
-class NPC(PC):
-    def __init__(
-        self,
-        Name: str,
-        Age: int,
-        Class: str,
-        Level: int,
-        Background: str,
-        Height: Height,
-        Weight: int,
-        Notes: list = [],
-        special_ability: base_ability = supercrit_ability(),
-        NOTES: list = [],
-        xp: int = None,
-        inventory: inv = None,
-        money: int = 0,
-        weapons_atpws: list = [],
-        npc_role: str = "generic",  # New attribute for NPC role (e.g., merchant, enemy, etc.)
-        aggressive: bool = False,  # New attribute to determine if NPC is aggressive
-    ):
-        super().__init__(
-            Name=Name,
-            Age=Age,
-            Class=Class,
-            Level=Level,
-            Background=Background,
-            Height=Height,
-            Weight=Weight,
-            Notes=Notes,
-            special_ability=special_ability,
-            NOTES=NOTES,
-            xp=xp,
-            inventory=inventory,
-            money=money,
-            weapons_atpws=weapons_atpws,
-        )
-        self.npc_role = npc_role
-        self.aggressive = aggressive
-
-    def interact(self):
-        if self.aggressive:
-            return f"{self.name} looks hostile and prepares for a fight!"
-        else:
-            return f"{self.name} has nothing to say to you."
-
-    def npc_info(self):
-        return f"Name: {self.name}, Age: {self.Age}, Class: {self.Class}, Level: {self.Level}, Role: {self.npc_role}, Aggressive: {self.aggressive}"
 
 
 class PC_action:
@@ -508,10 +459,10 @@ class NPC(Guard):
         self.asked_about = set()
         self.generic_response = generic_response
 
-    def talk(self):
+    def talk(self, text_area):
         while True:
             player_input = loop_til_valid_input(
-                f"What do you want to say to %*BROWN*%{self.name}%*RESET*%?",
+                f"What do you want to say to {self.name}?",
                 "",
                 str,
             )
@@ -521,18 +472,18 @@ class NPC(Guard):
 
             # Exit the loop if the player says "goodbye"
             if player_input == "goodbye":
-                type_text(f"Goodbye then. Don't get lost!")
+                add_text_to_textbox(text_area, f"Goodbye then. Don't get lost!")
                 break
 
             # Check for keywords and map to corresponding response
             for topic, variations in self.keyword_variations.items():
                 if any(variation in player_input for variation in variations):
                     self.asked_about.add(topic)
-                    type_text(self._get_response(topic))
+                    add_text_to_textbox(text_area, self._get_response(topic))
                     break  # Stop further keyword checks and wait for the next input
             else:
                 # If no keywords found, return a generic response
-                type_text(self._generic_response())
+                add_text_to_textbox(text_area, self._generic_response())
 
     def _get_response(self, topic):
         """Return a response from the NPC based on the topic asked."""
