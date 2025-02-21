@@ -178,7 +178,7 @@ def End(text: str, win: bool = True):
                 commands["quit"]()
     else:
         type_text("%*BOLD*%GAME OVER, YOU LOSE!")
-        loop_til_valid_input("Enter enything to leave:", "Please enter something:", str)
+        loop_til_valid_input("Enter anything to leave:", "Please enter something:", str)
         commands["quit"]()
 
 
@@ -754,7 +754,9 @@ def use_special_ability(player: PC, monster: creature):
         monster (creature): The monster being fought.
     """
     if player.special_ability.ready:
-        player.special_ability.activate(monster, randint(calculate_damage_range(player.atpw)), info_text_area)
+        damage_min, damage_max = calculate_damage_range(player.atpw)
+        damage = randint(damage_min, damage_max)
+        player.special_ability.activate(monster, damage, info_text_area)
         add_text_to_textbox(info_text_area, 
             f"You use your special ability: {player.special_ability.name}."
         )

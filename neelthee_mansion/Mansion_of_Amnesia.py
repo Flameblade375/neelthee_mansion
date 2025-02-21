@@ -614,10 +614,6 @@ def battle(player: PC, good_guys: list, bad_guys: list, last_room):
             handle_victory(player, bad_guys)
             return good_guys, None
 
-        if ask_for_consent("Do you want to run away", info_text_area):
-            Move(last_room)
-            return good_guys, bad_guys
-
         # Player and good guys' turn
         for ally in [player] + good_guys:
             if all(monster.hp <= 0 for monster in bad_guys):
@@ -649,7 +645,7 @@ def player_turn(player: PC, monster: creature):
         monster (creature): The monster being fought.
     """
     player_action = loop_til_valid_input(
-        "Choose your action: (attack/defend/special): ",
+        "Choose your action: (attack/defend): ", # /special
         "Invalid action. Please enter a valid action.",
         PC_action,
     ).value.lower()
@@ -659,8 +655,8 @@ def player_turn(player: PC, monster: creature):
     elif player_action == "defend":
         player.defending = True
         add_text_to_textbox(info_text_area, "You brace yourself for the next attack.")
-    elif player_action == "special":
-        use_special_ability(player, monster)
+    #elif player_action == "special":
+    #    use_special_ability(player, monster)
 
 
 def monster_turn(player: PC, monster: creature):
@@ -754,7 +750,9 @@ def use_special_ability(player: PC, monster: creature):
         monster (creature): The monster being fought.
     """
     if player.special_ability.ready:
-        player.special_ability.activate(monster, randint(calculate_damage_range(player.atpw)), info_text_area)
+        damage_min, damage_max = calculate_damage_range(player.atpw)
+        damage = randint(damage_min, damage_max)
+        player.special_ability.activate(monster, damage, info_text_area)
         add_text_to_textbox(info_text_area, 
             f"You use your special ability: {player.special_ability.name}."
         )

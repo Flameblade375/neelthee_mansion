@@ -106,3 +106,7 @@ I've done a lot in this update. I've:
 ## 11:35
 
 I have put the inputting in a tkinter window now, and if you die, you have to press the submit button to leave the game
+
+## 11:50
+
+I have removed the special attack, because I'm not fixing it right now, and now there is no running away
