@@ -101,3 +101,8 @@ I've done a lot in this update. I've:
  - fixed some bugs
  - and some more stuff
 
+# 21/02/2025
+
+## 11:35
+
+I have put the inputting in a tkinter window now, and if you die, you have to press the submit button to leave the game

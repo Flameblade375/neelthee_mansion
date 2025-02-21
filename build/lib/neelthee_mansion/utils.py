@@ -456,10 +456,8 @@ class Y_N:
         Value = Value.lower()
         if Value == "y":
             Value = True
-        elif Value == "n":
-            Value = False
         else:
-            raise ValueError("That wasn't Y or N")
+            Value = False
         self.value = Value
 
 
@@ -531,14 +529,33 @@ def loop_til_valid_input(
     input_text: str,
     bad_text: str,
     Class: classmethod,
-    delay: int = 0.075,
-    input_method: str = ">",
 ):
-    while True:
+    def on_submit():
+        nonlocal input_value, valid_input
         try:
-            type_text(input_text, delay=delay)
-            value = Class(input(input_method))
-            break
+            input_value = Class(entry.get())
+            valid_input = True
+            input_window.destroy()
         except ValueError:
-            type_text(bad_text)
-    return value
+            error_label.config(text=bad_text)
+
+    input_value = None
+    valid_input = False
+
+    while not valid_input:
+        input_window = tk.Tk()
+        input_window.title("Input Window")
+
+        tk.Label(input_window, text=input_text).pack(padx=10, pady=5)
+        entry = tk.Entry(input_window)
+        entry.pack(padx=10, pady=5)
+
+        submit_button = tk.Button(input_window, text="Submit", command=on_submit)
+        submit_button.pack(padx=10, pady=10)
+
+        error_label = tk.Label(input_window, text="", fg="red")
+        error_label.pack(padx=10, pady=5)
+
+        input_window.mainloop()
+
+    return input_value

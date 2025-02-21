@@ -167,21 +167,18 @@ def End(text: str, win: bool = True):
     if win:
         add_text_to_textbox(info_text_area, "Do you want to leave the game? Y/N")
         while True:
-            leave = loop_til_valid_input("", ).lower()
-            if leave == "n":
+            leave = loop_til_valid_input("Do you want to leave the game? Y/N:", "Please enter Y or N:", Y_N).value
+            if not leave:
                 add_text_to_textbox(info_text_area, "You decide to continue exploring.")
                 break
-            elif leave == "y":
+            elif leave:
                 add_text_to_textbox(info_text_area, 
                     "You escaped the house... %*BOLD*%GAME OVER, YOU WIN!",
                 )
                 commands["quit"]()
-            else:
-                add_text_to_textbox(info_text_area, 
-                    "Sorry, that wasn't 'y' or 'n'. Please enter 'y' or 'n'.",
-                )
     else:
-        add_text_to_textbox(info_text_area, "%*BOLD*%GAME OVER, YOU LOSE!")
+        type_text("%*BOLD*%GAME OVER, YOU LOSE!")
+        loop_til_valid_input("Enter anything to leave:", "Please enter something:", str)
         commands["quit"]()
 
 
@@ -208,7 +205,7 @@ def Use_grappling_hook():
         add_text_to_textbox(info_text_area, 
             "You throw your grappling-hook, it catches a branch of a nearby tree and hooks back onto itself. \nYou can swing into the forest!"
         )
-        if ask_for_consent("Do you want to swing into the forest"):
+        if ask_for_consent("Do you want to swing into the forest", info_text_area):
             add_text_to_textbox(info_text_area, "You swing into the forest")
             Move("Forest Clearing")
         else:
@@ -221,7 +218,7 @@ def Use_grappling_hook():
         add_text_to_textbox(info_text_area, 
             "You throw your grappling-hook, it catches the railing of the nearby house and hooks back onto itself. \nYou can climb into the house!"
         )
-        if ask_for_consent("Do you want to climb into the house"):
+        if ask_for_consent("Do you want to climb into the house", info_text_area):
             add_text_to_textbox(info_text_area, "You climb into the house")
             Move("Balcony")
         else:
@@ -242,8 +239,7 @@ def Use_quill():
 
     if all(item in player.inventory for item in ["ink-pot", "parchment", "quill"]):
         parchment_index = player.inventory.index("parchment")
-        add_text_to_textbox(info_text_area, "What do you want to write")
-        write = str(input(">")).strip()
+        write = loop_til_valid_input("What do you want to write:", "Please enter a string:", str).strip()
 
         if write:
             add_note(write, parchment_index)
@@ -482,7 +478,8 @@ def showStatus():
 
     # Optionally display additional room description
     if "description" in ROOMS[player.CURRENTROOM] and ask_for_consent(
-        "Do you want to observe the area"
+        "Do you want to observe the area",
+        info_text_area
     ):
         add_text_to_textbox(info_text_area, "The area:")
         add_text_to_textbox(info_text_area, ROOMS[player.CURRENTROOM]["description"])
@@ -617,7 +614,7 @@ def battle(player: PC, good_guys: list, bad_guys: list, last_room):
             handle_victory(player, bad_guys)
             return good_guys, None
 
-        if ask_for_consent("Do you want to run away"):
+        if ask_for_consent("Do you want to run away", info_text_area):
             Move(last_room)
             return good_guys, bad_guys
 
@@ -789,7 +786,7 @@ def select_target(chooser, targets: list):
         # Prompt the player to select a target
         while True:
             try:
-                choice = int(input("Enter the number of the target: ")) - 1
+                choice = loop_til_valid_input("Enter the number of the target:", "Please enter a hole number:", int) - 1
                 if choice in valid_targets:
                     return targets[choice]
                 else:
@@ -861,7 +858,7 @@ def get_player_input(split=True):
     global player
     move = ""
     while move == "":
-        move = str(input(">")).strip().lower()
+        move = loop_til_valid_input("command:", "please enter a string:", str).strip().lower()
     if split:
         return move.split()
     return move
@@ -1015,7 +1012,7 @@ def PrintMap():
 def handle_hungry_bear(player: PC, enemy: creature):
     enemy_reacting = True
     if "potion" in player.inventory:
-        if ask_for_consent("Do you want to throw your potion at the bear"):
+        if ask_for_consent("Do you want to throw your potion at the bear", info_text_area):
             enemy_reacting = False
             del player.inventory[player.inventory.index("potion")]
             add_text_to_textbox(info_text_area, 
@@ -1028,7 +1025,7 @@ def handle_hungry_bear(player: PC, enemy: creature):
 def handle_grumpy_pig(player: PC, enemy: creature):
     enemy_reacting = True
     if "saddle" in player.inventory and "pig-rod" in player.inventory:
-        if ask_for_consent("Do you want to use your saddle and pig-rod on the pig"):
+        if ask_for_consent("Do you want to use your saddle and pig-rod on the pig", info_text_area):
             enemy_reacting = False
             add_text_to_textbox(info_text_area, 
                 f"You throw a saddle onto the pig and leap on steering it about with a pig fishing rod!"
@@ -1039,7 +1036,7 @@ def handle_grumpy_pig(player: PC, enemy: creature):
             player.inventory_add(item["pig-steed"], info_text_area)
             player.xp += 20
     if "torch" in player.inventory:
-        if ask_for_consent("Do you want to use your torch to scare the pig away"):
+        if ask_for_consent("Do you want to use your torch to scare the pig away", info_text_area):
             enemy_reacting = False
             add_text_to_textbox(info_text_area, 
                 f"You wave your torch at the pig and it runs away through a tiny open window."
@@ -1049,7 +1046,7 @@ def handle_grumpy_pig(player: PC, enemy: creature):
             ]
             player.xp += 5
     if "rations" in player.inventory:
-        if ask_for_consent("Do you want to throw your ration at the pig"):
+        if ask_for_consent("Do you want to throw your ration at the pig", info_text_area):
             enemy_reacting = False
             add_text_to_textbox(info_text_area, 
                 f"You quickly throw rations at the pig. It still doesn't look happy though."
@@ -1064,7 +1061,7 @@ def handle_grumpy_pig(player: PC, enemy: creature):
 def handle_greedy_goblin(player: PC, enemy: creature):
     enemy_reacting = True
     if player.money >= 15:
-        if ask_for_consent("Do you want to pay the goblin to not attack you"):
+        if ask_for_consent("Do you want to pay the goblin to not attack you", info_text_area):
             enemy_reacting = False
             add_text_to_textbox(info_text_area, 
                 f"You pay the {enemy.name} to not attack you for now, but he says you should run."
@@ -1125,7 +1122,7 @@ guards = [
 def handle_wolf(player: PC, wolf: Guard):
     enemy_reacting = True
     if "rations" in player.inventory:
-        if ask_for_consent("Do you want to give your ration to the wolf"):
+        if ask_for_consent("Do you want to give your ration to the wolf", info_text_area):
             enemy_reacting = False
             add_text_to_textbox(info_text_area, 
                 "You quickly give your rations to the wolf. It looks happy, walks up to you, and nuzzles you."
@@ -1367,7 +1364,8 @@ def main():
                         if enemy.hp > 0:
                             enemy.add_text_flavor_text(info_text_area)
                             if ask_for_consent(
-                                f"Do you want to examine the {enemy.name}"
+                                f"Do you want to examine the {enemy.name}",
+                                info_text_area
                             ):
                                 enemy.add_text_description(info_text_area)
 
